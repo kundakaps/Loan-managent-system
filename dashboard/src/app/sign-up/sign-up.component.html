@@ -1,0 +1,46 @@
+<header>
+
+</header>
+
+<section class="vh-100">
+    <div class="container py-5 h-100 ">
+        <div class="row d-flex justify-content-center align-items-center h-100 ">
+            <div class="col-12 col-md-8 col-lg-6 col-xl-5 ">
+                <div class="card shadow-2-strong " style="border-radius: 1rem; ">
+                    <div class="card-body p-5 text-center ">
+                        <!-- <img style="height: 50px; width:150px; " class="responsive" src="/assets/Asset1.png"><br/><br/> -->
+                        <div style="display: flex; align-items: center;justify-content: center;margin-bottom:30px">
+                            <img class="responsive" src="/assets/img/logo.tif">
+                        </div>
+                        <h3 class="mb-5 ">Register</h3>
+                        <form #usersForm="ngForm" (ngSubmit)="getUserFormdata(usersForm.value)">
+                            <div class="form-outline mb-4 ">
+                                <input type="text" ngModel name="name" id="typeEmailX-2 " class="form-control form-control-lg " />
+                                <label class="form-label " for="typeEmailX-2 ">Name </label>
+                            </div>
+
+                            <div class="form-outline mb-4 ">
+                                <input type="email" ngModel name="email" id="typeEmailX-2 " class="form-control form-control-lg " />
+                                <label class="form-label " for="typeEmailX-2 ">Email</label>
+                            </div>
+
+                            <div class="form-outline mb-4 ">
+                                <input type="password" ngModel name="password" id="typePasswordX-2 " class="form-control form-control-lg " />
+                                <label class="form-label " for="typePasswordX-2 ">Password</label>
+                            </div>
+
+                            <button class="btn btn-primary btn-lg btn-block " type="submit ">Register</button>
+                        </form>
+
+                        <hr class="my-4 ">
+
+
+                        <label class="form-check-label " for="form1Example3 "> Already have an account? </label><br/>
+                        <a class="navbar-brand s" href="/#/home">Login</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

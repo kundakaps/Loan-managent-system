@@ -1,0 +1,186 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<div *ngIf="isWaterPayments" class="row">
+  <div class="col-lg-12 col-md-6 col-sm-6">
+      <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+        <div style="font-weight:bolder;margin-left:10px; font-size:30px ; color:#A11F23" class="card-header">Water Payment</div>
+          <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+
+
+            <form #Form="ngForm" (ngSubmit)="Formdata(Form.value)">
+
+              <div class="col-md-12">
+                <div class="row" style="display: flex; align-items: center; height: 100%;">
+                  <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black">Institution Name</label>
+
+                      <select style="padding: 0.7rem; border-radius: 1rem; font-size: 0.8rem; width: 100%; border: 1px solid #ced4da;" ngModel name="name" id="typeEmailX-2" required #name="ngModel">
+                        <option>Select an Institution</option>
+                        <option *ngFor="let institution of institutions" value="{{institution.institutionID}}">{{institution.institutionName}}</option>
+
+                      </select>
+
+
+                      <div *ngIf="name.invalid && name.touched" style="color:red;">Institution is required</div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black">Account/Metre Number</label>
+                      <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="account_no" id="typePasswordX-2" class="form-control form-control-lg" required #account_no="ngModel" />
+                      <div *ngIf="account_no.invalid && account_no.touched" style="color:red;">Account/Metre  number is required</div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <style>
+                        .custom-btn {
+                          background-color: #A11F23;
+                          border-radius: 2rem;
+                          border: none;
+                          color: white;
+                          width: 50%;
+                          font-size: 10px;
+                        }
+
+                        .custom-btn:hover {
+                          background-color: #FDAE1C !important;
+                        }
+                      </style>
+                      <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="Form.invalid">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+          </form>
+
+
+          </div>
+
+      </div>
+  </div>
+
+
+  <div *ngIf="isAccountDetails" class="col-lg-12 col-md-6 col-sm-6">
+    <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+      <div style="font-weight:bolder;margin-left:10px; font-size:30px; color:#A11F23" class="card-header">Account Details</div>
+        <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+
+
+          <form #Form="ngForm" (ngSubmit)="Formdata(Form.value)">
+
+            <div class="col-md-12">
+              <div class="row" style="display: flex; align-items: center; height: 100%;">
+                <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Institution Name</label>
+
+                    <p>{{institutionName}}</p>
+
+
+
+                  </div>
+                </div>
+
+                <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black;font-weight:bold">Account Number</label>
+                    <p>{{customerDetails['accountNumber']}}</p>
+                  </div>
+                </div>
+
+                <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black;font-weight:bold">Account holder Name</label>
+                    <p>{{customerDetails.customer_name}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div style="margin-top: 50px;" class="col-md-12">
+              <div class="row" style="display: flex; align-items: center; height: 100%;">
+                <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Customer Address</label>
+
+                    <p>{{customerDetails.address}}</p>
+                  </div>
+                </div>
+
+                <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Amount Recieved</label>
+                    <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="amount" id="typePasswordX-2" class="form-control form-control-lg" required #amount="ngModel" />
+                    <div *ngIf="amount.invalid && amount.touched" style="color:red;">Amount Recieved is required</div>
+                  </div>
+                </div>
+
+
+              </div>
+            </div>
+
+            <div style="margin-top: 50px;" class="col-md-12">
+              <div class="row" style="display: flex; align-items: center; height: 100%;">
+
+                 <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <style>
+                        .custom-btn {
+                          background-color: #A11F23;
+                          border-radius: 2rem;
+                          border: none;
+                          color: white;
+                          width: 50%;
+                          font-size: 10px;
+                        }
+
+                        .custom-btn:hover {
+                          background-color: #FDAE1C !important;
+                        }
+                      </style>
+                      <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="Form.invalid">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+
+
+
+
+              </div>
+            </div>
+
+
+
+
+
+
+
+
+        </form>
+
+
+        </div>
+
+    </div>
+</div>
+
+</div>

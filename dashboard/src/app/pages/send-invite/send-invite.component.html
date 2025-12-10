@@ -1,0 +1,361 @@
+<app-spinner *ngIf="isLoading">
+
+</app-spinner>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <h5 class="card-title">Event Details below</h5>
+
+            </div>
+            <div class="card-body ">
+
+                <div class="card-body">
+                    <div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 pr-1">
+                            <div class="form-group">
+                                <label>Event Name</label>
+                                <input ngModel name="event_name" readonly type="text" value="{{event['event_name']}}" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-md-6 pr-1">
+                            <div class="form-group">
+                                <label>Location</label>
+                                <input ngModel name="location" readonly type="text" value="{{event['location']}}" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea ngModel readonly name="description" value="{{event['description']}}" type="text" class="form-control"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 pr-1">
+                            <div class="form-group">
+                                <label>Date & Time</label>
+                                <input ngModel name="start_at" readonly value="{{event['start_at']}}" class="form-control">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- <img *ngIf="event['design']" src="assets/img/party1.png" alt="event image" style="width: 250; height: 350px; object-fit: cover;"> -->
+
+                    <!-- <img *ngIf="event['design']" src="assets/img/{{event['design']}}.png" alt="event image" style="width: 250; height: 350px; object-fit: cover;"> -->
+                    <div style="height: 500px;">
+                        <label>Invitation preview</label><br>
+                        <iframe [src]="pdfSrc" style="width: 350px; height: 500px; border: none;"></iframe>
+                    </div>
+
+
+
+
+                </div>
+
+
+
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div *ngIf="builk" class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <button (click)="switchSingle()" type="submit" class="btn btn-primary btn-round">Click to add Single invite</button>
+                <h5 class="card-title">Select invite file</h5>
+            </div>
+            <div class="card-body ">
+                <div class="card-body">
+                    <form #addinviteForm="ngForm" (ngSubmit)="addinvite()" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label for="file">Select File</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input (change)="onFileSelected($event)" type="file" class="custom-file-input" id="file" aria-describedby="inputGroupFileAddon">
+                                            <label class="custom-file-label" for="file">Choose file</label>
+                                        </div>
+
+                                    </div>
+                                    <small *ngIf="fileSelected" class="text-muted">Selected File: {{ selectedFileName }}</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="update ml-auto mr-auto">
+                                <button *ngIf="!isLoading" type="submit" class="btn btn-primary btn-round">Submit</button>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- <div *ngIf="builk" class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <button (click)="switchSingle()" type="submit" class="btn btn-primary btn-round">Click to add Single invite</button>
+                <h5 class="card-title">Select invite file</h5>
+
+            </div>
+            <div class="card-body ">
+
+                <div class="card-body">
+                    <form #addinviteForm="ngForm" (ngSubmit)="addinvite()" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label for="file">Select file</label>
+                                    <input (change)="onFileSelected($event)" type="file" value="selectedFile" class="form-control" id="file">
+                                </div>
+                            </div>
+
+                            <div *ngIf="fileSelected">
+                                <p>Selected File: {{ selectedFileName }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="update ml-auto mr-auto">
+                                <button *ngIf="!isLoading" type="submit" class="btn btn-primary btn-round">Submit</button>
+                            </div>
+
+                            <div>
+
+                            </div>
+                        </div>
+                    </form>
+
+                </div>
+
+
+
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+<div class="row">
+    <div *ngIf="single" class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <button (click)="switchbulk()" type="submit" class="btn btn-primary btn-round">Click to add bulk invites</button>
+                <h5 class="card-title">Add Single Invite</h5>
+
+            </div>
+            <div class="card-body ">
+
+                <div class="card-body">
+                    <form #addsingleinviteForm="ngForm" (ngSubmit)="addsingleinvite(addsingleinviteForm)" enctype="multipart/form-data">
+                        <!-- <input ngModel type="hidden" name="user_id" required minlength="2" maxlength="10" #userNameDir="ngModel"> -->
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>Full Name</label>
+                                    <input ngModel name="full_name" type="text" class="form-control">
+                                    <p *ngIf="required" style="color:red">Field required</p>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>email</label>
+                                    <input ngModel name="email" type="text" class="form-control">
+                                    <p *ngIf="required" style="color:red">Field required</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input placeholder="260977123123" ngModel name="phone" type="text" class="form-control">
+                                    <p *ngIf="required" style="color:red">Field required</p>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <div class="row">
+                            <div class="update ml-auto mr-auto">
+                                <button *ngIf="!isLoading" type="submit" class="btn btn-primary btn-round">Submit</button>
+                                <button style="background-color: grey;" (click)="switchbulk()" *ngIf="!isLoading" type="button" class="btn btn-denger btn-round">Cancel</button>
+
+                            </div>
+                            <div>
+
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h4 class="card-title"> Invitees</h4>
+            </div>
+
+            <div class="card-header">
+                <!-- <div *ngIf="free==3">
+                    <label>
+                  <input type="radio" [(ngModel)]="selectedPaymentMethod" value="cash"> Cash
+                </label>
+                    <label>
+                  <input style="margin-left: 10px;" type="radio" [(ngModel)]="selectedPaymentMethod" value="online"> Online Payment
+                </label>
+                </div> -->
+                <div class="row">
+                    <div class="update ml-auto mr-auto">
+                        <button *ngIf="!isLoading" type="submit" (click)="sendinvites()" class="btn btn-primary btn-round">Send All invites</button>
+                        <button *ngIf="!isLoading" type="submit" (click)="sendSelectedInvites()" class="btn btn-primary btn-round ml-3">Send selected invites</button>
+                    </div>
+
+                    <div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;margin-top:20px; margin-left:20px; margin-right:10px">
+                <div>
+
+                    <input type="checkbox" [(ngModel)]="selectAll" (change)="selectAllInvites()">
+                    <label style="margin-left: 10px;">Select All</label>
+                </div>
+
+                <button *ngIf="!isLoading" (click)="bulkDelete()" style="background-color: red; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Bulk Delete</button>
+            </div>
+
+
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class=" text-primary">
+                            <th style="color: #351431;" class="text-center">
+                                Select
+                            </th>
+                            <th style="color: #351431;" class="text-center">
+                                Name
+                            </th>
+                            <th style="color: #351431;" class="text-center">
+                                phone
+                            </th>
+                            <th style="color: #351431;" class="text-center">
+                                Email
+                            </th>
+                            <th style="color: #351431;" class="text-center">
+                                Invite status
+                            </th>
+                            <th style="color: #351431;" class="text-center">
+                                Edit
+                            </th>
+
+
+
+
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let invite of invites">
+                                <td class="text-center">
+                                    <input type="checkbox" [(ngModel)]="invite.selected" name="selectedInvites">
+                                </td>
+                                <td class="text-center">
+                                    {{invite.name}}
+                                </td>
+                                <td class="text-center">
+                                    {{invite.phone_number}}
+                                </td>
+                                <td class="text-center">
+                                    {{invite.email}}
+                                </td>
+                                <td class="text-center">
+
+                                    <h1 *ngIf="invite.is_sent == 0" class="badge badge-warning">No sent</h1>
+                                    <h1 *ngIf="invite.is_sent == 1" class="badge badge-success">Sent</h1>
+
+
+                                </td>
+
+                                <td class="text-center">
+                                    <button style="background-color: grey;color:rgb(177, 175, 175)" *ngIf="invite.is_sent == 1" class="btn  btn-round">Edit</button>
+                                    <button *ngIf="invite.is_sent == 0" (click)="editInvite(invite.id)" class="btn btn-primary btn-round">Edit</button>
+                                </td>
+
+
+
+                            </tr>
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,155 @@
+<div class="page-wrapper">
+
+  <app-spinner *ngIf="isLoading"></app-spinner>
+
+  <div *ngIf="isAddCustomer" class="form-card">
+
+    <h2 class="form-title">Customer Registration</h2>
+    <p class="form-subtitle">Enter customer details below</p>
+
+          <!-- Pass the 'customerForm' reference to the submit function -->
+          <form (ngSubmit)="submitForm(customerForm)" #customerForm="ngForm">
+
+            <!-- Row 1 -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>First Name</label>
+                <input type="text" class="form-control" name="first_name" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" class="form-control" name="last_name" ngModel required />
+              </div>
+            </div>
+
+            <!-- Row 2 -->
+            <div class="form-row">
+              <div class="form-group">
+                <label>NRC</label>
+                <input type="text" class="form-control" name="nrc" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Occupation</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="occupation" ngModel required />
+              </div>
+            </div>
+
+            <!-- Full width -->
+            <div class="form-group">
+              <label>Residential Address</label>
+              <!-- Added required -->
+              <textarea class="form-control" name="residential_address" ngModel required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Work Address</label>
+              <!-- Added required -->
+              <textarea class="form-control" name="work_address" ngModel required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Contact Number</label>
+              <input type="text" class="form-control" name="contact_number" ngModel required />
+            </div>
+
+            <hr class="section-divider" />
+
+            <h3 class="section-title">Referral Information</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Referral Name</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="referral_name" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Referral Phone</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="referral_phone" ngModel required />
+              </div>
+            </div>
+
+            <hr class="section-divider" />
+
+            <h3 class="section-title">Next of Kin</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Next of Kin Name</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="next_of_kin_name" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Next of Kin Phone</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="next_of_kin_phone" ngModel required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Next of Kin Email</label>
+              <!-- Added required -->
+              <input type="email" class="form-control" name="next_of_kin_email" ngModel required />
+            </div>
+
+            <div class="form-group">
+              <label>Next of Kin Address</label>
+              <!-- Added required -->
+              <textarea class="form-control" name="next_of_kin_address" ngModel required></textarea>
+            </div>
+
+            <!-- Button is disabled if the form is invalid -->
+            <button type="submit" class="submit-btn" [disabled]="!customerForm.valid">
+              Submit
+            </button>
+
+          </form>
+
+
+  </div>
+
+
+<div class="page-wrapper" *ngIf="isAllCustomers">
+
+        <!-- Reusing 'form-card' ensures it is exactly the same width/style as the form -->
+        <div class="form-card">
+
+          <div class="form-title">
+            <strong>All Customers</strong>
+          </div>
+
+          <div class="form-subtitle">
+            List of all registered customers
+          </div>
+
+          <div class="table-container">
+            <table class="custom-table" id="customersTable">
+              <thead>
+                <tr>
+                  <th>First Name</th>
+                  <th>Last Name</th>
+                  <th>NRC</th>
+                  <th>Phone Number</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of customers">
+                  <td>{{ data.first_name | titlecase }}</td>
+                  <td>{{ data.last_name | titlecase }}</td>
+                  <td>{{ data.nrc | uppercase }}</td>
+                  <td>{{ data.contact_number }}</td>
+                  <td class="text-center">
+                    <button class="action-btn" (click)="detailspage(data.id)">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+ </div>
+

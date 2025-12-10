@@ -1,0 +1,420 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<div class="col-md-12">
+  <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+    <div class="card-title">
+    <strong>SUBMITTED EMPLOYEE DETAILS</strong><br/><br/>
+    </div>
+    <div clas="card-body">
+
+      <!-- <form #Form="ngForm" (ngSubmit)="UpDateData(Form.value)"> -->
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">First Name</label>
+              <input
+               readonly
+                style="padding: 5px; border-radius: 1rem"
+                type="text"
+                ngModel
+                name="first_name"
+                id="typePasswordX-2"
+                class="form-control form-control-lg"
+                [(ngModel)]="employeeDetails.first_name"
+                [value]="employeeDetails.first_name | lowercase | titlecase"
+              />
+
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Middle Name</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="middle_name" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.middle_name" [value]="employeeDetails.middle_name | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Last Name</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="last_name" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.last_name" [value]="employeeDetails.last_name | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Date of Birth</label>
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_birth" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.date_of_birth"
+              [value]="employeeDetails.date_of_birth | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Date of Engagement</label>
+              <input readonly  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.date_of_engagement | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Gender</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.gender | lowercase | titlecase"  />
+
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Nationality</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.nationality | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Marital Status</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.marital_status | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Department</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.branch | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Employment Type</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.employment_type | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Work group</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.work_group | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Account Number</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="account_no" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.account_no" [value]="employeeDetails.account_no | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Nhima No</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="nhima_no" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.nhima_no" [value]="employeeDetails.nhima_no | lowercase | titlecase"/>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">TPIN </label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="tpin" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.tpin" [value]="employeeDetails.tpin | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Social Security Number</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="social_security_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.social_security_number" [value]="employeeDetails.social_security_number | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Phone Number</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="phone_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.phone_number" [value]="employeeDetails.phone_number | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">ID Type </label>
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.id_type | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">ID Number</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="id_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.id_number" [value]="employeeDetails.id_number | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Physical Address</label>
+
+              <textarea readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="physical_address" id="typePasswordX-2" class="form-control form-control-lg"[(ngModel)]="employeeDetails.physical_address" [value]="employeeDetails.physical_address | lowercase | titlecase" ></textarea>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Emergency Contact </label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="emergency_contact" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.emergency_contact" [value]="employeeDetails.emergency_contact | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Mobile Number</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="mobile_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.mobile_number" [value]="employeeDetails.mobile_number | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Personal Email</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="personal_email" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.personal_email" [value]="employeeDetails.personal_email | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Work Email</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="work_email" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.work_email" [value]="employeeDetails.work_email | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Position </label>
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.position | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+
+
+        <div class="row">
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Grade </label>
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.grade | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Basic Salary</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="basic_salary" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.basic_salary" [value]="employeeDetails.basic_salary | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Housing Allowance</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="housing_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.housing_allowance" [value]="employeeDetails.housing_allowance | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+
+
+
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Upkeep Allowance</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="upkeep_allowance" id="typePasswordX-2" class="form-control form-control-lg"[(ngModel)]="employeeDetails.upkeep_allowance" [value]="employeeDetails.upkeep_allowance | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Car Allowance</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="car_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.car_allowance" [value]="employeeDetails.car_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Medical Allowance </label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="medical_allowance" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.medical_allowance" [value]="employeeDetails.medical_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Non-Contractual Allowance</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="non_contractual_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.non_contractual_allowance" [value]="employeeDetails.non_contractual_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Employee Number</label>
+              <input readonly style="padding: 5px; border-radius: 1rem" type="text" ngModel name="employee_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.man_no" [value]="employeeDetails.man_no | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Employment Status</label>
+
+              <input readonly style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="text" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.doe"
+              [value]="employeeDetails.employment_status | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+
+
+        </div>
+
+
+
+          <div class="row" style="display: flex; align-items: center; height: 100%; margin-top:50px">
+
+             <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <style>
+                    .custom-btn {
+                      background-color: #A11F23;
+                      border-radius: 2rem;
+                      border: none;
+                      color: white;
+                      width: 50%;
+                      font-size: 10px;
+                    }
+
+                    .custom-btn:hover {
+                      background-color: #FDAE1C !important;
+                    }
+                  </style>
+                  <button (click)="approve()" class="custom-btn btn btn-lg btn-block" type="submit" >
+                    Update
+                  </button>
+
+              </div>
+
+
+
+
+          </div>
+        </div>
+
+      <!-- </form> -->
+
+    </div>
+  </div>
+</div>

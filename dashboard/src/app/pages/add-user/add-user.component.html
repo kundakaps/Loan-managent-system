@@ -1,0 +1,161 @@
+<app-spinner *ngIf="loading"></app-spinner>
+
+
+<div *ngIf="addusers">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card card-user">
+                <div class="card-body">
+                    <form #userForm="ngForm" (ngSubmit)="onSubmit(userForm)">
+
+                        <div class="row">
+                            <div class="col-md-6 pr-1">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input style="border-radius: 30px;" type="text" class="form-control" placeholder="Full name" name="name" ngModel required #name="ngModel" />
+                                    <div *ngIf="name.invalid && name.touched" class="text-danger">
+                                        Name is required.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 pl-1">
+                                <div class="form-group">
+                                    <label>Username</label>
+                                    <input style="border-radius: 30px;" type="text" class="form-control" placeholder="username" name="email" ngModel required username #username="ngModel" />
+                                    <div *ngIf="username.invalid && username.touched" class="text-danger">
+                                        Valid username is required.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input style="border-radius: 30px;" type="password" class="form-control" placeholder="Password" name="password" ngModel required minlength="6" #password="ngModel" />
+                                    <div *ngIf="password.invalid && password.touched" class="text-danger">
+                                        Password must be at least 6 characters long.
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                        <style>
+                            .custom-btn:hover {
+                                background-color: #FDAE1C !important;
+                            }
+                        </style>
+
+                        <div class="row">
+                            <div class="update ml-auto mr-auto">
+                                <button style="background-color: #A11F23;" type="submit" class="sadcustom-btn btn btn-primary btn-round" [disabled]="userForm.invalid">
+                              Submit
+                          </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header ">
+                </div>
+                <div class="card-body ">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-sm row-border hover" id="usersTable">
+                            <thead>
+                                <tr>
+                                    <th style="color: #A11F23; font-size:10px" class="text-left">ID</th>
+                                    <th style="color: #A11F23; font-size:10px" class="text-left">Name</th>
+                                    <th style="color: #A11F23;font-size:10px" class="text-left">Email</th>
+                                    <th style="color: #A11F23;font-size:10px" class="text-left">Role</th>
+                                    <th style="color: #A11F23;font-size:10px" class="text-left">Department</th>
+                                    <th style="color: #A11F23;font-size:10px" class="text-left">Change Role</th>
+                                    <th style="color: #A11F23;font-size:10px" class="text-left">Assign Department</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let user of users ; let i = index">
+                                    <td style="font-size:12px" class="text-left">{{ i + 1 }}</td>
+                                    <td style="font-size:12px" class="text-left">{{ user.name }}</td>
+                                    <td style="font-size:12px" class="text-left">{{ user.email }}</td>
+                                    <td style="font-size:12px" class="text-left">{{ user.role_name }}</td>
+                                    <td style="font-size:12px" class="text-left">{{ user.department_name }}</td>
+
+
+                                    <td style="font-size:12px" class="text-left">
+                                        <select *ngIf="user.role_name !== 'Admin'" style="border-radius: 30px;" class="form-control" (change)="onRoleChange($event, user)">
+                                      <option>Select Role</option>
+                                      <option value="0">User</option>
+                                      <option value="1">Admin</option>
+                                      <option value="2">Final Approver</option>
+
+                                  </select>
+                                        <span *ngIf="user.role_name === 'Admin'" class="approved-text">N/A</span>
+                                    </td>
+
+
+                                    <td style="font-size:12px" class="text-left">
+                                        <select *ngIf="user.role_name !== 'Admin'" style="border-radius: 30px;" class="form-control" (change)="onDepartmentChange($event, user)">
+                                      <option>Select Department</option>
+                                      <option *ngFor="let department of departments" value="{{department.id}}">{{department.name}}</option>
+
+                                  </select>
+                                        <span *ngIf="user.role_name === 'Admin'" class="approved-text">N/A</span>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="approveusers" class="col-md-12">
+
+
+    <div class="card ">
+        <div class="card-header ">
+
+            <p>Approve pending users</p>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm row-border hover" id="pendingusersTable">
+                    <thead>
+                        <tr>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">ID</th>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">Name</th>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">Email</th>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">Status</th>
+                            <th style="color: #A11F23;font-size:10px" class="text-left">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let pendingUser of pendingUsers; let i = index">
+                            <td style="font-size:12px" class="text-left">{{ i + 1 }}</td>
+                            <td style="font-size:12px" class="text-left">{{ pendingUser.name }}</td>
+                            <td style="font-size:12px" class="text-left">{{ pendingUser.email }}</td>
+                            <td style="font-size:12px" class="text-left">{{ pendingUser.status }}</td>
+                            <td style="font-size:12px" class="text-left">
+                                <button style="background-color: #A11F23; margin-top:10px;margin-left:5px" type="button" class="custom-btn btn btn-primary btn-round" (click)="confirmApproval(pendingUser.id)">Approve</button>
+                                <button style="background-color: red; margin-top:10px;margin-left:5px" type="button" class="custom-btn btn btn-primary btn-round" (click)="confirmReject(pendingUser.id)">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>

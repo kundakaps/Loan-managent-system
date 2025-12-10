@@ -1,0 +1,168 @@
+<app-spinner *ngIf="loading"></app-spinner>
+
+<div *ngIf="showaddpayment" class="row">
+
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <!-- <h5 class="card-title">Add Event: events: Invitations</h5> -->
+                <!-- <button (click)="showAddPayments()" class="btn btn-round btn-primary">ADD Payment</button> -->
+                <button (click)="showPayments()" class="btn btn-round btn-primary">Payments</button>
+                <button (click)="SelectPayment()" class="btn btn-round btn-primary">Princing</button>
+
+            </div>
+            <div class="card-body ">
+
+                <div class="card-body">
+
+                </div>
+
+
+
+
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+<div *ngIf="showpayment" class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <button (click)="showPayments()" class="btn btn-round btn-primary">Payments</button>
+                <button (click)="SelectPayment()" class="btn btn-round btn-primary">Pricing</button>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th>Package name</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Reference No</th>
+                        <th>Mode of payment</th>
+                        <th>Payment Date</th>
+                    </tr>
+                    <tr *ngFor="let payment of payments">
+                        <ng-container *ngIf="payment.status === 'TXN_AUTH_SUCCESSFUL' && payment.payment_type === 'online'">
+                            <td>{{ payment.name }}</td>
+                            <td>{{ payment.amount }}</td>
+                            <td>{{ payment.status }}</td>
+                            <td>{{ payment.reference }}</td>
+                            <td>{{ payment.payment_type }}</td>
+                            <td>{{ payment.created_at }}</td>
+                        </ng-container>
+                        <ng-container *ngIf="payment.status === 'pending' && payment.payment_type === 'cash'">
+                            <td>{{ payment.name }}</td>
+                            <td>{{ payment.amount }}</td>
+                            <td>{{ payment.status }}</td>
+                            <td>{{ payment.reference }}</td>
+                            <td>{{ payment.payment_type }}</td>
+                            <td>{{ payment.created_at }}</td>
+                        </ng-container>
+                    </tr>
+                </table>
+            </div>
+            <div class="card-footer">
+                <hr>
+                <div class="stats"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div *ngIf="showpricing" class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+                <!-- <h5 class="card-title">Add Event: events: Invitations</h5> -->
+                <!-- <button (click)="showAddPayments()" class="btn btn-round btn-primary">ADD Payment</button> -->
+                <button (click)="showPayments()" class="btn btn-round btn-primary">Payments</button>
+                <button (click)="SelectPayment()" class="btn btn-round btn-primary">Princing</button>
+
+            </div>
+            <div class="card-body ">
+
+                <div class="row">
+
+                    <div (click)="submit(package.id)" *ngFor="let package of packages" class="container col-md-3 card m-2">
+                        <h4>ZMW {{package.amount}}</h4>
+                        <hr style="margin-top: -19px;">
+                        <p> <i class="nc-icon nc-album-2"> </i> {{ package.invitation}} Invitation</p>
+                        <p> <i class="nc-icon nc-chat-33"> </i> {{ package.sms}} SMSs</p>
+                        <p> <i class="nc-icon nc-email-85"> </i> {{ package.email}} Email</p>
+                        <p> <i class="nc-icon nc-mobile"> </i> Mobile app access</p>
+                    </div>
+
+
+
+
+                    <div class="container col-md-3 card m-2">
+                        <h4>custom</h4>
+                        <hr style="margin-top: -19px;">
+                        <p>Above 500 Invitation</p>
+
+                    </div>
+
+                </div>
+
+
+
+
+            </div>
+            <div class="card-footer ">
+                <hr>
+                <div class="stats">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div *ngIf="isPaymentModalOpen" class="modal-overlay" (click)="closePaymentModal()">
+    <div class="modal-container" (click)="stopPropagation($event)">
+        <div class="modal-header">
+            <h4>{{ modalTitle }}</h4>
+            <span class="close-btn" (click)="closePaymentModal()">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-6 pr-1">
+                    <div class="form-group">
+
+                        <button (click)="submitPaymentonline()" class="btn btn-round btn-primary"> Online Payment</button>
+
+                    </div>
+                </div>
+                <div class="col-md-6 pr-1">
+                    <div class="form-group">
+                        <button (click)="cashpayment()" class="btn btn-round btn-primary"> Cash Payment</button>
+                    </div>
+                </div>
+                <hr>
+
+            </div>
+            <button style="background-color: grey;" (click)="closePaymentModal()" class="btn btn-round btn-primary"> Cancel</button>
+        </div>
+    </div>
+</div>

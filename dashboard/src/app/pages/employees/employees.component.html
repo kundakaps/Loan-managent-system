@@ -1,0 +1,723 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<style>
+  .card-header {
+      display: flex;  /* Make buttons align side by side */
+      gap: 10px;      /* Optional: space between the buttons */
+      width: 30%;
+  }
+
+  .custom-btn {
+      background-color: #A11F23;
+      border-radius: 2rem;
+      border: none;
+      color: white;
+      width: 10px;
+      text-align: center;
+  }
+
+  .custom-btn:hover {
+      background-color: #FDAE1C !important;
+  }
+</style>
+<div *ngIf="isAllEmployees"  class="row">
+  <div class="col-md-12">
+      <div class="card ">
+          <div class="card-header ">
+          </div>
+          <div class="card-body ">
+
+            <style>
+              .custom-btn {
+                  background-color: #A11F23;
+                  border-radius: 2rem;
+                  border: none;
+                  color: white;
+                  width: 80%;
+              }
+
+              .custom-btn:hover {
+                  background-color: #FDAE1C !important;
+              }
+          </style>
+<!-- DataTable -->
+<table class="table table-striped table-bordered table-sm row-border hover" id="employeeTable">
+  <thead>
+    <tr>
+      <th style="color: #351431; font-size:10px" class="text-left">Man No</th>
+      <th style="color: #351431; font-size:10px" class="text-left">First Name</th>
+      <th style="color: #351431; font-size:10px" class="text-left">Middle Name</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Last Name</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Gender</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Branch/Department</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Group Affiliationt</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Grade</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of employees">
+      <td style="font-size:10px" class="text-left">{{ employee.man_no | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.first_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.middle_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.last_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.gender | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.branch_description | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.group_affiliation | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.grade_description | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">
+       <button (click)="viewOptions(employee.first_name, employee.last_name,employee.man_no)" class="custom-btn " >View</button>
+      </td>
+
+
+    </tr>
+  </tbody>
+</table>
+
+              </div>
+          </div>
+  </div>
+</div>
+
+<div *ngIf="isDocuments"  class="row">
+  <div class="col-md-12">
+      <div class="card ">
+          <div class="card-header ">
+            <button (click)="showFamily()" class="custom-btn btn">Family</button>
+            <button (click)="showQualifications()" class="custom-btn btn">Qualifications</button>
+          </div>
+          <div *ngIf="isFamilyDoc" class="card-body ">
+            <div class="card-title">
+              <strong>Family Documents</strong>
+            </div><br/>
+            <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+              <thead>
+                <tr>
+                  <th style="color: #351431; font-size:10px" class="text-left">Man No</th>
+                  <th style="color: #351431; font-size:10px" class="text-left">employee Name</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Relationship</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Member Name</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Member Gender</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Member Id Type</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Member Id Number</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let family of familyDocs">
+                  <td style="font-size:10px" class="text-left">{{ family.man_no }}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.first_name | lowercase | titlecase}} {{ family.last_name | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.relationship_code | lowercase | titlecase }}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.member_first_name| lowercase | titlecase }} {{ family.member_last_name | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.member_gender | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.member_id_type | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.member_id_number }}</td>
+                  <td style="font-size:10px" class="text-left">{{ family.record_status }}</td>
+                  <td style="font-size:10px" class="text-left">
+                  <button (click)="pullFamilyDoc(family.id)" class="custom-btn  " >View</button>
+                  </td>
+
+
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+          <div *ngIf="isQualificationDoc" class="card-body ">
+            <div class="card-title">
+              <strong>Qualification Documents</strong>
+            </div><br/>
+            <table class="table table-striped table-bordered table-sm row-border hover" id="qualificationTable">
+              <thead>
+                <tr>
+                  <th style="color: #351431; font-size:10px" class="text-left">Man No</th>
+                  <th style="color: #351431; font-size:10px" class="text-left">First Name</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Last Name</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">qualification</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Type</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Year of completion</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                  <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let qualificationDoc of qualificationDocs">
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.man_no | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.first_name | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.last_name | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.qualification | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.qualification_type_code | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.year_of_completion | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">{{ qualificationDoc.status | lowercase | titlecase}}</td>
+                  <td style="font-size:10px" class="text-left">
+                  <button (click)="pullQualificationDic(qualificationDoc.id)" class="custom-btn" >View</button>
+                  </td>
+
+
+                </tr>
+              </tbody>
+            </table>
+
+          </div>
+
+
+          </div>
+      </div>
+</div>
+
+<div *ngIf="isAddEmployees"  class="row">
+  <div class="col-md-12">
+      <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+        <div class="card-title">
+        <strong>EMPLOYEE DETAILS</strong><br/><br/>
+        </div>
+        <div clas="card-body">
+
+          <form #Form="ngForm" (ngSubmit)="Formdata(Form.value)">
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">First Name</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="first_name" id="typePasswordX-2" class="form-control form-control-lg" required #first_name="ngModel" />
+                  <div *ngIf="first_name.invalid && first_name.touched" style="color:red;">First Name is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Middle Name</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="middle_name" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Last Name</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="last_name" id="typePasswordX-2" class="form-control form-control-lg" required #last_name="ngModel" />
+                  <div *ngIf="last_name.invalid && last_name.touched" style="color:red;">last Name is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Date of Birth</label>
+                  <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_birth" id="typePasswordX-2" class="form-control form-control-lg" required #date_of_birth="ngModel" />
+                  <div *ngIf="date_of_birth.invalid && date_of_birth.touched" style="color:red;">DOB is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Date of Engagement</label>
+                  <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" required #date_of_engagement="ngModel" />
+                  <div *ngIf="date_of_engagement.invalid && date_of_engagement.touched" style="color:red;">Date of Engagement is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Gender</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="gender" id="typePasswordX-2" class="form-control " required #gender="ngModel">
+                    <option value="MALE">Male</option>
+                    <option value="FEMALE">Female</option>
+                  </select>
+                  <div *ngIf="gender.invalid && gender.touched" style="color:red;">Gender is required</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Nationality</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="nationality" id="typePasswordX-2" class="form-control " required #nationality="ngModel">
+                    <option *ngFor="let nationality of addUserSupportingData.nationality" value="{{nationality.nationality_code}}">{{nationality.description}}</option>
+                  </select>
+                  <div *ngIf="nationality.invalid && nationality.touched" style="color:red;">Nationality is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Marital Status</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="marital_status" id="typePasswordX-2" class="form-control " required #marital_status="ngModel">
+                    <option value="SINGLE">Single</option>
+                    <option value="MARRIED">Married</option>
+                    <option value="DIVORCED">Divorced</option>
+                    <option value="WIDOWED">Widowed</option>
+
+                  </select>
+                  <div *ngIf="marital_status.invalid && marital_status.touched" style="color:red;">marital status is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Department</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="department" id="typePasswordX-2" class="form-control " required #department="ngModel">
+                    <option *ngFor="let branch of addUserSupportingData.branches" value="{{branch.branch_code}}">{{branch.description }}</option>
+
+                  </select>
+                  <div *ngIf="department.invalid && department.touched" style="color:red;">Department is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Employment Type</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="employment_type" id="typePasswordX-2" class="form-control " required #employment_type="ngModel">
+                    <option value="PERMANENT">Permanent</option>
+                    <option value="CONTRACT">Contract</option>
+                  </select>
+                  <div *ngIf="employment_type.invalid && employment_type.touched" style="color:red;">Employment Type is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Work group</label>
+
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="work_group" id="typePasswordX-2" class="form-control " required #work_group="ngModel">
+                    <option value="MANAGEMENT">Management</option>
+                    <option value="UNION">Union</option>
+                  </select>
+                  <div *ngIf="work_group.invalid && work_group.touched" style="color:red;">Work group is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Account Number</label>
+
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="account_no" id="typePasswordX-2" class="form-control form-control-lg" required #account_no="ngModel" />
+                  <div *ngIf="account_no.invalid && account_no.touched" style="color:red;">Account Number is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Nhima No</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="nhima_no" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">TPIN </label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="tpin" id="typePasswordX-2" class="form-control form-control-lg" required #tpin="ngModel" />
+                  <div *ngIf="tpin.invalid && tpin.touched" style="color:red;">TPIN is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Social Security Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="social_security_number" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Phone Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="phone_number" id="typePasswordX-2" class="form-control form-control-lg" required #phone_number="ngModel" />
+                  <div *ngIf="phone_number.invalid && phone_number.touched" style="color:red;">Phone Number is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">ID Type </label>
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="id_type" id="typePasswordX-2" class="form-control " required #id_type="ngModel">
+                    <option value="NRC">NRC</option>
+                    <option value="PASSPORT">Passport</option>
+                  </select>
+                  <div *ngIf="id_type.invalid && id_type.touched" style="color:red;">ID Type is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">ID Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="id_number" id="typePasswordX-2" class="form-control form-control-lg" required #id_number="ngModel" />
+                  <div *ngIf="id_number.invalid && id_number.touched" style="color:red;">ID Number is required</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Physical Address</label>
+
+                  <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="physical_address" id="typePasswordX-2" class="form-control form-control-lg" required #physical_address="ngModel"></textarea>
+                  <div *ngIf="physical_address.invalid && physical_address.touched" style="color:red;">Physical Address is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Emergency Contact </label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="emergency_contact" id="typePasswordX-2" class="form-control form-control-lg" required #emergency_contact="ngModel" />
+                  <div *ngIf="emergency_contact.invalid && emergency_contact.touched" style="color:red;">Emergency Contact is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Mobile Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="mobile_number" id="typePasswordX-2" class="form-control form-control-lg" required #mobile_number="ngModel" />
+                  <div *ngIf="mobile_number.invalid && mobile_number.touched" style="color:red;">Mobile Number is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Personal Email</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="personal_email" id="typePasswordX-2" class="form-control form-control-lg" required #personal_email="ngModel" />
+                  <div *ngIf="personal_email.invalid && personal_email.touched" style="color:red;">Personal Email is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Work Email</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="work_email" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Position </label>
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="position" id="typePasswordX-2" class="form-control " required #position="ngModel">
+                    <option *ngFor="let position of addUserSupportingData.position" value="{{position.position_code}}">{{position.description | lowercase | titlecase}}</option>
+                  </select>
+                  <div *ngIf="position.invalid && position.touched" style="color:red;">Position is required</div>
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+
+            <div class="row">
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Grade </label>
+                  <select   style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="grade" id="typePasswordX-2" class="form-control " required #grade="ngModel">
+                    <option *ngFor="let grade of addUserSupportingData.grade" value="{{grade.grade_code}}">{{grade.grade_description | lowercase | titlecase}}</option>
+                  </select>
+                  <div *ngIf="grade.invalid && grade.touched" style="color:red;">Grade is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Basic Salary</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="basic_salary" id="typePasswordX-2" class="form-control form-control-lg" required #basic_salary="ngModel" />
+                  <div *ngIf="basic_salary.invalid && basic_salary.touched" style="color:red;">Basic Salary is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Housing Allowance</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="housing_allowance" id="typePasswordX-2" class="form-control form-control-lg" required #housing_allowance="ngModel" />
+                  <div *ngIf="housing_allowance.invalid && housing_allowance.touched" style="color:red;">Housing Allowance is required</div>
+                </div>
+              </div>
+
+
+
+
+
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Upkeep Allowance</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="upkeep_allowance" id="typePasswordX-2" class="form-control form-control-lg" />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Car Allowance</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="car_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Medical Allowance </label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="medical_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Non-Contractual Allowance</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="non_contractual_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Employee Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="employee_number" id="typePasswordX-2" class="form-control form-control-lg" required #employee_number="ngModel" />
+                  <div *ngIf="employee_number.invalid && employee_number.touched" style="color:red;">Employee Number is required</div>
+                </div>
+              </div>
+
+
+
+
+            </div>
+
+
+            <div style="margin-top: 50px;" class="col-md-12">
+              <div class="row" >
+
+                 <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <style>
+                        .custom-btn {
+                          background-color: #A11F23;
+                          border-radius: 2rem;
+                          border: none;
+                          color: white;
+                          width: 50%;
+                          font-size: 10px;
+                        }
+
+                        .custom-btn:hover {
+                          background-color: #FDAE1C !important;
+                        }
+                      </style>
+                      <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="Form.invalid">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+
+
+
+
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+  </div>
+
+</div>
+
+<div *ngIf="isEmployeePositions">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+      </div>
+      <div class="card-body">
+        <style>
+          .custom-btn {
+            background-color: #A11F23;
+            border-radius: 2rem;
+            border: none;
+            color: white;
+            width: 80%;
+          }
+          .custom-btn1 {
+            background-color: #A11F23;
+            border-radius: 2rem;
+            border: none;
+            color: white;
+            width: 20%;
+          }
+
+          .custom-btn:hover {
+            background-color: #FDAE1C !important;
+          }
+
+          /* Floating Action Button */
+          .fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #A11F23;
+            border: none;
+            border-radius: 50%;
+            width: 56px;
+            height: 56px;
+            color: white;
+            font-size: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          }
+
+          .fab:hover {
+            background-color: #FDAE1C;
+          }
+        </style>
+        <button *ngIf="Localroles.includes('hr-5')" (click)="onPlusClick()" class="custom-btn1 btn">Add Position</button>
+        <!-- DataTable -->
+        <table class="table table-striped table-bordered table-sm row-border hover" id="employeePositionTable">
+          <thead>
+            <tr>
+              <th style="color: #351431; font-size:10px" class="text-left">Position Code</th>
+              <th style="color: #351431; font-size:10px" class="text-left">Posistion Description</th>
+              <th style="color: #351431; font-size:10px" class="text-left">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let position of addUserSupportingData.position">
+              <td style="font-size:10px" class="text-left">{{ position.position_code | lowercase | titlecase}}</td>
+              <td style="font-size:10px" class="text-left">{{ position.description | lowercase | titlecase}}</td>
+              <td style="font-size:10px" class="text-left">
+                <button (click)="deletePosition(position.position_code)" class="custom-btn">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Floating Action Button -->
+        <!-- <button class="fab" (click)="onPlusClick()">+</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div *ngIf="isEmployeeUpdates"  class="row">
+  <div class="col-md-12">
+      <div class="card ">
+          <div class="card-header ">
+          </div>
+          <div class="card-body ">
+
+            <style>
+              .custom-btn {
+                  background-color: #A11F23;
+                  border-radius: 2rem;
+                  border: none;
+                  color: white;
+                  width: 80%;
+              }
+
+              .custom-btn:hover {
+                  background-color: #FDAE1C !important;
+              }
+          </style>
+<!-- DataTable -->
+<table class="table table-striped table-bordered table-sm row-border hover" id="employeependingupdateTable">
+  <thead>
+    <tr>
+      <th style="color: #351431; font-size:10px" class="text-left">Man No</th>
+      <th style="color: #351431; font-size:10px" class="text-left">Time Submitted</th>
+      <th style="color: #351431; font-size:10px" class="text-left">Status</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employeesPendingUpdates of employeesPendingUpdates">
+      <td style="font-size:10px" class="text-left">{{ employeesPendingUpdates.man_no | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employeesPendingUpdates.timestamp | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employeesPendingUpdates.record_status | lowercase | titlecase}}</td>
+
+      <td style="font-size:10px" class="text-left">
+       <button (click)="gotoDetails(employeesPendingUpdates.man_no)" class="custom-btn " >View</button>
+      </td>
+
+
+    </tr>
+  </tbody>
+</table>
+
+              </div>
+          </div>
+      </div>
+</div>
+

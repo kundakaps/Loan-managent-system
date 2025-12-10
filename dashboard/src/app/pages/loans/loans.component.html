@@ -1,0 +1,135 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<div *ngIf="isAddloan" class="form-card">
+  <h2 class="form-title">Create Loan Facility</h2>
+  <p class="form-subtitle">Enter loan details below</p>
+
+  <form (ngSubmit)="submitForm(customerForm)" #customerForm="ngForm">
+
+    <!-- Row 1 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Select Client</label>
+        <!-- Added [(ngModel)] -->
+        <select class="form-control" name="client_id" [(ngModel)]="loanModel.client_id" required>
+          <option value="">Select Client</option>
+          <option *ngFor="let client of customers" [value]="client.id">
+            {{ client.first_name + ' ' + client.last_name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Select Facility</label>
+        <!--
+           1. Value is bound to facility.id (Requirement Met)
+           2. (ngModelChange) triggers calculation when facility changes
+        -->
+        <select class="form-control" name="facility_name"
+                [(ngModel)]="loanModel.facility_id"
+                (ngModelChange)="calculateMonthlyRepayment()"
+                required>
+          <option value="">Select Facility</option>
+          <option *ngFor="let facility of facilities" [value]="facility.id">
+            {{ facility.facility_name }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Amount</label>
+        <!-- Triggers calculation when amount changes -->
+        <input type="number" class="form-control" name="amount"
+               [(ngModel)]="loanModel.amount"
+               (ngModelChange)="calculateMonthlyRepayment()"
+               required />
+      </div>
+      <div class="form-group">
+        <label>Tenure (in Months)</label>
+        <!-- Triggers calculation when tenure changes -->
+        <input type="number" class="form-control" name="tenure"
+               [(ngModel)]="loanModel.tenure"
+               (ngModelChange)="calculateMonthlyRepayment()"
+               required />
+      </div>
+    </div>
+
+    <!-- Full width -->
+    <div class="form-group">
+      <label>Monthly Repayment</label>
+      <!--
+         1. Bound to the calculated result
+         2. Readonly so user cannot edit it manually
+      -->
+      <input type="text" class="form-control" name="monthly_repayments"
+             [ngModel]="loanModel.monthly_repayment"
+             readonly
+             required />
+    </div>
+
+    <div class="form-group">
+      <label>Date of Next Payment</label>
+      <input type="date" class="form-control" name="next_payment"
+             [(ngModel)]="loanModel.next_payment"
+             required />
+    </div>
+
+    <button type="submit" class="submit-btn" [disabled]="!customerForm.valid">
+      Submit
+    </button>
+
+  </form>
+</div>
+
+
+
+  <div class="page-wrapper" *ngIf="isAllLoans">
+
+        <!-- Reusing 'form-card' ensures it is exactly the same width/style as the form -->
+        <div class="form-card">
+
+          <div class="form-title">
+            <strong>All Loans</strong>
+          </div>
+
+          <div class="form-subtitle">
+            List of all loans
+          </div>
+
+          <div class="table-container">
+            <table class="custom-table" id="loansTable">
+              <thead>
+                <tr>
+                  <th>Client Name</th>
+                  <th>Facility Name</th>
+                  <th>Amount</th>
+                  <th>Balance</th>
+                  <th>Next Payment Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of Loans">
+                  <td>{{ data.first_name | titlecase }} {{ data.last_name | titlecase }}</td>
+                  <td>{{ data.amount | titlecase }}</td>
+                  <td>{{ data.facility_name | titlecase }}</td>
+                  <td>{{ data.balance | titlecase }}</td>
+                  <td>{{ data.next_payment_date | titlecase }}</td>
+                  <td>{{ data.status | titlecase }}</td>
+                  <td class="text-center">
+                    <button class="action-btn" (click)="detailspage(data.id)">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+  </div>
+

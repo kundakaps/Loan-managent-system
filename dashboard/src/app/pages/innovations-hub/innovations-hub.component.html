@@ -1,0 +1,138 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<div *ngIf="isSubmission">
+  <div class="col-md-12 col-sm-12">
+    <div class="card shadow-2-strong" style="border-radius: 1rem;">
+        <div class="card-body p-5">
+          <div class="card-header">
+            Cultivating Creative Concepts: <strong>Innovation Submission Form</strong>
+          </div><br/><br/>
+
+              <form style="padding:15px" #Form="ngForm" (ngSubmit)="Formdata(Form.value)">
+
+                <div class="row">
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Innovation Title</label>
+                      <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="title" id="typePasswordX-2" class="form-control form-control-lg" required #title="ngModel" />
+                      <div *ngIf="title.invalid && title.touched" style="color:red;">Innovation Title is required</div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+                <div class="row">
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Introduction</label>
+                      <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="introduction" id="typePasswordX-2" class="form-control form-control-lg" required #introduction="ngModel">
+
+                      </textarea>
+
+                      <div *ngIf="introduction.invalid && introduction.touched" style="color:red;">Introduction is required</div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Business Problem</label>
+                      <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="business_problem" id="typePasswordX-2" class="form-control form-control-lg" required #business_problem="ngModel">
+
+                      </textarea>
+
+                      <div *ngIf="business_problem.invalid && business_problem.touched" style="color:red;">Business Problem is required</div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row">
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Proposed Solutions</label>
+                      <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="proposed_solution" id="typePasswordX-2" class="form-control form-control-lg" required #proposed_solution="ngModel">
+
+                      </textarea>
+
+                      <div *ngIf="proposed_solution.invalid && proposed_solution.touched" style="color:red;">Proposed Solutions is required</div>
+                    </div>
+                  </div>
+
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Competitive Analysis</label>
+                      <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="competitive_analysis" id="typePasswordX-2" class="form-control form-control-lg" required #competitive_analysis="ngModel">
+
+                      </textarea>
+
+                      <div *ngIf="competitive_analysis.invalid && competitive_analysis.touched" style="color:red;">Competitive Analysis is required</div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="row">
+
+                  <div class="col-md-6 4pr-1">
+                    <div class="form-group">
+                      <label style="color:black; font-weight:bold">Proposed Innovation Benefits</label>
+                      <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="proposed_innovation_benefits" id="typePasswordX-2" class="form-control form-control-lg" required #proposed_innovation_benefits="ngModel">
+
+                      </textarea>
+
+                      <div *ngIf="proposed_innovation_benefits.invalid && proposed_innovation_benefits.touched" style="color:red;">Proposed Innovation Benefits is required</div>
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+
+                <div style="margin-top: 50px;" >
+                  <div class="row" >
+
+                     <div class="col-md-4 4pr-1">
+                        <div class="form-group">
+                          <style>
+                            .custom-btn {
+                              background-color: #A11F23;
+                              border-radius: 2rem;
+                              border: none;
+                              color: white;
+                              width: 100%;
+                              font-size: 10px;
+                            }
+
+                            .custom-btn:hover {
+                              background-color: #FDAE1C !important;
+                            }
+                          </style>
+                          <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="Form.invalid">
+                            Submit
+                          </button>
+                        </div>
+                      </div>
+
+
+
+
+                  </div>
+                </div>
+
+              </form>
+
+
+    </div>
+</div>
+</div>

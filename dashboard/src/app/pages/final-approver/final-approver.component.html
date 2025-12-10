@@ -1,0 +1,68 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+
+<div *ngIf="pending" class="col-md-12">
+    <div class="card ">
+        <div class="card-header ">
+
+            <p>Pending Messages</p>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm row-border hover" id="final">
+                    <thead>
+                        <tr>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">ID</th>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">Message</th>
+                            <th style="color: #A11F23;font-size:10px" class="text-left">Action</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let Message of MessageData; let i = index">
+                            <td style="font-size:12px" class="text-left">{{ i + 1 }}</td>
+                            <td style="font-size:12px" class="text-left">{{ Message.message }}</td>
+                            <td style="font-size:12px" class="text-left">
+                                <button style="background-color: #A11F23; margin-top:10px;margin-left:5px" type="button" class="custom-btn btn btn-primary btn-round" (click)="confirmApproval(Message.id)">Approve</button>
+                                <button type="button" style="margin-top:10px;margin-left:5px" class="custom-btn btn btn-primary btn-round" (click)="editMessage(Message.id, Message.message)">Edit</button>
+                                <button style="background-color: red; margin-top:10px;margin-left:5px" type="button" class="custom-btn btn btn-primary btn-round" (click)="confirmReject(Message.id)">Reject</button>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div *ngIf="approved" class="col-md-12">
+    <div class="card ">
+        <div class="card-header ">
+
+            <p>Approved Messages</p>
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-sm row-border hover" id="approvedTable">
+                    <thead>
+                        <tr>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">ID</th>
+                            <th style="color: #A11F23; font-size:10px" class="text-left">Message</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let Message of MessageData; let i = index">
+
+                            <td style="font-size:12px" class="text-left">{{ i + 1 }}</td>
+                            <td style="font-size:12px" class="text-left">{{ Message.message }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>

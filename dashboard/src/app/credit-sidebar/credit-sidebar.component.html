@@ -1,0 +1,69 @@
+<div class="sidebar-wrapper">
+    <div class="logo">
+        <a class="simple-text logo-normal">
+            <div style="display: flex; justify-content: center; align-items: center; margin:-20px">
+                <img style="height: 105px;" src="assets/img/logo.png">
+
+
+            </div>
+        </a>
+        <a class="simple-text logo-normal">
+
+        </a>
+    </div>
+    <style>
+        /* Reset any inherited styles causing greyed-out effect */
+
+        .nav a,
+        i,
+        .nav .menu-link,
+        .nav .child-link {
+            color: #A11F23 !important;
+            font-weight: 500;
+            text-decoration: none;
+            opacity: 1 !important;
+            /* Ensures there’s no dimming effect */
+        }
+        /* Hover effect */
+
+        .menu-link:hover,
+        .child-link:hover {
+            color: yellow !important;
+        }
+
+        .nc-icon {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .nav p {
+            margin: 0;
+            font-size: 14px;
+        }
+    </style>
+
+    <ul class="nav">
+        <li *ngFor="let menuItem of menuItems" [ngClass]="menuItem.class">
+            <a *ngIf="!menuItem.children" [routerLink]="menuItem.path" class="menu-link">
+                <i style=" font-size: 15px;" class="nc-icon {{ menuItem.icon }}"></i>
+                <p style=" font-size: 10px;">{{ menuItem.title }}</p>
+            </a>
+
+
+            <div *ngIf="menuItem.children" style="margin-left: 24px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
+                <a href="javascript:void(0)" (click)="toggleDropdown(menuItem)" class="menu-link" style="display: flex; align-items: center;">
+                    <i style=" font-size: 15px;" class="nc-icon {{ menuItem.icon }}"></i>
+                    <p style=" font-size: 10px; margin-left: 0px;">{{ menuItem.title }}</p>
+                </a>
+                <ul *ngIf="menuItem.isOpen" class="nav" style="margin-left:19px; margin-top:-1px;display: flex; flex-direction: column; justify-content: center; align-items: flex-start;  padding-left: 20px;">
+                    <li *ngFor="let child of menuItem.children">
+                        <a style="font-size: 10px; margin: 0px; display: inline;" [routerLink]="menuItem.path + '/' + child.path" class="child-link">{{ child.title }}</a>
+                    </li>
+                </ul>
+            </div>
+
+        </li>
+    </ul>
+
+
+</div>

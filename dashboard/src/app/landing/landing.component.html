@@ -1,0 +1,151 @@
+<div>
+    <app-spinner *ngIf="isLoading"></app-spinner>
+</div>
+
+<!-- Navbar -->
+<nav style="background-color:white" class="navbar navbar-expand-lg">
+    <div class="container-fluid d-flex align-items-center">
+        <!-- Logo on the left -->
+        <a style="margin-left:25px" class="navbar-brand" >
+            <img src="assets/img/logo.png" alt="Logo" style="height: 90px;">
+        </a>
+
+        <!-- User Name and Icon on the right -->
+        <div style="margin-right: 25px;" class="ms-auto d-flex align-items-center">
+            <span style="font-size:18px" class="navbar-text text-black">{{username|lowercase}}</span>
+            <i (click)="logout()" style="font-size: 25px; margin-left: 10px; color:red" class="nc-icon nc-button-power"></i>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Section -->
+<section style="margin-top: -90px;" class="vh-100 d-flex flex-column justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+          <div class="col-md-8 col-sm-12 d-flex flex-column justify-content-center align-items-center mb-4 text-center">
+            <!-- Grid of buttons or content -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 15px; justify-items: center; margin: 20px 0;">
+
+                <a href="/#/dashboard">
+                    <div *ngIf="roles.includes('hr')"
+                         style="width: 150px; height: 150px; background-color: white; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px; font-size: 24px; cursor: pointer; box-shadow: 0px 4px 6px rgba(161, 30, 35, 0.3); padding-top: 10px;">
+                        <img src="assets/img/landing/hr1.png" alt="HR" style="width: 150px; height: 150px; object-fit: contain; padding:10px">
+                        <div>
+                            <p style="font-size:12px; padding:13px">Human Resource</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/#/rm/dashboard">
+                    <div *ngIf="roles.includes('rm')"
+                         style="width: 150px; height: 150px; background-color: white; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px; font-size: 24px; cursor: pointer; box-shadow: 0px 4px 6px rgba(161, 30, 35, 0.3); padding-top: 10px;">
+                        <img src="assets/img/landing/rm.png" alt="RM" style="width: 120px; height: 100px; object-fit: contain; padding:10px">
+                        <div>
+                            <p style="font-size:12px; padding:13px">Relationship Management</p>
+                        </div>
+                    </div>
+                </a>
+                <a href="/#/ip/dashboard">
+                    <div *ngIf="roles.includes('ip')"
+                         style="width: 150px; height: 150px; background-color: white; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px; font-size: 24px; cursor: pointer; box-shadow: 0px 4px 6px rgba(161, 30, 35, 0.3); padding-top: 10px;">
+                        <img src="assets/img/landing/ip.png" alt="IP" style="width: 150px; height: 150px; object-fit: contain;padding:10px">
+                        <div>
+                            <p style="font-size:12px; padding:13px">Integrated Payments</p>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="/#/credit/dashboard">
+                  <div *ngIf="roles.includes('cr')"
+                       style="width: 150px; height: 150px; background-color: white; color: black; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: 15px; font-size: 24px; cursor: pointer; box-shadow: 0px 4px 6px rgba(161, 30, 35, 0.3); padding-top: 10px;">
+                      <img src="assets/img/landing/ip.png" alt="CR" style="width: 150px; height: 150px; object-fit: contain;padding:10px">
+                      <div>
+                          <p style="font-size:12px; padding:13px">Credit</p>
+                      </div>
+                  </div>
+              </a>
+
+            </div>
+
+         </div>
+
+
+            <div class="col-md-4 col-sm-12">
+                <!-- Slideshow Container -->
+                <div class="slideshow-container">
+                    <div *ngFor="let image of images; let i = index" class="slides" [ngStyle]="{ display: slideIndex === (i + 1) ? 'block' : 'none' }">
+                        <img [src]="image" alt="Slideshow Image">
+                    </div>
+
+                    <a class="prev" (click)="changeSlide(-1)">&#10094;</a>
+                    <a class="next" (click)="changeSlide(1)">&#10095;</a>
+                </div>
+
+                <!-- Slideshow Styles -->
+                <style>
+                    * {
+                        margin: 0;
+                        padding: 0;
+                        box-sizing: border-box;
+                    }
+
+                    .slideshow-container {
+                        position: relative;
+                        max-width: 100%;
+                        margin: auto;
+                    }
+
+                    .slides {
+                        display: none;
+                        width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                    }
+
+                    .slides img {
+                        width: 100%;
+                        height: auto;
+                        border-radius: 8px;
+                    }
+
+                    .prev,
+                    .next {
+                        position: absolute;
+                        top: 50%;
+                        width: auto;
+                        padding: 16px;
+                        color: white;
+                        font-weight: bold;
+                        font-size: 18px;
+                        border-radius: 0 3px 3px 0;
+                        user-select: none;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        cursor: pointer;
+                        transition: 0.3s;
+                        z-index: 1;
+                    }
+
+                    .prev {
+                        left: 0;
+                        border-radius: 3px 0 0 3px;
+                    }
+
+                    .next {
+                        right: 0;
+                        border-radius: 3px 0 0 3px;
+                    }
+
+                    .prev:hover,
+                    .next:hover {
+                        background-color: rgba(0, 0, 0, 0.8);
+                    }
+                </style>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="fixed-bottom text-center p-2" style="background-color: rgba(0, 0, 0, 0.5); color: white;">&copy; {{test | date: 'yyyy'}}, HRMS Portal powered by
+        <a style="color: #A11F23;font-weight:bold" href="https://www.izb.co.zm/">IZB Development Team</a>
+    </footer>
+</section>

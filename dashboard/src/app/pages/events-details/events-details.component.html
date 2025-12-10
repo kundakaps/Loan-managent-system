@@ -1,0 +1,111 @@
+<!-- Spinner displayed while data is loading -->
+<div style="display: flex; justify-content: center; align-items: center; height: 80vh;" *ngIf="isLoading">
+  <app-spinner></app-spinner>
+</div>
+
+<!-- Main Content Area: Displayed only when data is loaded -->
+<div *ngIf="!isLoading && eventDetails" class="row" style="font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;">
+  <div class="col-md-12">
+    <!-- The main card with white background and subtle shadow -->
+    <div class="card" style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.05);">
+
+      <!-- Card Header: Contains the event title and key details -->
+      <div class="card-header" style="padding: 24px 30px; border-bottom: 1px solid #f0f0f0; background-color: transparent;">
+        <h2 style="color: #1a1a1a; font-weight: 600; margin: 0; font-size: 28px;">
+          {{ eventDetails.event.title }}
+        </h2>
+        <div style="margin-top: 12px; display: flex; align-items: center; flex-wrap: wrap; gap: 20px; color: #555; font-size: 15px;">
+          <span style="display: flex; align-items: center;">
+            <b style="color: #FFC107; font-size: 20px; margin-right: 8px;">☰</b>
+            {{ eventDetails.event.start_date | date: 'fullDate' }}
+          </span>
+          <span style="display: flex; align-items: center;">
+            <b style="color: #FFC107; font-size: 20px; margin-right: 8px;">⏰</b>
+            {{ eventDetails.event.start_time }}
+          </span>
+          <span style="display: flex; align-items: center;">
+            <b style="color: #FFC107; font-size: 20px; margin-right: 8px;"></b>
+            {{ eventDetails.event.location }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Card Body: Contains description, charts, and financial summary -->
+      <div class="card-body" style="padding: 30px;">
+
+        <!-- Event Description -->
+        <div style="margin-bottom: 30px;">
+            <h4 style="color: #333; font-weight: 600; border-left: 4px solid #FFC107; padding-left: 12px; margin-bottom: 15px;">Event Overview</h4>
+            <p style="color: #666; font-size: 16px; line-height: 1.6;">
+                {{ eventDetails.event.description }}
+            </p>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+        <!-- Ticket Analytics Section with Charts -->
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h3 style="color: #1a1a1a; font-weight: 600;">Ticket Sales Analytics</h3>
+        </div>
+
+        <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 30px;">
+            <!-- VIP Tickets Chart and Info -->
+            <div style="flex: 1; min-width: 280px; text-align: center; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+                <h5 style="color: #333; font-weight: 600; margin-bottom: 20px;">VIP Tickets</h5>
+                <div style="position: relative; max-width: 200px; margin: auto;">
+                    <canvas #vipTicketsChart></canvas>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                         <div style="font-size: 28px; font-weight: 700; color: #1a1a1a;">{{ eventDetails.data.sold_vip_tickets }}</div>
+                         <div style="font-size: 14px; color: #666;">Sold</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; font-size: 15px; color: #444;">
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #FFC107; border-radius: 50%; margin-right: 8px;"></span>
+                    Sold: <b>{{ eventDetails.data.sold_vip_tickets }}</b>
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #343A40; border-radius: 50%; margin-right: 8px; margin-left: 15px;"></span>
+                    Remaining: <b>{{ eventDetails.data.remaining_vip_tickets }}</b>
+                </div>
+            </div>
+
+            <!-- Normal Tickets Chart and Info -->
+            <div style="flex: 1; min-width: 280px; text-align: center; padding: 20px; background-color: #f9f9f9; border-radius: 8px;">
+                <h5 style="color: #333; font-weight: 600; margin-bottom: 20px;">Standard Tickets</h5>
+                <div style="position: relative; max-width: 200px; margin: auto;">
+                    <canvas #normalTicketsChart></canvas>
+                     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+                         <div style="font-size: 28px; font-weight: 700; color: #1a1a1a;">{{ eventDetails.data.sold_normal_tickets }}</div>
+                         <div style="font-size: 14px; color: #666;">Sold</div>
+                    </div>
+                </div>
+                 <div style="margin-top: 20px; font-size: 15px; color: #444;">
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #FFC107; border-radius: 50%; margin-right: 8px;"></span>
+                    Sold: <b>{{ eventDetails.data.sold_normal_tickets }}</b>
+                    <span style="display: inline-block; width: 12px; height: 12px; background-color: #343A40; border-radius: 50%; margin-right: 8px; margin-left: 15px;"></span>
+                    Remaining: <b>{{ eventDetails.data.remaining_normal_tickets }}</b>
+                </div>
+            </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 40px 0;">
+
+        <!-- Financial Summary -->
+        <div>
+            <h4 style="color: #333; font-weight: 600; border-left: 4px solid #FFC107; padding-left: 12px; margin-bottom: 20px;">Revenue Summary</h4>
+             <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: #fdfdfd; border-radius: 6px; margin-bottom: 10px;">
+                <span style="font-size: 16px; color: #555;">VIP Ticket Revenue</span>
+                <span style="font-size: 18px; font-weight: 600; color: #212529;">{{ eventDetails.data.vip_amount_sold | currency:'k':'symbol':'1.2-2' }}</span>
+            </div>
+             <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px; background-color: #fdfdfd; border-radius: 6px; margin-bottom: 10px;">
+                <span style="font-size: 16px; color: #555;">Standard Ticket Revenue</span>
+                <span style="font-size: 18px; font-weight: 600; color: #212529;">{{ eventDetails.data.normal_amount_sold | currency:'k':'symbol':'1.2-2' }}</span>
+            </div>
+             <div style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background-color: #FFC107; border-radius: 6px; margin-top: 15px;">
+                <span style="font-size: 18px; font-weight: 700; color: #1a1a1a;">Total Revenue</span>
+                <span style="font-size: 22px; font-weight: 700; color: #1a1a1a;">{{ (eventDetails.data.vip_amount_sold + eventDetails.data.normal_amount_sold) | currency:'k':'symbol':'1.2-2' }}</span>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

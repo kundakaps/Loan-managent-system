@@ -1,0 +1,104 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<style>
+  .card-header {
+      display: flex;  /* Make buttons align side by side */
+      gap: 10px;      /* Optional: space between the buttons */
+      width: 30%;
+  }
+
+  .custom-btn {
+      background-color: #A11F23;
+      border-radius: 2rem;
+      border: none;
+      color: white;
+      width: 100%;
+      text-align: center;
+  }
+
+  .custom-btn:hover {
+      background-color: #FDAE1C !important;
+  }
+</style>
+<div *ngIf="isPending">
+  <div  class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+
+            </div>
+            <div class="card-body ">
+              <div class="card-title">
+                <strong>Leave Pending Approval</strong>
+              </div><br/>
+              <table class="table table-striped table-bordered table-sm row-border hover" id="leavepending">
+                <thead>
+                  <tr>
+
+                    <th style="color: #351431;font-size:10px" class="text-left">Leave Reference</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Name</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Leave Type</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Leave Balance</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Number of Days</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Start Date</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">End Date</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let pendingLeave of pendingLeave">
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.leave_ref_no | lowercase | titlecase}} </td>
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.first_name | lowercase | titlecase}} {{ pendingLeave.middle_name | lowercase | titlecase}} {{ pendingLeave.last_name | lowercase | titlecase}}</td>
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.leave_type | lowercase | titlecase}} </td>
+                    <td style="font-size:10px" class="text-left">
+                      <p *ngIf="leaveTypeLowercase(pendingLeave.leave_type) == 'annual' || leaveTypeLowercase(pendingLeave.leave_type) == 'commutation' || leaveTypeLowercase(pendingLeave.leave_type) == 'special'">
+                        {{ pendingLeave.annual }}
+                      </p>
+                      <p *ngIf="leaveTypeLowercase(pendingLeave.leave_type) == 'study' ">
+                        {{ pendingLeave.study_leave }}
+                      </p>
+
+                      <p *ngIf="leaveTypeLowercase(pendingLeave.leave_type) == 'paternity' || leaveTypeLowercase(pendingLeave.leave_type) == 'maternity' ">
+                        {{ pendingLeave.parental_leave }}
+                      </p>
+
+                      <p *ngIf="leaveTypeLowercase(pendingLeave.leave_type) == 'compassionate' ">
+                        {{ pendingLeave.compassionate }}
+                      </p>
+
+                      <p *ngIf="leaveTypeLowercase(pendingLeave.leave_type) == 'family responsibility' ">
+                        {{ pendingLeave.family_responsibility }}
+                      </p>
+
+
+                    </td>
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.number_of_days | lowercase | titlecase }}</td>
+
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.start_date| date:'dd/MM/yy' | lowercase | titlecase}}</td>
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.end_date | date:'dd/MM/yy' | lowercase | titlecase}}</td>
+
+                    <td style="font-size:10px" class="text-left">{{ pendingLeave.status }}</td>
+                    <td style="font-size:10px" class="text-left">
+                    <button (click)="actionPending(pendingLeave.leave_ref_no, pendingLeave.leave_type)" class="custom-btn  " >View</button>
+                    </td>
+
+
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+
+            </div>
+        </div>
+  </div>
+</div>

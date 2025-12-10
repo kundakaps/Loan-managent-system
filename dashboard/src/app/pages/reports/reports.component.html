@@ -1,0 +1,156 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<style>
+  .custom-btn {
+    background-color: #A11F23;
+    border-radius: 2rem;
+    border: none;
+    color: white;
+    width: 50%;
+    font-size: 10px;
+  }
+
+  .custom-btn:hover {
+    background-color: #FDAE1C !important;
+  }
+
+  .custom-btn1 {
+    background-color: #A11F23;
+    border-radius: 2rem;
+    border: none;
+    color: white;
+    width: 100%;
+    font-size: 10px;
+  }
+
+  .custom-btn1:hover {
+    background-color: #FDAE1C !important;
+  }
+
+  .custom-btn2 {
+    background-color: #A11F23;
+    border-radius: 2rem;
+    border: none;
+    color: white;
+    width: 200px;
+    font-size: 10px;
+  }
+
+  .custom-btn2:hover {
+    background-color: #FDAE1C !important;
+  }
+</style>
+
+
+<div *ngIf="isEmployeeReport"  class="row">
+  <div class="col-md-12">
+      <div class="card ">
+          <div class="card-header ">
+          </div>
+          <div class="card-body ">
+
+            <!-- <style>
+              .custom-btn {
+                  background-color: #A11F23;
+                  border-radius: 2rem;
+                  border: none;
+                  color: white;
+                  width: 80%;
+              }
+
+              .custom-btn:hover {
+                  background-color: #FDAE1C !important;
+              }
+          </style> -->
+<!-- DataTable -->
+<!-- employee.component.html -->
+<!-- Filter inputs section -->
+<div class="filter-section mb-3">
+  <div class="row">
+    <div class="col-md-2">
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.branch" placeholder="Branch/Department" (input)="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.groupAffiliation" placeholder="Group Affiliation" (input)="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.grade" placeholder="Grade" (input)="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.employmentStatus" placeholder="Employment Status" (input)="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <input type="text" class="form-control form-control-sm" [(ngModel)]="filters.basicPay" placeholder="Basic Pay" (input)="applyFilters()">
+    </div>
+    <div class="col-md-2">
+      <p>{{numberOfEmployees}} Employees</p>
+      <!-- <input type="text" class="form-control form-control-sm"  value=""> -->
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-md-3">
+      <label class="small">Date of Engagement:</label>
+      <div class="d-flex">
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.doeStart" (input)="applyFilters()">
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.doeEnd" (input)="applyFilters()">
+      </div>
+    </div>
+    <div class="col-md-3">
+      <label class="small">End of Service:</label>
+      <div class="d-flex">
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.eosStart" (input)="applyFilters()">
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="filters.eosEnd" (input)="applyFilters()">
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row" style="display: flex; justify-content: flex-end;">
+  <div style="display: flex; gap: 10px;">
+    <button (click)="exportToCSV()" class="custom-btn2 btn">Export to CSV</button>
+    <button (click)="exportToExcel()" class="custom-btn2 btn">Export to Excel</button>
+  </div>
+</div>
+<!-- Employee Table -->
+<table class="table table-striped table-bordered table-sm row-border hover" id="employeeTable">
+  <thead>
+    <tr>
+      <th style="color: #351431; font-size:10px" class="text-left">Man No</th>
+      <th style="color: #351431; font-size:10px" class="text-left">First Name</th>
+      <th style="color: #351431; font-size:10px" class="text-left">Middle Name</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Last Name</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Gender</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Branch/Department</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Group Affiliation</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Grade</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Employee Status</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Basic Pay</th>
+      <th style="color: #351431;font-size:10px" class="text-left">Date of Engagement</th>
+      <th style="color: #351431;font-size:10px" class="text-left">End of service</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let employee of filteredEmployees">
+      <td style="font-size:10px" class="text-left">{{ employee.man_no | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.first_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.middle_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.last_name | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.gender | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.branch_description | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.group_affiliation | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.grade_description | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.employment_status | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.basic_pay | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.doe | date:'dd-MM-yy' | lowercase | titlecase}}</td>
+      <td style="font-size:10px" class="text-left">{{ employee.end_of_service | date:'dd-MM-yy' | lowercase | titlecase}}</td>
+    </tr>
+  </tbody>
+</table>
+
+              </div>
+          </div>
+  </div>
+</div>

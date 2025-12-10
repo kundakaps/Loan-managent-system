@@ -1,0 +1,1402 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+
+<div *ngIf="isQualification" >
+
+  <div  class="row">
+
+    <div class="col-md-12" >
+      <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+        <div class="card-title">
+          <strong>QUALIFICATION DETAILS</strong><br/><br/>
+        </div>
+
+        <div clas="card-body">
+          <form #usersForm="ngForm" (ngSubmit)="AddQualification(usersForm.value)" enctype="multipart/form-data">
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Institution </label>
+                  <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="institution" id="typePasswordX-2" class="form-control " required #institution="ngModel">
+                    <option *ngFor="let institution of qualificationData.institutions" value="{{institution.id}}">{{institution.short_name | lowercase | titlecase}}</option>
+                  </select>
+                  <div *ngIf="institution.invalid && institution.touched" style="color:red;">Institution is required</div>
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Qualification Type </label>
+                  <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="qualificationType" id="typePasswordX-2" class="form-control " required #qualificationType="ngModel">
+                    <option *ngFor="let qualificationType of qualificationData.qualificationType" value="{{qualificationType.description}}">{{qualificationType.description | lowercase | titlecase}}</option>
+                  </select>
+                  <div *ngIf="qualificationType.invalid && qualificationType.touched" style="color:red;">QualificationType is required</div>
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Qualification Obtained </label>
+                  <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="qualificationObtained" id="typePasswordX-2" class="form-control " required #qualificationObtained="ngModel">
+                    <option *ngFor="let qualificationObtained of qualificationData.qualificationObtained" value="{{qualificationObtained.name}}">{{qualificationObtained.name | lowercase | titlecase}}</option>
+                  </select>
+                  <div *ngIf="qualificationObtained.invalid && qualificationObtained.touched" style="color:red;">Qualification Obtained is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Completion Date</label>
+                  <input
+                  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;"
+                  type="date"
+                  ngModel
+                  name="date_of_completion"
+                  id="typePasswordX-2"
+                  class="form-control form-control-lg"
+                  required
+                  #date_of_completion="ngModel" />
+
+
+                  <div *ngIf="date_of_completion.invalid && date_of_completion.touched" style="color:red;">Completion Date is required</div>
+                </div>
+              </div>
+
+            </div>
+
+
+
+
+            <div class="row">
+
+              <div class="col-md-6 pr-1">
+                <div class="form-outline">
+                  <label style="font-weight: bold; color: black" class="form-label" for="typePasswordX-2">Certificate</label>
+                  <div class="input-group">
+                    <label style="background-color:#A11E23;border-radius:30px; color:white;margin-right:10px" class="btn btn-primary" for="certificate">Select File</label>
+                    <input id="certificate" (change)="CertificateOnChange($event, 'certificate')" type="file" class="form-control-file d-none">
+                    <span style="border-radius:30px;" class="input-group-text">{{ certificate || 'No file selected' }}</span>
+                </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 pr-1">
+                <div class="form-outline">
+                  <label style="font-weight: bold; color: black" class="form-label" for="typePasswordX-2">Transcript</label>
+                  <div class="input-group">
+                    <label style="background-color:#A11E23;border-radius:30px; color:white;margin-right:10px" class="btn btn-primary" for="transcript">Select File</label>
+                    <input id="transcript" (change)="TranscriptonChange($event, 'transcript')" type="file" class="form-control-file d-none">
+                    <span style="border-radius:30px;" class="input-group-text">{{ transcript || 'No file selected' }}</span>
+                </div>
+                </div>
+              </div>
+
+
+
+            </div>
+
+
+            <div style="margin-top: 50px;" class="col-md-12">
+              <div class="row" style="display: flex; align-items: center; height: 100%;">
+
+                 <div class="col-md-4 4pr-1">
+                    <div class="form-group">
+                      <style>
+                        .custom-btn {
+                          background-color: #A11F23;
+                          border-radius: 2rem;
+                          border: none;
+                          color: white;
+                          width: 50%;
+                          font-size: 10px;
+                        }
+
+                        .custom-btn:hover {
+                          background-color: #FDAE1C !important;
+                        }
+                      </style>
+                      <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="usersForm.invalid">
+                        Submit
+                      </button>
+                    </div>
+                  </div>
+
+
+
+
+              </div>
+            </div>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+    <div  class="row">
+      <div class="col-md-12">
+          <div class="card ">
+              <div class="card-header ">
+
+              </div>
+              <div class="card-body ">
+                <div class="card-title">
+                  <strong>QUALIFICATION INFORMATION</strong>
+                </div><br/>
+                <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+                  <thead>
+                    <tr>
+
+
+                      <th style="color: #351431;font-size:10px" class="text-left">Qualification</th>
+
+                      <th style="color: #351431;font-size:10px" class="text-left">Institution</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Year of completion</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Qualification Type</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let qualification of employee.qualifications">
+
+                      <td style="font-size:10px" class="text-left">{{ qualification.qualification | lowercase | titlecase}} </td>
+                      <td style="font-size:10px" class="text-left">{{ qualification.institution_name | lowercase | titlecase }}</td>
+
+                      <td style="font-size:10px" class="text-left">{{ qualification.year_of_completion | lowercase | titlecase}}</td>
+                      <td style="font-size:10px" class="text-left">{{ qualification.qualification_type_code | lowercase | titlecase}}</td>
+
+                      <td style="font-size:10px" class="text-left">{{ qualification.record_status }}</td>
+                      <td style="font-size:10px" class="text-left">
+                      <button (click)="deleteQualificationdoc(qualification.id)" class="custom-btn  " >Delete</button>
+                      </td>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
+
+
+              </div>
+          </div>
+    </div>
+
+</div>
+
+
+<div *ngIf="isFamily" >
+
+<div  class="row">
+
+  <div class="col-md-12" >
+    <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+      <div class="card-title">
+        <strong>FAMILY MEMBER DETAILS</strong><br/><br/>
+      </div>
+
+      <div clas="card-body">
+        <form #usersForm="ngForm" (ngSubmit)="AddFamilyMember(usersForm.value)" enctype="multipart/form-data">
+
+          <div class="row">
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">First Name</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="first_name" id="typePasswordX-2" class="form-control form-control-lg" required #first_name="ngModel" />
+                <div *ngIf="first_name.invalid && first_name.touched" style="color:red;">First Name is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Middle Name</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="middle_name" id="typePasswordX-2" class="form-control form-control-lg"  />
+                <!-- <div *ngIf="middle_name.invalid && middle_name.touched" style="color:red;">Middle Name is required</div> -->
+              </div>
+            </div>
+
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Last Name</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="last_name" id="typePasswordX-2" class="form-control form-control-lg" required #last_name="ngModel" />
+                <div *ngIf="last_name.invalid && last_name.touched" style="color:red;">last Name is required</div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Mobile Number</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="mobile_number" id="typePasswordX-2" class="form-control form-control-lg" required #mobile_number="ngModel" />
+                <div *ngIf="mobile_number.invalid && mobile_number.touched" style="color:red;">Mobile Number is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Gender</label>
+
+                <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="gender" id="typePasswordX-2" class="form-control " required #gender="ngModel">
+                  <option value="MALE">Male</option>
+                  <option value="FEMALE">Female</option>
+                </select>
+                <div *ngIf="gender.invalid && gender.touched" style="color:red;">Gender is required</div>
+              </div>
+            </div>
+
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Relationship</label>
+
+                <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="relationship" id="typePasswordX-2" class="form-control " required #relationship="ngModel">
+                  <option value="CHILD">Child</option>
+                  <option value="SPOUSE">Spouse</option>
+                  <option value="PARENT">Parent</option>
+                  <option value="SIBLING">Sibling</option>
+                  <option value="NEXT OF KIN">Next of Kin</option>
+                </select>
+                <div *ngIf="relationship.invalid && relationship.touched" style="color:red;">Relationship is required</div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Date of Birth</label>
+                <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_birth" id="typePasswordX-2" class="form-control form-control-lg" required #date_of_birth="ngModel" />
+                <div *ngIf="date_of_birth.invalid && date_of_birth.touched" style="color:red;">Date of Birth is required</div>
+              </div>
+            </div>
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">ID Type</label>
+
+                <select  style="padding: 5px; border-radius: 1rem;height:38px"  ngModel name="idType" id="typePasswordX-2" class="form-control " required #idType="ngModel">
+                  <option value="NRC">NRC</option>
+                  <option value="PASSPORT">Passport</option>
+                </select>
+                <div *ngIf="idType.invalid && idType.touched" style="color:red;">ID Type is required</div>
+              </div>
+            </div>
+
+
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">ID Number</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="idNumber" id="typePasswordX-2" class="form-control form-control-lg" required #idNumber="ngModel" />
+                <div *ngIf="idNumber.invalid && idNumber.touched" style="color:red;">ID Number is required</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="row">
+            <div class="col-md-4 4pr-1">
+              <div class="form-group">
+                <label style="color:black; font-weight:bold">Email Address</label>
+                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="emailAdress" id="typePasswordX-2" class="form-control form-control-lg" required #emailAdress="ngModel" />
+                <div *ngIf="emailAdress.invalid && emailAdress.touched" style="color:red;">Email Address is required</div>
+              </div>
+            </div>
+
+
+            <div class="col-md-8 pr-1">
+              <div class="form-outline">
+                <label style="font-weight: bold; color: black" class="form-label" for="typePasswordX-2">Supporting Document</label>
+                <div class="input-group">
+                  <label style="background-color:#A11E23;border-radius:30px; color:white;margin-right:10px" class="btn btn-primary" for="familyDoc">Select File</label>
+                  <input id="familyDoc" (change)="FamilyDoconChange($event, 'familyDoc')" type="file" class="form-control-file d-none">
+                  <span style="border-radius:30px;" class="input-group-text">{{ familyDoc || 'No file selected' }}</span>
+              </div>
+              </div>
+            </div>
+
+
+
+          </div>
+
+
+          <div style="margin-top: 50px;" class="col-md-12">
+            <div class="row" style="display: flex; align-items: center; height: 100%;">
+
+               <div class="col-md-4 4pr-1">
+                  <div class="form-group">
+                    <style>
+                      .custom-btn {
+                        background-color: #A11F23;
+                        border-radius: 2rem;
+                        border: none;
+                        color: white;
+                        width: 50%;
+                        font-size: 10px;
+                      }
+
+                      .custom-btn:hover {
+                        background-color: #FDAE1C !important;
+                      }
+                    </style>
+                    <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="usersForm.invalid">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+
+
+
+
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+
+
+  <div  class="row">
+    <div class="col-md-12">
+        <div class="card ">
+            <div class="card-header ">
+
+            </div>
+            <div class="card-body ">
+              <div class="card-title">
+                <strong>FAMILY INFORMATION</strong>
+              </div><br/>
+              <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+                <thead>
+                  <tr>
+
+                    <th style="color: #351431; font-size:10px" class="text-left">Member Name</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Relationship</th>
+
+                    <th style="color: #351431;font-size:10px" class="text-left">Member Gender</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Member Id Type</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Member Id Number</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                    <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let family of employee.familyDetails">
+
+                    <td style="font-size:10px" class="text-left">{{ family.first_name | lowercase | titlecase}} {{ family.last_name | lowercase | titlecase}}</td>
+                    <td style="font-size:10px" class="text-left">{{ family.relationship_code | lowercase | titlecase }}</td>
+
+                    <td style="font-size:10px" class="text-left">{{ family.gender | lowercase | titlecase}}</td>
+                    <td style="font-size:10px" class="text-left">{{ family.id_type | lowercase | titlecase}}</td>
+                    <td style="font-size:10px" class="text-left">{{ family.id_number }}</td>
+                    <td style="font-size:10px" class="text-left">{{ family.record_status }}</td>
+                    <td style="font-size:10px" class="text-left">
+                    <button (click)="deletefamilydoc(family.id)" class="custom-btn  " >Delete</button>
+                    </td>
+
+
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+
+
+
+            </div>
+        </div>
+  </div>
+
+</div>
+
+<div *ngIf="isPersonal">
+  <style>
+    .custom-btn {
+        background-color: #A11F23;
+        border-radius: 30px;
+        border: none;
+        color: white;
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .custom-btn:hover {
+        background-color: #FDAE1C !important;
+    }
+    .custom-btn1 {
+      background-color: #A11F23;
+      border-radius: 30px;
+      border: none;
+      color: white;
+
+      font-size: 12px;
+  }
+
+  .custom-btn1:hover {
+      background-color: #FDAE1C !important;
+  }
+  </style>
+
+  <div class="row" style="display: flex; justify-content: flex-end; width: 100%;">
+    <button (click)="goToEdit()" style="width: 100px;" class="custom-btn btn">Edit</button>
+  </div>
+
+  <div class="row">
+
+    <div class="col-lg-8 col-md-6 col-sm-6">
+        <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+            <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+
+
+              <div style="display: flex; align-items: center; font-family: Arial, sans-serif; padding: 16px; border-radius: 8px; ">
+                <!-- Profile Image -->
+                <img src="assets/img/profile.png" alt="Profile Picture" style="border-radius: 50%; width: 100px; height: 100px; margin-right: 16px;">
+
+                <!-- Profile Info -->
+                <div style="flex: 1;">
+                  <!-- Name -->
+                  <div style="font-size: 18px; font-weight: bold; color: #333;">{{employeeDetails.employee[0].first_name}} {{employeeDetails.employee[0].middle_name}} {{employeeDetails.employee[0].last_name}}</div><br/>
+
+                  <div style="display: flex; justify-content: space-between; gap: 10px; width :80%">
+                    <!-- Origin and Applied Date -->
+                    <div style="color: #555;; font-size: 14px; margin-top: 4px; font-size: 13px;">
+                      <span>Position:<br/> <b>{{employeeDetails.employee[0].position_description | lowercase | titlecase}}</b></span>
+                    </div>
+                    <div style="color: #555;; font-size: 14px; margin-top: 4px; font-size: 13px;">
+                      <span>Employment Status:<br/> <b>{{employeeDetails.employee[0].employment_status | lowercase | titlecase}}</b></span>
+                    </div>
+
+                    <div style="color: #555;; font-size: 14px; margin-top: 4px;font-size: 13px;">
+                      Employment type:<br/> <b>{{employeeDetails.employee[0].employment_type_code | lowercase | titlecase}}</b>
+                    </div>
+
+                    <div style="color: #555;; font-size: 14px; margin-top: 4px; font-size: 13px;">
+                      Date of joining:<br/> <b>{{employeeDetails.employee[0].doe}}</b>
+                    </div>
+                  </div>
+
+
+                </div>
+
+
+
+              </div>
+
+
+            </div>
+
+        </div>
+
+        <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+          <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">ID Type</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].id_type_code | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">ID Number</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].id_no | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">SSN</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].ssn | lowercase | titlecase}}"/>
+
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Account No</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].account_no | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">TPIN</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].tpin_no | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Nhima No</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].nhima_no | lowercase | titlecase}}"/>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Branch/Department</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].branch_description | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Group Affiliation</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].group_affiliation | lowercase | titlecase}}" />
+
+                </div>
+              </div>
+
+
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Grade</label>
+                  <input style="padding: 5px; border-radius: 1rem" type="text"  id="typePasswordX-2" class="form-control form-control-lg" readonly value="{{employeeDetails.employee[0].grade_description | lowercase | titlecase}}"/>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+       </div>
+
+
+
+       <!-- <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+        <div class="card-title"><strong>Family Details</strong></div>
+        <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+          <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+            <thead>
+              <tr>
+                <th style="color: #351431; font-size:10px" class="text-left">Full Name</th>
+                <th style="color: #351431; font-size:10px" class="text-left">Gender</th>
+                <th style="color: #351431;font-size:10px" class="text-left">ID Type</th>
+                <th style="color: #351431;font-size:10px" class="text-left">ID Number</th>
+                <th style="color: #351431;font-size:10px" class="text-left">Relationship</th>
+                <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                <th style="color: #351431;font-size:10px" class="text-left">Contact details</th>
+
+                <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let member of employeeDetails.familyDetails">
+                <td style="font-size:10px" class="text-left">{{member.first_name | lowercase | titlecase}} {{member.last_name | lowercase | titlecase}} </td>
+                <td style="font-size:10px" class="text-left"> {{member.gender | lowercase | titlecase}}</td>
+                <td style="font-size:10px" class="text-left">{{member.id_type }}</td>
+                <td style="font-size:10px" class="text-left">{{member.id_number}}</td>
+                <td style="font-size:10px" class="text-left">{{member.relationship_code | lowercase | titlecase}}</td>
+                <td style="font-size:10px" class="text-left">
+                  {{member.record_status | lowercase | titlecase}}
+                </td>
+                <td style="font-size:10px" class="text-left">
+                  <p>{{member.mobile_number}}<br/>{{member.email_address}}</p>
+
+                </td>
+                <td style="font-size:10px" class="text-left">
+                 <button (click)="pullFamilyDoc(member.id)" class="custom-btn  " >View</button>
+                </td>
+
+
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+       </div>
+
+       <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+        <div class="card-title"><strong>Qualifications</strong></div>
+        <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+          <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+            <thead>
+              <tr>
+                <th style="color: #351431; font-size:10px" class="text-left">Qualification</th>
+                <th style="color: #351431; font-size:10px" class="text-left">Qualification Type</th>
+                <th style="color: #351431; font-size:10px" class="text-left">Status</th>
+                <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let qualifications of employeeDetails.qualifications">
+                <td style="font-size:10px" class="text-left">{{qualifications.qualification  | lowercase | titlecase}} </td>
+                <td style="font-size:10px" class="text-left"> {{qualifications.qualification_type_code | lowercase | titlecase}}</td>
+                <td style="font-size:10px" class="text-left">{{qualifications.record_status  | lowercase | titlecase}} </td>
+                <td style="font-size:10px" class="text-left">
+                 <button (click)="pullQualificationDic(qualifications.id)" class="custom-btn  " >View</button>
+                </td>
+
+
+              </tr>
+            </tbody>
+          </table>
+
+        </div>
+       </div> -->
+
+
+    </div>
+
+    <div class="col-lg-4 col-md-6 col-sm-6">
+      <div class="row">
+          <div class="col-lg-12 col-md-6 col-sm-6">
+              <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+                  <div class="card-body" style="padding-bottom: 10px; margin-bottom: 5px;">
+
+                    <div style="font-family: Arial, sans-serif;  padding: 16px; border-radius: 8px;  ">
+                      <!-- Header -->
+                      <div style="font-size: 18px; font-weight: bold; color: #333; margin-bottom: 16px;">
+                        Personal Information
+                      </div>
+
+                      <!-- Email Address -->
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 10px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M12 13l-8-5.5V18h16V7.5L12 13zm0-2.7l7.2-4.9H4.8L12 10.3z"></path>
+                        </svg>
+                        <div style="font-size: 12px; ">
+                          <div>Email Address:  <a  href="mailto:{{employeeDetails.contact[0].personal_email}}" style="display: inline-block; color: #A11E23; text-decoration: none; border: 1px solid #A11E23; padding: 2px 8px; border-radius: 12px; font-size: 12px;">{{employeeDetails.contact[0].personal_email}}</a></div>
+
+                        </div>
+                      </div>
+
+                      <!-- Phone Number -->
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M6.6 10.8a15.4 15.4 0 006.6 6.6l2.2-2.2c.3-.3.7-.4 1.1-.3 1.2.4 2.5.6 3.8.6.6 0 1 .5 1 1v3.4c0 .6-.5 1-1 1C12.4 22 2 11.6 2 4c0-.6.5-1 1-1h3.4c.6 0 1 .5 1 1 0 1.3.2 2.6.6 3.8.1.4 0 .8-.3 1.1l-2.2 2.2z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Phone Number: <a href="tel:{{employeeDetails.contact[0].phone_no}}" style="display: inline-block; color: #A11E23; text-decoration: none; border: 1px solid #A11E23; padding: 2px 8px; border-radius: 12px; font-size: 12px;">{{employeeDetails.contact[0].phone_no}}</a> </div>
+
+                        </div>
+                      </div>
+
+                      <!-- Gender -->
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M12 2C9.24 2 7 4.24 7 7c0 2.22 1.64 4.07 3.78 4.45C9.1 12.09 8 13.84 8 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-2.16-1.1-3.91-2.78-4.55C15.36 11.07 17 9.22 17 7c0-2.76-2.24-5-5-5z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Gender: {{employeeDetails.employee[0].gender | lowercase | titlecase}}</div>
+
+                        </div>
+                      </div>
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M12 2C9.24 2 7 4.24 7 7c0 2.22 1.64 4.07 3.78 4.45C9.1 12.09 8 13.84 8 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-2.16-1.1-3.91-2.78-4.55C15.36 11.07 17 9.22 17 7c0-2.76-2.24-5-5-5z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Marital Status: {{employeeDetails.employee[0].marital_status | lowercase | titlecase}}</div>
+
+                        </div>
+                      </div>
+
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M12 2C9.24 2 7 4.24 7 7c0 2.22 1.64 4.07 3.78 4.45C9.1 12.09 8 13.84 8 16c0 2.76 2.24 5 5 5s5-2.24 5-5c0-2.16-1.1-3.91-2.78-4.55C15.36 11.07 17 9.22 17 7c0-2.76-2.24-5-5-5z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Nationality: {{employeeDetails.employee[0].nationality_code | lowercase | titlecase}}</div>
+
+                        </div>
+                      </div>
+
+                      <!-- Birthdate -->
+                      <div style="display: flex; align-items: center; margin-bottom: 12px; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-2 .89-2 2v14c0 1.11.89 2 2 2h14c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Birthdate: {{employeeDetails.employee[0].dob}}</div>
+
+                        </div>
+                      </div>
+
+                      <!-- Living Address -->
+                      <div style="display: flex; align-items: center; font-size: 14px; color: #555;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" style="width: 20px; height: 20px; margin-right: 8px;">
+                          <path d="M12 2C8.13 2 5 5.13 5 9c0 3.25 2.42 6.75 7.05 11.33.5.5 1.35.5 1.85 0C16.58 15.75 19 12.25 19 9c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"></path>
+                        </svg>
+                        <div style="font-size: 12px;">
+                          <div>Residential Address: {{employeeDetails.contact[0].physical_address | lowercase | titlecase}}</div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr>
+
+
+
+                  </div>
+              </div>
+          </div>
+
+
+
+
+
+      </div>
+  </div>
+
+
+  </div>
+
+</div>
+
+
+<div *ngIf="isLoanApplication" >
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card card-stats" style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0;">
+        <div class="card-title">
+          <strong>Loan Application</strong><br /><br />
+        </div>
+
+        <div class="card-body">
+          <form #usersForm="ngForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+
+
+            <div *ngIf="currentStep === 1">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Select Type of Loan</label>
+                    <select
+                    style="padding: 5px; border-radius: 1rem;height:38px"
+                    [(ngModel)]="formValues.type_of_loan"
+                    ngModel
+                    name="type_of_loan"
+                    class="form-control"
+                    required
+                    #type_of_loan="ngModel"
+                    (ngModelChange)="updateFormValues('type_of_loan', type_of_loan.value)"
+                    >
+                      <option value="Staff home loan scheme">Staff home loan scheme</option>
+                      <option value="Staff Equity release">Staff Equity release</option>
+                      <option value="Staff car loan">Staff car loan</option>
+                      <option value="staff composite personal loan">staff composite personal loan</option>
+                      <option value="Staff Green asset finance">Staff Green asset finance</option>
+                      <option value="Staff loan against GRZ Bonds">Staff loan against GRZ Bonds</option>
+                    </select>
+                    <div *ngIf="type_of_loan.invalid && type_of_loan.touched" style="color:red;"> Type of Loan is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Loan Amount</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.loan_amount"
+                    type="text"
+                    ngModel
+                    name="loan_amount"
+                    class="form-control form-control-lg"
+                    required
+                    #loan_amount="ngModel"
+                    (ngModelChange)="updateFormValues('loan_amount', loan_amount.value)"
+                    />
+                    <div *ngIf="loan_amount.invalid && loan_amount.touched" style="color:red;">Loan Amount is required</div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Loan Tenure (in Months) </label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.loan_tunure_period"
+                    type="text"
+                    ngModel
+                    name="loan_tunure_period"
+                    class="form-control form-control-lg"
+                    required
+                    #loan_tunure_period="ngModel"
+                    (ngModelChange)="updateFormValues('loan_tunure_period', loan_tunure_period.value)"
+                    />
+                    <div *ngIf="loan_tunure_period.invalid && loan_tunure_period.touched" style="color:red;">Loan Tenure  is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Monthly Repayments</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                    [(ngModel)]="formValues.monthly_payments"
+                    type="text"
+                    ngModel
+                    name="monthly_payments"
+                    class="form-control form-control-lg"
+                    required
+                    #monthly_payments="ngModel"
+                    (ngModelChange)="updateFormValues('monthly_payments', monthly_payments.value)"
+                    />
+                    <div *ngIf="monthly_payments.invalid && monthly_payments.touched" style="color:red;">Monthly Repayments is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="currentStep === 2">
+              <div class="card-title">
+                <strong>Fixed Monthly Income</strong><br /><br />
+              </div>
+
+              <!-- Repeat the structure for other form fields as needed -->
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Basic Pay</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.basic_pay"
+                    type="text"
+                    ngModel
+                    name="basic_pay"
+                    class="form-control form-control-lg"
+                    required
+                    #basic_pay="ngModel"
+                    (ngModelChange)="updateFormValues('basic_pay', basic_pay.value)"
+                    />
+                    <div *ngIf="basic_pay.invalid && basic_pay.touched" style="color:red;">Basic Pay is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Fixed Allowances</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.fixed_allowance"
+                    type="text"
+                    ngModel
+                    name="fixed_allowance"
+                    class="form-control form-control-lg"
+                    required
+                    #fixed_allowance="ngModel"
+                    (ngModelChange)="updateFormValues('fixed_allowance', fixed_allowance.value)"
+                    />
+                    <div *ngIf="fixed_allowance.invalid && fixed_allowance.touched" style="color:red;">Fixed Allowances is required</div>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Total Monthly Income</label>
+                    <input readonly
+                    style="padding: 5px; border-radius: 1rem"
+                    [(ngModel)]="formValues.total_fixed_income"
+                    type="text"
+                    ngModel
+                    name="total_fixed_income"
+                    class="form-control form-control-lg"
+                    required
+                    #total_fixed_income="ngModel"
+                    (ngModelChange)="updateFormValues('total_fixed_income', total_fixed_income.value)" />
+                    <div *ngIf="total_fixed_income.invalid && total_fixed_income.touched" style="color:red;">Total Monthly Income is require</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="currentStep === 3">
+              <div class="card-title">
+                <strong>Fixed Monthly STATUTORY DUES</strong><br/><br/>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">PAYE</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.paye"
+                    type="text"
+                    ngModel
+                    name="paye"
+                    class="form-control form-control-lg"
+                    required
+                    #paye="ngModel"
+                    (ngModelChange)="updateFormValues('paye', paye.value)"
+                     />
+                    <div *ngIf="paye.invalid && paye.touched" style="color:red;">PAYE is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Napsa</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.napsa"
+                    type="text"
+                    ngModel
+                    name="napsa"
+                    class="form-control form-control-lg"
+                    required
+                    #napsa="ngModel"
+                    (ngModelChange)="updateFormValues('napsa', napsa.value)"
+                     />
+                    <div *ngIf="napsa.invalid && napsa.touched" style="color:red;">Napsa is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Union Subscription (optional)</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.union_subscription"
+                    type="text"
+                    ngModel
+                    name="union_subscription"
+                    class="form-control form-control-lg"
+
+                    #union_subscription="ngModel"
+                    (ngModelChange)="updateFormValues('union_subscription', union_subscription.value)"
+                     />
+
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Total Statutory Dues</label>
+                    <input
+                    readonly
+                    style="padding: 5px; border-radius: 1rem"
+                    [(ngModel)]="formValues.total_statutory_dues"
+                    type="text"
+                    ngModel
+                    name="total_statutory_dues"
+                    class="form-control form-control-lg"
+                    required
+                    #total_statutory_dues="ngModel"
+                    (ngModelChange)="updateFormValues('total_statutory_dues', total_statutory_dues.value)"
+                    />
+                    <div *ngIf="total_statutory_dues.invalid && total_statutory_dues.touched" style="color:red;">Total Statutory Dues is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="currentStep === 4">
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">NET PAY</label>
+                    <input
+                    readonly
+                    style="padding: 5px; border-radius: 1rem"
+                    [(ngModel)]="formValues.net_pay"
+                    type="text"
+                    ngModel
+                    name="net_pay"
+                    class="form-control form-control-lg"
+                    required
+                    #net_pay="ngModel"
+                    (ngModelChange)="updateFormValues('net_pay', net_pay.value)"
+                    />
+                    <div *ngIf="net_pay.invalid && net_pay.touched" style="color:red;">Net Pay is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Allowable Deductions</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                    [(ngModel)]="formValues.allowable_deductions"
+                    type="text"
+                    ngModel
+                    name="allowable_deductions"
+                    class="form-control form-control-lg"
+                    required
+                    #allowable_deductions="ngModel"
+                    (ngModelChange)="updateFormValues('allowable_deductions', allowable_deductions.value)"
+                     />
+                    <div *ngIf="allowable_deductions.invalid && allowable_deductions.touched" style="color:red;">Allowable Deductions is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Present Deductions Including this Loan</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.present_deductions"
+                    type="text"
+                    ngModel
+                    name="present_deductions"
+                    class="form-control form-control-lg"
+                    required
+                    #present_deductions="ngModel"
+                    (ngModelChange)="updateFormValues('present_deductions', present_deductions.value)"
+                    />
+                    <div *ngIf="present_deductions.invalid && present_deductions.touched" style="color:red;">Present Deductions is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Debt Ratio</label>
+                    <input
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.debt_ratio"
+                    type="text"
+                    ngModel
+                    name="debt_ratio"
+                    class="form-control form-control-lg"
+                    required
+                    #debt_ratio="ngModel"
+                    (ngModelChange)="updateFormValues('debt_ratio', debt_ratio.value)"
+                    />
+                    <div *ngIf="debt_ratio.invalid && debt_ratio.touched" style="color:red;">Debt Ratio is required</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6 4pr-1">
+                  <div class="form-group">
+                    <label style="color:black; font-weight:bold">Purpose of Loan</label>
+                    <textarea
+                    style="padding: 5px; border-radius: 1rem"
+                     [(ngModel)]="formValues.purpose_of_loan"
+                    type="text"
+                    ngModel
+                    name="purpose_of_loan"
+                    class="form-control form-control-lg"
+                    required
+                    #purpose_of_loan="ngModel"
+                    (ngModelChange)="updateFormValues('purpose_of_loan', purpose_of_loan.value)">
+
+                    </textarea>
+
+                    <div *ngIf="purpose_of_loan.invalid && purpose_of_loan.touched" style="color:red;">Purpose of Loan is required</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+
+            <!-- Step 5: Summary -->
+            <div *ngIf="currentStep === 5" style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                <img src="assets/img/logo.png" alt="Company Logo" style="height: 80px; width: auto;" />
+                <div style="font-size: 1.5rem; font-weight: bold; color: #333;">
+                  <strong>Summary of Loan Application</strong>
+                </div>
+              </div>
+
+              <div style="padding: 10px; background-color: #fff; border-radius: 10px;">
+                <!-- First Section -->
+                <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Loan Type:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.type_of_loan }}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Loan Amount:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.loan_amount | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Loan Tenure:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.loan_tunure_period }}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Monthly Repayments:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.monthly_payments | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Second Section -->
+                <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Basic Pay:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.basic_pay | number:'1.0-0'}}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Fixed Allowances:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.fixed_allowance | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Total Monthly Income:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.total_fixed_income | number:'1.0-0' }}</p>
+                    </div>
+                    <!-- <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">PAYE:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.paye | number:'1.0-0'}}</p>
+                    </div> -->
+                  </div>
+                </div>
+
+                <!-- Third Section -->
+                <div style="margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 20px;">
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <!-- <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Total Monthly Income:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.total_fixed_income | number:'1.0-0' }}</p>
+                    </div> -->
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">PAYE:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.paye | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Napsa:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.napsa | number:'1.0-0'}}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Union Subscription:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.union_subscription | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Total Statutory Dues:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.total_statutory_dues | number:'1.0-0'}}</p>
+                    </div>
+                    <!-- <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Net Pay:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.net_pay | number:'1.0-0'}}</p>
+                    </div> -->
+                  </div>
+                </div>
+
+                <!-- Fourth Section -->
+                <div>
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <!-- <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Total Statutory Dues:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.total_statutory_dues | number:'1.0-0'}}</p>
+                    </div> -->
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Net Pay:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.net_pay | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Allowable Deductions:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.allowable_deductions | number:'1.0-0'}}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Present Deductions:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.present_deductions | number:'1.0-0'}}</p>
+                    </div>
+                  </div>
+
+                  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 15px;">
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Debt Ratio:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.debt_ratio }}</p>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                      <h5 style="font-size: 1.1rem; font-weight: 500; color: #333; margin-bottom: 5px;">Purpose of Loan:</h5>
+                      <p style="font-size: 1rem; color: #555; margin: 0;">{{ formValues.purpose_of_loan }}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Navigation Buttons -->
+            <div class="row">
+              <div class="col-md-12" style="display: flex; justify-content: space-between;">
+                <button
+                  *ngIf="currentStep > 1"
+                  class="btn custom-btn1"
+                  type="button"
+                  (click)="previousStep()"
+                >
+                  Previous
+                </button>
+                <button
+                  *ngIf="currentStep < 5"
+                  class="btn custom-btn1"
+                  type="button"
+                  (click)="nextStep()"
+                  [disabled]="usersForm.invalid"
+                >
+                  Next
+                </button>
+                <button
+                  *ngIf="currentStep === 5"
+                  class="btn custom-btn1"
+                  type="submit"
+
+                  [disabled]="usersForm.invalid"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+    <!-- <div  class="row">
+      <div class="col-md-12">
+          <div class="card ">
+              <div class="card-header ">
+
+              </div>
+              <div class="card-body ">
+                <div class="card-title">
+                  <strong>FAMILY INFORMATION</strong>
+                </div><br/>
+                <table class="table table-striped table-bordered table-sm row-border hover" id="familyTable">
+                  <thead>
+                    <tr>
+
+                      <th style="color: #351431; font-size:10px" class="text-left">Member Name</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Relationship</th>
+
+                      <th style="color: #351431;font-size:10px" class="text-left">Member Gender</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Member Id Type</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Member Id Number</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Status</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let family of employee.familyDetails">
+
+                      <td style="font-size:10px" class="text-left">{{ family.first_name | lowercase | titlecase}} {{ family.last_name | lowercase | titlecase}}</td>
+                      <td style="font-size:10px" class="text-left">{{ family.relationship_code | lowercase | titlecase }}</td>
+
+                      <td style="font-size:10px" class="text-left">{{ family.gender | lowercase | titlecase}}</td>
+                      <td style="font-size:10px" class="text-left">{{ family.id_type | lowercase | titlecase}}</td>
+                      <td style="font-size:10px" class="text-left">{{ family.id_number }}</td>
+                      <td style="font-size:10px" class="text-left">{{ family.record_status }}</td>
+                      <td style="font-size:10px" class="text-left">
+                      <button (click)="deletefamilydoc(family.id)" class="custom-btn  " >Delete</button>
+                      </td>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
+
+
+              </div>
+          </div>
+    </div> -->
+
+  </div>
+

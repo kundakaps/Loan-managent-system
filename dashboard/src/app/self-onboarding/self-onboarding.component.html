@@ -1,0 +1,459 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+<section class="vh-100 d-flex flex-column justify-content-center align-items-center" style="background-image: url('assets/img/bg.jpg');background-size: cover;">
+  <div class="container">
+      <div class="row justify-content-center align-items-center">
+          <div class="col-md-10 col-sm-12">
+              <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                  <div class="card-body p-5">
+                      <img style="margin-bottom: 30px;" width="200" class="responsive img-fluid" src="assets/img/logo.png">
+                      <div class="scrollable-form">
+                        <form style="padding:15px" #Form="ngForm" (ngSubmit)="Formdata(Form.value)">
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">First Name</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="first_name" id="typePasswordX-2" class="form-control form-control-lg" required #first_name="ngModel" />
+                                <div *ngIf="first_name.invalid && first_name.touched" style="color:red;">First Name is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Middle Name (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="middle_name" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Last Name</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="last_name" id="typePasswordX-2" class="form-control form-control-lg" required #last_name="ngModel" />
+                                <div *ngIf="last_name.invalid && last_name.touched" style="color:red;">last Name is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Date of Birth</label>
+                                <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_birth" id="typePasswordX-2" class="form-control form-control-lg" required #date_of_birth="ngModel" />
+                                <div *ngIf="date_of_birth.invalid && date_of_birth.touched" style="color:red;">DOB is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Report Date</label>
+                                <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" required #date_of_engagement="ngModel" />
+                                <div *ngIf="date_of_engagement.invalid && date_of_engagement.touched" style="color:red;">Date of Engagement is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Gender</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="gender" id="typePasswordX-2" class="form-control " required #gender="ngModel">
+                                  <option value="MALE">Male</option>
+                                  <option value="FEMALE">Female</option>
+                                </select>
+                                <div *ngIf="gender.invalid && gender.touched" style="color:red;">Gender is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Nationality</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="nationality" id="typePasswordX-2" class="form-control " required #nationality="ngModel">
+                                  <option *ngFor="let nationality of addUserSupportingData.nationality" value="{{nationality.nationality_code}}">{{nationality.description}}</option>
+                                </select>
+                                <div *ngIf="nationality.invalid && nationality.touched" style="color:red;">Nationality is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Marital Status</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="marital_status" id="typePasswordX-2" class="form-control " required #marital_status="ngModel">
+                                  <option value="SINGLE">Single</option>
+                                  <option value="MARRIED">Married</option>
+                                  <option value="DIVORCED">Divorced</option>
+                                  <option value="WIDOWED">Widowed</option>
+
+                                </select>
+                                <div *ngIf="marital_status.invalid && marital_status.touched" style="color:red;">marital status is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Department</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="department" id="typePasswordX-2" class="form-control " required #department="ngModel">
+                                  <option *ngFor="let branch of addUserSupportingData.branches" value="{{branch.branch_code}}">{{branch.description }}</option>
+
+                                </select>
+                                <div *ngIf="department.invalid && department.touched" style="color:red;">Department is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Employment Type</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="employment_type" id="typePasswordX-2" class="form-control " required #employment_type="ngModel">
+                                  <option value="PERMANENT">Permanent</option>
+                                  <option value="CONTRACT">Contract</option>
+                                </select>
+                                <div *ngIf="employment_type.invalid && employment_type.touched" style="color:red;">Employment Type is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Work group</label>
+
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="work_group" id="typePasswordX-2" class="form-control " required #work_group="ngModel">
+                                  <option value="MANAGEMENT">Management</option>
+                                  <option value="UNION">Union</option>
+                                </select>
+                                <div *ngIf="work_group.invalid && work_group.touched" style="color:red;">Work group is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Account Number</label>
+
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="account_no" id="typePasswordX-2" class="form-control form-control-lg" required #account_no="ngModel" />
+                                <div *ngIf="account_no.invalid && account_no.touched" style="color:red;">Account Number is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Nhima No</label>
+                                <input
+                                  style="padding: 5px; border-radius: 1rem"
+                                  type="text"
+                                  ngModel
+                                  name="nhima_no"
+                                  id="typePasswordX-2"
+                                  class="form-control form-control-lg"
+                                  maxlength="14"
+                                  pattern="[0-9]*"
+                                  inputmode="numeric"
+                                  oninput="this.value = this.value.replace(/\D/g, '')"
+                                />
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">TPIN </label>
+                                <input style="padding: 5px; border-radius: 1rem"
+                                 type="text"
+                                 ngModel name="tpin"
+                                 id="typePasswordX-2"
+                                 class="form-control form-control-lg"
+                                 required #tpin="ngModel"
+                                 maxlength="10"
+                                 pattern="[0-9]*"
+                                 inputmode="numeric"
+                                 oninput="this.value = this.value.replace(/\D/g, '')"
+                                 />
+                                <div *ngIf="tpin.invalid && tpin.touched" style="color:red;">TPIN is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Social Security Number</label>
+                                <input style="padding: 5px; border-radius: 1rem"
+                                type="text"
+                                ngModel name="social_security_number"
+                                id="typePasswordX-2"
+                                class="form-control form-control-lg"
+                                maxlength="9"
+                                pattern="[0-9]*"
+                                inputmode="numeric"
+                                oninput="this.value = this.value.replace(/\D/g, '')"
+                                />
+                                <!-- <div *ngIf="social_security_number.invalid && social_security_number.touched" style="color:red;">Social Security Number is required</div> -->
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Phone Number</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="phone_number" id="typePasswordX-2" class="form-control form-control-lg" required #phone_number="ngModel" />
+                                <div *ngIf="phone_number.invalid && phone_number.touched" style="color:red;">Phone Number is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">ID Type </label>
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="id_type" id="typePasswordX-2" class="form-control " required #id_type="ngModel">
+                                  <option value="NRC">NRC</option>PASSPORT
+                                  <option value="PASSPORT">Passport</option>
+                                </select>
+                                <div *ngIf="id_type.invalid && id_type.touched" style="color:red;">ID Type is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">ID Number</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="id_number" id="typePasswordX-2" class="form-control form-control-lg" required #id_number="ngModel" />
+                                <div *ngIf="id_number.invalid && id_number.touched" style="color:red;">ID Number is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Physical Address</label>
+
+                                <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="physical_address" id="typePasswordX-2" class="form-control form-control-lg" required #physical_address="ngModel"></textarea>
+                                <div *ngIf="physical_address.invalid && physical_address.touched" style="color:red;">Physical Address is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Emergency Contact </label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="emergency_contact" id="typePasswordX-2" class="form-control form-control-lg" required #emergency_contact="ngModel" />
+                                <div *ngIf="emergency_contact.invalid && emergency_contact.touched" style="color:red;">Emergency Contact is required</div>
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Mobile Number</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="mobile_number" id="typePasswordX-2" class="form-control form-control-lg" required #mobile_number="ngModel" />
+                                <div *ngIf="mobile_number.invalid && mobile_number.touched" style="color:red;">Mobile Number is required</div>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Personal Email</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="personal_email" id="typePasswordX-2" class="form-control form-control-lg" required #personal_email="ngModel" />
+                                <div *ngIf="personal_email.invalid && personal_email.touched" style="color:red;">Personal Email is required</div>
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Work Email (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="work_email" id="typePasswordX-2" class="form-control form-control-lg"  />
+
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Position (optional) </label>
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="position" id="typePasswordX-2" class="form-control " >
+                                  <option *ngFor="let position of addUserSupportingData.position" value="{{position.position_code}}">{{position.description | lowercase | titlecase}}</option>
+                                </select>
+                                <!-- <div *ngIf="position.invalid && position.touched" style="color:red;">Position is required</div> -->
+                              </div>
+                            </div>
+
+
+
+
+                          </div>
+
+
+                          <div class="row">
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Grade (optional)</label>
+                                <select  style="padding: 5px; border-radius: 1rem; height: 38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="grade" id="typePasswordX-2" class="form-control " >
+                                  <option *ngFor="let grade of addUserSupportingData.grade" value="{{grade.grade_code}}">{{grade.grade_description | lowercase | titlecase}}</option>
+                                </select>
+                                <!-- <div *ngIf="grade.invalid && grade.touched" style="color:red;">Grade is required</div> -->
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Basic Salary (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="basic_salary" id="typePasswordX-2" class="form-control form-control-lg"  />
+                                <!-- <div *ngIf="basic_salary.invalid && basic_salary.touched" style="color:red;">Basic Salary is required</div> -->
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Housing Allowance (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="housing_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+                                <!-- <div *ngIf="housing_allowance.invalid && housing_allowance.touched" style="color:red;">Housing Allowance is required</div> -->
+                              </div>
+                            </div>
+
+
+
+
+
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Upkeep Allowance (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="upkeep_allowance" id="typePasswordX-2" class="form-control form-control-lg" />
+                                <!-- <div *ngIf="upkeep_allowance.invalid && upkeep_allowance.touched" style="color:red;">Upkeep Allowance is required</div> -->
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Car Allowance (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="car_allowance" id="typePasswordX-2" class="form-control form-control-lg" />
+                                <!-- <div *ngIf="car_allowance.invalid && car_allowance.touched" style="color:red;">Car Allowance is required</div> -->
+                              </div>
+                            </div>
+
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Medical Allowance (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="medical_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+                                <!-- <div *ngIf="medical_allowance.invalid && medical_allowance.touched" style="color:red;">Medical Allowance is required</div> -->
+                              </div>
+                            </div>
+
+                          </div>
+
+
+                          <div class="row">
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Non-Contractual Allowance (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="non_contractual_allowance" id="typePasswordX-2" class="form-control form-control-lg"  />
+                                <!-- <div *ngIf="non_contractual_allowance.invalid && non_contractual_allowance.touched" style="color:red;">Non-Contractual Allowance</div> -->
+                              </div>
+                            </div>
+
+                            <div class="col-md-4 4pr-1">
+                              <div class="form-group">
+                                <label style="color:black; font-weight:bold">Employee Number (optional)</label>
+                                <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="employee_number" id="typePasswordX-2" class="form-control form-control-lg"  />
+                                <!-- <div *ngIf="employee_number.invalid && employee_number.touched" style="color:red;">Employee Number is required</div> -->
+                              </div>
+                            </div>
+
+
+
+
+                          </div>
+
+
+                          <div style="margin-top: 50px;" class="col-md-12">
+                            <div class="row" style="display: flex; align-items: center; height: 100%;">
+
+                               <div class="col-md-4 4pr-1">
+                                  <div class="form-group">
+                                    <style>
+                                      .custom-btn {
+                                        background-color: #A11F23;
+                                        border-radius: 2rem;
+                                        border: none;
+                                        color: white;
+                                        width: 100%;
+                                        font-size: 10px;
+                                      }
+
+                                      .custom-btn:hover {
+                                        background-color: #FDAE1C !important;
+                                      }
+                                    </style>
+                                    <button class="custom-btn btn btn-lg btn-block" type="submit" [disabled]="Form.invalid">
+                                      Submit
+                                    </button>
+                                  </div>
+                                </div>
+
+
+
+
+                            </div>
+                          </div>
+
+                        </form>
+                      </div>
+                      <p style="margin-top: 20px;">Already have an Account?<a style="color:#A11F23 ;" href="#/home"> Login</a> </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+  <footer class="fixed-bottom text-center p-2" style="background-color: rgba(0, 0, 0, 0.5); color: white;">&copy; {{test | date: 'yyyy'}}, IZB HUB Portal powered by
+      <a style="color: #A11F23;font-weight:bold" href="https://www.izb.co.zm/"> IZB Development Team</a>
+  </footer>
+</section>
+
+<style>
+  .scrollable-form {
+    max-height: 450px; /* Adjust the height as necessary */
+    overflow-y: auto;
+  }
+</style>
+

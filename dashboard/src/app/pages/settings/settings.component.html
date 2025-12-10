@@ -1,0 +1,130 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+<style>
+  .custom-btn {
+      background-color: #A11F23;
+      border-radius: 30px;
+      border: none;
+      color: white;
+      width: 100%;
+      font-size: 12px;
+  }
+
+  .custom-btn:hover {
+      background-color: #FDAE1C !important;
+  }
+</style>
+
+<div *ngIf="isholidayMaintenance" >
+
+  <div  class="row">
+
+    <div class="col-md-12" >
+      <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+        <div class="card-title">
+          <strong>ADD A HOLIDAY</strong><br/><br/>
+        </div>
+
+        <div clas="card-body">
+          <form #usersForm="ngForm" enctype="multipart/form-data">
+
+
+
+
+
+
+            <div class="row">
+              <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <label style="color:black; font-weight:bold">Select a date</label>
+                  <input
+                      style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;"
+                      type="date"
+                      ngModel
+                      name="date_of_birth"
+                      id="typePasswordX-2"
+                      class="form-control form-control-lg"
+                      required
+                      #date_of_birth="ngModel"
+                      (change)="onDateChange($event)"
+                    />
+
+                  <div *ngIf="date_of_birth.invalid && date_of_birth.touched" style="color:red;">Date of Birth is required</div>
+                </div>
+              </div>
+
+
+
+
+
+
+            </div>
+
+
+
+
+
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+    <div  class="row">
+      <div class="col-md-12">
+          <div class="card ">
+              <div class="card-header ">
+
+              </div>
+              <div class="card-body ">
+                <div class="card-title">
+                  <strong>HOLIDAY INFORMATION</strong>
+                </div><br/>
+                <table class="table table-striped table-bordered table-sm row-border hover" id="holidayTable">
+                  <thead>
+                    <tr>
+
+                      <th style="color: #351431; font-size:10px" class="text-left">Date</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Description</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">year</th>
+                      <th style="color: #351431;font-size:10px" class="text-left">Action</th>
+
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let holiday of holidays.data">
+
+                      <td style="font-size:10px" class="text-left">{{ holiday.date | lowercase | titlecase}} </td>
+                      <td style="font-size:10px" class="text-left">{{ holiday.description | lowercase | titlecase }}</td>
+
+                      <td style="font-size:10px" class="text-left">{{ holiday.year | lowercase | titlecase}}</td>
+
+                      <td style="font-size:10px" class="text-left">
+                      <button (click)="deleteHoliday(holiday.date)" class="custom-btn  " >Delete</button>
+                      </td>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
+
+
+              </div>
+          </div>
+    </div>
+
+  </div>
+

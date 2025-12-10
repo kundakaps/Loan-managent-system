@@ -1,0 +1,428 @@
+<div>
+  <app-spinner *ngIf="isLoading">
+
+  </app-spinner>
+</div>
+
+<div class="col-md-12">
+  <div class="card card-stats"  style="padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; ">
+    <div class="card-title">
+    <strong>EDIT EMPLOYEE DETAILS</strong><br/><br/>
+    </div>
+    <div clas="card-body">
+
+      <form #Form="ngForm" (ngSubmit)="UpDateData(Form.value)">
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">First Name</label>
+              <input
+                style="padding: 5px; border-radius: 1rem"
+                type="text"
+                ngModel
+                name="first_name"
+                id="typePasswordX-2"
+                class="form-control form-control-lg"
+                [(ngModel)]="employeeDetails.employee[0].first_name"
+                [value]="employeeDetails.employee[0].first_name | lowercase | titlecase"
+              />
+
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Middle Name</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="middle_name" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.employee[0].middle_name" [value]="employeeDetails.employee[0].middle_name | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Last Name</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="last_name" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].last_name" [value]="employeeDetails.employee[0].last_name | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Date of Birth</label>
+              <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_birth" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.employee[0].dob"
+              [value]="employeeDetails.employee[0].dob | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Date of Engagement</label>
+              <input  style="padding: 5px; border-radius: 1rem; height: 40px; line-height: 40px; width: 100%; font-size: 16px;" type="date" ngModel name="date_of_engagement" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].doe"
+              [value]="employeeDetails.employee[0].doe | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Gender</label>
+
+              <select style="padding: 5px 35px 5px 5px; border-radius: 1rem; height: 38px;appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;" ngModel name="gender" id="typePasswordX-2" class="form-control">
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+            </select>
+
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Nationality</label>
+
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="nationality" id="typePasswordX-2" class="form-control" >
+                <option *ngFor="let nationality of addUserSupportingData.nationality" value="{{nationality.nationality_code}}">{{nationality.description}}</option>
+              </select>
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Marital Status</label>
+
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="marital_status" id="typePasswordX-2" class="form-control " >
+                <option value="SINGLE">Single</option>
+                <option value="MARRIED">Married</option>
+                <option value="DIVORCED">Divorced</option>
+                <option value="WIDOWED">Widowed</option>
+
+              </select>
+
+            </div>
+          </div>
+
+          <!-- <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Department</label>
+
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right 10px center; background-size: 15px; appearance: none;"  ngModel name="department" id="typePasswordX-2" class="form-control " >
+                <option *ngFor="let branch of addUserSupportingData.branches" value="{{branch.branch_code}}">{{branch.description }}</option>
+
+              </select>
+
+            </div>
+          </div> -->
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Account Number</label>
+
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="account_no" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].account_no" [value]="employeeDetails.employee[0].account_no | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <!-- <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Employment Type</label>
+
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right 10px center; background-size: 15px; appearance: none;"  ngModel name="employment_type" id="typePasswordX-2" class="form-control " >
+                <option value="PERMANENT">Permanent</option>
+                <option value="CONTRACT">Contract</option>
+              </select>
+
+            </div>
+          </div> -->
+
+<!--
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Work group</label>
+
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right 10px center; background-size: 15px; appearance: none;"  ngModel name="work_group" id="typePasswordX-2" class="form-control " >
+                <option value="MANAGEMENT">Management</option>
+                <option value="UNION">Union</option>
+              </select>
+
+            </div>
+          </div> -->
+
+
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Nhima No</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="nhima_no" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].nhima_no" [value]="employeeDetails.employee[0].nhima_no | lowercase | titlecase"/>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">TPIN </label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="tpin" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].tpin_no" [value]="employeeDetails.employee[0].tpin_no | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Social Security Number</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="social_security_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].ssn" [value]="employeeDetails.employee[0].ssn | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Phone Number</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="phone_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.contact[0].phone_no" [value]="employeeDetails.contact[0].phone_no | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">ID Type </label>
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; appearance: none; -webkit-appearance: none; -moz-appearance: none; background: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 20 20%22 width=%2210%22 height=%2210%22%3E%3Cpolygon fill=%22%23AAAAAA%22 points=%220,5 10,15 20,5%22 /%3E%3C/svg%3E') no-repeat right 10px center; background-size: 10px; width: 100%;"  ngModel name="id_type" id="typePasswordX-2" class="form-control ">
+                <option value="NRC">NRC</option>PASSPORT
+                <option value="PASSPORT">Passport</option>
+              </select>
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">ID Number</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="id_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].id_no" [value]="employeeDetails.employee[0].id_no | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Physical Address</label>
+
+              <textarea style="padding: 5px; border-radius: 1rem" type="text" ngModel name="physical_address" id="typePasswordX-2" class="form-control form-control-lg"[(ngModel)]="employeeDetails.contact[0].physical_address" [value]="employeeDetails.contact[0].physical_address | lowercase | titlecase" ></textarea>
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Emergency Contact </label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="emergency_contact" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.contact[0].emergency_contact" [value]="employeeDetails.contact[0].emergency_contact | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Mobile Number</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="mobile_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.contact[0].emergency_mobile" [value]="employeeDetails.contact[0].emergency_mobile | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Personal Email</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="personal_email" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.contact[0].personal_email" [value]="employeeDetails.contact[0].personal_email | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Work Email</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="work_email" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.contact[0].work_email" [value]="employeeDetails.contact[0].work_email | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <!-- <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Position </label>
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right 10px center; background-size: 15px; appearance: none;"  ngModel name="position" id="typePasswordX-2" class="form-control " >
+                <option *ngFor="let position of addUserSupportingData.position" value="{{position.position_code}}">{{position.description | lowercase | titlecase}}</option>
+              </select>
+
+            </div>
+          </div> -->
+
+
+
+
+        </div>
+
+
+        <div class="row">
+
+
+          <!-- <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Grade </label>
+              <select  style="padding: 5px; border-radius: 1rem;height:38px; background: url('https://img.icons8.com/ios-filled/50/000000/chevron-down.png') no-repeat right 10px center; background-size: 15px; appearance: none;"  ngModel name="grade" id="typePasswordX-2" class="form-control " >
+                <option *ngFor="let grade of addUserSupportingData.grade" value="{{grade.grade_code}}">{{grade.grade_description | lowercase | titlecase}}</option>
+              </select>
+
+            </div>
+          </div> -->
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Basic Salary</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="basic_salary" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].basic_pay" [value]="employeeDetails.employee[0].basic_pay | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Housing Allowance</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="housing_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].housing_allowance" [value]="employeeDetails.employee[0].housing_allowance | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+
+
+
+
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Upkeep Allowance</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="upkeep_allowance" id="typePasswordX-2" class="form-control form-control-lg"[(ngModel)]="employeeDetails.employee[0].upkeep_allowance" [value]="employeeDetails.employee[0].upkeep_allowance | lowercase | titlecase"  />
+
+            </div>
+          </div>
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Car Allowance</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="car_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].car_allowance" [value]="employeeDetails.employee[0].car_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Medical Allowance </label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="medical_allowance" id="typePasswordX-2" class="form-control form-control-lg"  [(ngModel)]="employeeDetails.employee[0].medical_allowance" [value]="employeeDetails.employee[0].medical_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="row">
+
+          <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Non-Contractual Allowance</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="non_contractual_allowance" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].non_contractual_allowance" [value]="employeeDetails.employee[0].non_contractual_allowance | lowercase | titlecase" />
+
+            </div>
+          </div>
+
+          <!-- <div class="col-md-4 4pr-1">
+            <div class="form-group">
+              <label style="color:black; font-weight:bold">Employee Number</label>
+              <input style="padding: 5px; border-radius: 1rem" type="text" ngModel name="employee_number" id="typePasswordX-2" class="form-control form-control-lg" [(ngModel)]="employeeDetails.employee[0].man_no" [value]="employeeDetails.employee[0].man_no | lowercase | titlecase" />
+
+            </div>
+          </div> -->
+
+
+
+
+        </div>
+
+
+
+          <div class="row" style="display: flex; align-items: center; height: 100%; margin-top:50px">
+
+             <div class="col-md-4 4pr-1">
+                <div class="form-group">
+                  <style>
+                    .custom-btn {
+                      background-color: #A11F23;
+                      border-radius: 2rem;
+                      border: none;
+                      color: white;
+                      width: 50%;
+                      font-size: 10px;
+                    }
+
+                    .custom-btn:hover {
+                      background-color: #FDAE1C !important;
+                    }
+                  </style>
+                  <button class="custom-btn btn btn-lg btn-block" type="submit" >
+                    Update
+                  </button>
+
+              </div>
+
+
+
+
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

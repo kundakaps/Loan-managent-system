@@ -1,0 +1,47 @@
+<div>
+    <app-spinner *ngIf="isLoading">
+
+    </app-spinner>
+</div>
+<section class="vh-100 d-flex flex-column justify-content-center align-items-center" style="background-image: url('assets/img/banner1.jpg');background-size: cover;">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-md-6 col-sm-12 d-flex flex-column justify-content-center align-items-center mb-4 text-center">
+                <img width="400" class="responsive img-fluid" src="assets/img/logo.png">
+
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="card shadow-2-strong" style="border-radius: 1rem;">
+                    <div class="card-body p-5">
+                        <p>Your monthly Subscription Fee is K{{topay}}. Kindly send the amount to 260977560405 and upload proof of payment below</p>
+                        <form #usersForm="ngForm" (ngSubmit)="getUserFormdata(usersForm.value)">
+                            <div class="col-md-12 pr-1">
+                                <div class="form-group">
+                                    <label>Uplod Proof of Payment</label>
+                                    <div class="input-group">
+                                        <label style="background-color:#542E54;border-radius:30px; color:white;margin-right:10px" class="btn btn-primary" for="directorNrcInput">Select File</label>
+                                        <input id="directorNrcInput" (change)="onFileChange($event, 'pop')" type="file" class="form-control-file d-none">
+                                        <span style="border-radius:30px;" class="input-group-text">{{ pop || 'No file selected' }}</span>
+                                    </div>
+                                    <p *ngIf="required" style="color:red">Field required</p>
+                                </div>
+                            </div>
+
+
+
+                            <button style="background-color: #543054; border-radius: 2rem" *ngIf="!isLoading" class="btn btn-primary btn-lg btn-block" type="submit">Submit</button>
+
+
+
+                            <!-- <label class="form-check-label " for="form1Example3 "> Don't Have an Account? </label><br/>
+                          <a style="color: #207121;" class="navbar-brand s" href="/#/signup">Register</a> -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="fixed-bottom text-center p-2" style="background-color: rgba(0, 0, 0, 0.5); color: white;">&copy; {{test | date: 'yyyy'}}, powered by
+        <a style="color: #E3983C;" href="https://bytewavetechnologieszm.com">Bytewave Technologies</a>
+    </footer>
+</section>
