@@ -21,17 +21,17 @@ public function CreateCustomer(Request $request)
 
 
 
-        if (!$this->isIpAllowedForUser($user->id, $ip)) {
-            // Log unauthorized IP attempt
-            Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
-                'user_id' => $user->id,
-                'username' => $user->email,
-                'ip' => $ip,
-                'action' => 'unauthorized IP attempt on login',
-            ]);
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
 
-            return response()->json([], 401);
-        }
+        //     return response()->json([], 401);
+        // }
         // 1) Validate input
         $validated = $request->validate([
             'first_name'           => ['required', 'string', ],
@@ -95,18 +95,18 @@ public function CreateCustomer(Request $request)
         $user = auth()->user();
         $ip = $request->ip();
 
-        if (!$this->isIpAllowedForUser($user->id, $ip)) {
-            // Log unauthorized IP attempt
-            Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
-                'user_id' => $user->id,
-                'username' => $user->email,
-                'ip' => $ip,
-                'action' => 'unauthorized IP attempt on login',
-            ]);
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
 
 
-            return response()->json([], 401);
-        }
+        //     return response()->json([], 401);
+        // }
 
         $data =Customers::all();
 
@@ -132,17 +132,17 @@ public function CreateFacility(Request $request)
 
 
 
-        if (!$this->isIpAllowedForUser($user->id, $ip)) {
-            // Log unauthorized IP attempt
-            Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
-                'user_id' => $user->id,
-                'username' => $user->email,
-                'ip' => $ip,
-                'action' => 'unauthorized IP attempt on login',
-            ]);
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
 
-            return response()->json([], 401);
-        }
+        //     return response()->json([], 401);
+        // }
         // 1) Validate input
         $validated = $request->validate([
             'facility_name'           => ['required', 'string', ],
@@ -187,18 +187,18 @@ public function GetAllFacilities(Request $request){
         $user = auth()->user();
         $ip = $request->ip();
 
-        if (!$this->isIpAllowedForUser($user->id, $ip)) {
-            // Log unauthorized IP attempt
-            Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
-                'user_id' => $user->id,
-                'username' => $user->email,
-                'ip' => $ip,
-                'action' => 'unauthorized IP attempt on login',
-            ]);
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
 
 
-            return response()->json([], 401);
-        }
+        //     return response()->json([], 401);
+        // }
 
         $data =Facility::all();
 

@@ -1,0 +1,296 @@
+<div class="main-content">
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading Loan Details...</p>
+  </div>
+
+  <div class="container-fluid" *ngIf="!isLoading && loanDetails && loanDetails.loan">
+
+    <!-- 1. HEADER SECTION -->
+    <div class="details-header">
+      <div class="header-left">
+        <h4 class="title">Loan #{{ loanDetails.loan.id }}</h4>
+        <span class="status-badge" [ngClass]="getStatusClass(loanDetails.loan.status)">
+          {{ loanDetails.loan.status | uppercase }}
+        </span>
+
+        <button (click)="activateLoan(loanDetails.loan.id )" *ngIf="loanDetails.loan.status == 'unactivated' && role =='1'" class="btn btn-primary">Activate</button>
+      </div>
+      <div class="header-right">
+        <p class="posted-by">Posted by: <strong>{{ loanDetails.loan.posted_by_name }}</strong></p>
+        <div class="date-info">
+            <i class="fa fa-calendar"></i> {{ loanDetails.loan.created_at | date:'mediumDate' }}
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. SUMMARY METRICS (ZMW) -->
+    <div class="metrics-grid">
+      <div class="card metric-card">
+        <div class="icon-box blue-bg"><i class="fa fa-money"></i></div>
+        <div class="text-box">
+          <p class="label">Principal Amount</p>
+          <h3 class="value">{{ loanDetails.loan.amount | currency:'ZMW ':'symbol':'1.0-0' }}</h3>
+        </div>
+      </div>
+      <div class="card metric-card active-card">
+        <div class="icon-box yellow-bg"><i class="fa fa-pie-chart"></i></div>
+        <div class="text-box">
+          <p class="label">Current Balance</p>
+          <h3 class="value">{{ loanDetails.loan.balance | currency:'ZMW ':'symbol':'1.0-0' }}</h3>
+        </div>
+        <div class="mini-progress">
+            <div class="bar" [style.width.%]="getPercentagePaid()"></div>
+        </div>
+      </div>
+      <div class="card metric-card">
+        <div class="icon-box blue-bg"><i class="fa fa-hourglass-half"></i></div>
+        <div class="text-box">
+          <p class="label">Duration</p>
+          <h3 class="value">{{ loanDetails.loan.tenure }} <small>Months</small></h3>
+        </div>
+      </div>
+      <div class="card metric-card">
+        <div class="icon-box blue-bg"><i class="fa fa-calendar-check-o"></i></div>
+        <div class="text-box">
+          <p class="label">Next Payment</p>
+          <h3 class="value date-value">{{ loanDetails.loan.next_payment_date | date:'dd MMM yyyy' }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. DETAILS GRID -->
+    <div class="details-grid">
+
+      <!-- LEFT COL: CUSTOMER -->
+      <div class="left-column">
+        <div class="card profile-card">
+          <div class="card-header"><h5 class="card-title"><i class="fa fa-user-circle"></i> Borrower Profile</h5></div>
+          <div class="card-body">
+            <div class="profile-header">
+              <div class="avatar-placeholder">{{ loanDetails.customer.first_name | slice:0:1 }}{{ loanDetails.customer.last_name | slice:0:1 }}</div>
+              <div class="names">
+                <h3>{{ loanDetails.customer.first_name }} {{ loanDetails.customer.last_name }}</h3>
+                <p>{{ loanDetails.customer.occupation }}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="info-row"><span class="label">NRC</span><span class="data">{{ loanDetails.customer.nrc }}</span></div>
+            <div class="info-row"><span class="label">Phone</span><span class="data highlight">{{ loanDetails.customer.contact_number }}</span></div>
+            <div class="info-row"><span class="label">Address</span><span class="data">{{ loanDetails.customer.residential_address }}</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h5 class="card-title"><i class="fa fa-history"></i> Repayments</h5></div>
+            <div class="card-body p-0">
+                <table class="table table-hover">
+                    <thead><th>Date</th><th class="text-right">Amount</th></thead>
+                    <tbody>
+                        <ng-container *ngIf="loanDetails.repayments && loanDetails.repayments.length > 0; else noRepay">
+                          <tr *ngFor="let pay of loanDetails.repayments">
+                              <td>{{ pay.created_at | date:'dd MMM yyyy' }}</td>
+                              <td class="text-right font-weight-bold">{{ pay.amount | currency:'ZMW ' }}</td>
+                          </tr>
+                        </ng-container>
+                        <ng-template #noRepay><tr><td colspan="2" class="text-center text-muted p-3">No repayments yet.</td></tr></ng-template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+      </div>
+
+      <!-- RIGHT COL: COLLATERAL -->
+      <div class="right-column">
+
+        <div class="card">
+          <div class="card-header"><h5 class="card-title"><i class="fa fa-briefcase"></i> Facility & Terms</h5></div>
+          <div class="card-body">
+            <div class="terms-grid">
+                <div class="term-item"><small>Type</small><h6>{{ loanDetails.facility.facility_name }}</h6></div>
+                <div class="term-item"><small>Monthly</small><h6 class="text-blue">{{ loanDetails.loan.monthly_repayment | currency:'ZMW ' }}</h6></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODE A: DISPLAY (Read Only) - Updated with ALL FIELDS -->
+        <ng-container *ngIf="loanDetails.collaterals">
+            <div class="card">
+                <div class="card-header"><h5 class="card-title"><i class="fa fa-car"></i> Asset Inspection</h5></div>
+                <div class="card-body">
+                    <!-- Identity Section -->
+                    <div class="vehicle-identity">
+                        <div class="plate-box">
+                            <span class="label">Number Plate</span>
+                            <div class="plate-number">{{ loanDetails.collaterals.number_plate }}</div>
+                        </div>
+                        <div class="specs-grid">
+                            <div class="spec">
+                                <small>Mileage</small>
+                                <strong>{{ loanDetails.collaterals.mileage | number }} km</strong>
+                            </div>
+                            <div class="spec">
+                                <small>Engine No.</small>
+                                <strong>{{ loanDetails.collaterals.engine_number }}</strong>
+                            </div>
+                            <div class="spec">
+                                <small>Chassis No.</small>
+                                <strong>{{ loanDetails.collaterals.chassis_number }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <!-- Full Condition Report -->
+                    <h6 class="subsection-title">Full Condition Report</h6>
+                    <div class="condition-grid">
+                        <div class="condition-item">
+                            <span class="part">CV Joints</span>
+                            <span class="state">{{ loanDetails.collaterals.cv_joints_condition }}</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="part">Shocks</span>
+                            <span class="state">{{ loanDetails.collaterals.shocks_condition }}</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="part">Control Arms</span>
+                            <span class="state">{{ loanDetails.collaterals.control_arms_condition }}</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="part">Tires</span>
+                            <span class="state">{{ loanDetails.collaterals.tires_condition }}</span>
+                        </div>
+                        <div class="condition-item">
+                            <span class="part">Body Condition</span>
+                            <span class="state">{{ loanDetails.collaterals.body_condition }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents -->
+            <div class="card" *ngIf="loanDetails.collaterals_files?.length > 0">
+                <div class="card-header"><h5 class="card-title"><i class="fa fa-paperclip"></i> Documents</h5></div>
+                <div class="card-body">
+                    <p class="text-muted small mb-3">Click to view/download.</p>
+                    <div class="files-gallery">
+                        <div class="file-card clickable" *ngFor="let file of loanDetails.collaterals_files" (click)="viewFile(file.file_name)">
+                            <div class="file-icon">
+                                <i *ngIf="file.file_name.endsWith('.pdf')" class="fa fa-file-pdf-o" style="color: #f5365c;"></i>
+                                <i *ngIf="!file.file_name.endsWith('.pdf')" class="fa fa-file-image-o" style="color: #003366;"></i>
+                            </div>
+                            <div class="file-name">{{ file.file_name.endsWith('.pdf') ? 'PDF Document' : 'Image File' }}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <!-- MODE B: ENTRY FORM -->
+        <div class="card form-card" *ngIf="showCollateralForm()">
+            <div class="card-header">
+                <h5 class="card-title"><i class="fa fa-plus-circle"></i> Add Collateral Details</h5>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="collateralForm">
+                    <h6 class="subsection-title">Vehicle Identification</h6>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <label>Number Plate</label>
+                            <input type="text" class="form-control" formControlName="number_plate" placeholder="e.g. ABC 1234">
+                        </div>
+                    </div>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>Engine Number</label>
+                            <input type="text" class="form-control" formControlName="engine_number">
+                        </div>
+                        <div class="form-group">
+                            <label>Chassis Number</label>
+                            <input type="text" class="form-control" formControlName="chassis_number">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Current Mileage</label>
+                            <input type="text" class="form-control" formControlName="mileage" placeholder="e.g. 120,000 km">
+                        </div>
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <h6 class="subsection-title">Condition Report</h6>
+                    <div class="form-row two-col">
+                        <div class="form-group">
+                            <label>CV Joints</label>
+                            <select class="form-control" formControlName="cv_joints_condition">
+                                <option *ngFor="let opt of conditionOptions" [value]="opt">{{opt}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shocks</label>
+                            <select class="form-control" formControlName="shocks_condition">
+                                <option *ngFor="let opt of conditionOptions" [value]="opt">{{opt}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Control Arms</label>
+                            <select class="form-control" formControlName="control_arms_condition">
+                                <option *ngFor="let opt of conditionOptions" [value]="opt">{{opt}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Tires</label>
+                            <select class="form-control" formControlName="tires_condition">
+                                <option *ngFor="let opt of conditionOptions" [value]="opt">{{opt}}</option>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Body Condition</label>
+                            <select class="form-control" formControlName="body_condition">
+                                <option *ngFor="let opt of conditionOptions" [value]="opt">{{opt}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr class="form-divider">
+
+                    <h6 class="subsection-title">Attach Photos / Documents</h6>
+
+                    <div class="upload-dropzone"
+                         [class.drag-over]="isDragOver"
+                         (drop)="onFileDrop($event)"
+                         (dragover)="onDragOver($event)"
+                         (dragleave)="onDragLeave($event)">
+                        <i class="fa fa-cloud-upload"></i>
+                        <p>Drag files here or click to browse</p>
+                        <label class="btn-browse">
+                            Select Files
+                            <input type="file" multiple (change)="onFileBrowse($event)" hidden>
+                        </label>
+                    </div>
+
+                    <div class="selected-files-list" *ngIf="selectedFiles.length > 0">
+                        <div *ngFor="let file of selectedFiles; let i = index" class="selected-file">
+                            <span>{{ file.name }}</span>
+                            <span class="remove" (click)="removeFile(i)">&times;</span>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-submit" (click)="submitCollateral()" [disabled]="isSubmitting">
+                            <span *ngIf="!isSubmitting">Save Collateral & Upload</span>
+                            <span *ngIf="isSubmitting"><i class="fa fa-spinner fa-spin"></i> Saving...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

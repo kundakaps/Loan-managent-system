@@ -52,6 +52,7 @@ import { EventsComponent } from 'app/pages/events/events.component';
 import { EventsDetailsComponent } from 'app/pages/events-details/events-details.component';
 import { CustomersComponent } from 'app/pages/customers/customers.component';
 import { FacilitiesComponent } from 'app/pages/facilities/facilities.component';
+import { LoanDetailsComponent } from 'app/pages/loan-details/loan-details.component';
 
 export const AdminLayoutRoutes: Routes = [
      { path: 'dashboard',      component: DashboardComponent,canActivate:[AuthGuard]},
@@ -74,13 +75,15 @@ export const AdminLayoutRoutes: Routes = [
       ]
     },
        { path: 'loans',      component: LoansComponent,canActivate:[AuthGuard],
-      children: [
+        children: [
         { path: 'add-loan', component: LoansComponent },
+        { path: 'waiting-activation', component: LoansComponent },
         { path: 'all-loans', component: LoansComponent },
 
 
       ]
     },
+    { path: 'loan-details',      component: LoanDetailsComponent},
    // { path: 'event-details',      component: EventsDetailsComponent,canActivate:[AuthGuard]},
 
     // { path: 'documents',      component: DocumentsComponent,canActivate:[AuthGuard],

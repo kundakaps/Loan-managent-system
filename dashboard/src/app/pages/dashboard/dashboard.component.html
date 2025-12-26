@@ -1,13 +1,139 @@
-<!-- Spinner Overlay -->
-<div *ngIf="isLoading" class="spinner-overlay" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255, 255, 255, 0.8); z-index: 9999; display: flex; justify-content: center; align-items: center;">
-    <div class="spinner-container">
-        <div class="spinner" style="border: 8px solid #f3f3f3; border-top: 8px solid #FFC107; border-radius: 50%; width: 60px; height: 60px; animation: spin 1s linear infinite;"></div>
-    </div>
-    <style>
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
-</div>
+<div class="main-content">
 
+  <!-- LOADING OVERLAY -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Loading Financial Data...</p>
+  </div>
+
+  <div class="container-fluid" *ngIf="!isLoading && dashboardData">
+
+    <div class="header-section">
+      <h2 class="title">Financial Overview</h2>
+      <p class="subtitle">Today's metrics and performance</p>
+    </div>
+
+    <!-- ROW 1: TOP 3 KPI CARDS (Clients, Loans, Payments) -->
+    <!-- These will split the width 3 ways (33% each) -->
+    <div class="kpi-grid-three">
+
+      <!-- Card 1: Total Clients -->
+      <div class="card kpi-card">
+        <div class="card-icon blue-bg">
+          <i class="fa fa-users"></i>
+        </div>
+        <div class="card-info">
+          <p class="category">Total Clients</p>
+          <h3 class="value">{{ dashboardData?.total_clients || 0 }}</h3>
+        </div>
+      </div>
+
+      <!-- Card 2: Total Loans -->
+      <div class="card kpi-card">
+        <div class="card-icon yellow-bg">
+          <i class="fa fa-file-text"></i>
+        </div>
+        <div class="card-info">
+          <p class="category">Total Loans</p>
+          <h3 class="value">{{ dashboardData?.total_loans || 0 }}</h3>
+        </div>
+      </div>
+
+      <!-- Card 3: Payments Made -->
+      <div class="card kpi-card">
+        <div class="card-icon yellow-bg">
+          <i class="fa fa-check-circle"></i>
+        </div>
+        <div class="card-info">
+          <p class="category">Payments Made</p>
+          <h3 class="value">
+            {{ dashboardData?.total_payments_today || 0 }}
+            <span class="muted-text">/ {{ dashboardData?.total_payments_expected_today || 0 }}</span>
+          </h3>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ROW 2: COLLECTIONS WIDE CARD (Redesigned) -->
+    <div class="card wide-financial-card">
+      <div class="card-body">
+
+        <!-- Left Side: Icon & Title -->
+        <div class="financial-identity">
+          <div class="card-icon blue-bg">
+            <i class="fa fa-money"></i>
+          </div>
+          <div class="identity-text">
+            <p class="category">Collections Today</p>
+            <h3 class="value">{{ dashboardData?.sum_paid_today | currency:'ZMW ':'symbol':'1.0-0' }}</h3>
+          </div>
+        </div>
+
+        <!-- Right Side: Target & Percentage -->
+        <div class="financial-target">
+          <div class="target-info">
+            <span class="label">Target Goal</span>
+            <span class="target-value">{{ dashboardData?.expected_sum_for_today | currency:'ZMW ':'symbol':'1.0-0' }}</span>
+          </div>
+          <div class="percentage-badge"
+               [ngClass]="{'is-zero': (dashboardData?.sum_paid_today === 0)}">
+             <!-- Calculate Percentage -->
+             {{ (dashboardData?.expected_sum_for_today > 0)
+                ? ((dashboardData?.sum_paid_today / dashboardData?.expected_sum_for_today) | percent:'1.0-0')
+                : '0%'
+             }}
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom Progress Bar -->
+      <div class="progress-track">
+        <div class="progress-fill"
+             [style.width.%]="(dashboardData?.expected_sum_for_today > 0)
+             ? ((dashboardData?.sum_paid_today / dashboardData?.expected_sum_for_today) * 100)
+             : 0">
+        </div>
+      </div>
+    </div>
+
+
+    <!-- ROW 3: CHARTS -->
+    <div class="charts-grid">
+
+      <!-- Chart 1 -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Collections vs Targets</h4>
+          <p class="card-category">Daily Financial Performance</p>
+        </div>
+        <div class="card-body">
+          <canvas id="cashflowChart"></canvas>
+        </div>
+        <div class="card-footer">
+          <div class="stats"><i class="fa fa-clock-o"></i> Updated just now</div>
+        </div>
+      </div>
+
+      <!-- Chart 2 -->
+      <div class="card chart-card">
+        <div class="card-header">
+          <h4 class="card-title">Loan Composition</h4>
+          <p class="card-category">Active vs Pending vs Inactive</p>
+        </div>
+        <div class="card-body">
+          <canvas id="loanStatusChart"></canvas>
+          <div class="donut-inner">
+            <h5>{{ (dashboardData?.total_active_loans || 0) + (dashboardData?.total_pending_collateral_loans || 0) + (dashboardData?.total_inactive_loans || 0) }}</h5>
+            <small>Total Loans</small>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="stats"><i class="fa fa-refresh"></i> Live Portfolio Data</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

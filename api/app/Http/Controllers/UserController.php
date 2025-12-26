@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\AssignedRoles;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\UserIpBinding;
@@ -70,17 +72,21 @@ class UserController extends Controller
             return response()->json(['error' => 'Incorrect email or password'], 401);
         }
 
-        if (!$this->isIpAllowedForUser($user->id, $ip)) {
-            // Log unauthorized IP attempt
-            Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
-                'user_id' => $user->id,
-                'username' => $user->email,
-                'ip' => $ip,
-                'action' => 'unauthorized IP attempt on login',
-            ]);
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
 
-            return response()->json([], 401);
-        }
+        //     return response()->json([], 401);
+        // }
+
+        $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+
 
         $credentials = [
             'email' => $data['username'],
@@ -101,6 +107,7 @@ class UserController extends Controller
         return response()->json([
             'success' => true,
             'token' => $token,
+            'role' => $roles->role_id??0,
         ], 200);
     }
 

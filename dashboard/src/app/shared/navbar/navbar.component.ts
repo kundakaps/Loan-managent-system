@@ -85,7 +85,8 @@ export class NavbarComponent implements OnInit{
       try {
         this.http.get(BASE_URL + '/api/me', { headers }).subscribe(
           (response: any) => {
-            const name = response['data']['name'];
+           // console.log(response);
+            const name = response['name'];
             this.username = name;
             //console.log(response['data']['name'])
           },

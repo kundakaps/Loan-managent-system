@@ -1,150 +1,147 @@
-import { EventsService } from 'app/services/events.service';
-import { DashboardDataService } from './../../services/dashboard-data.service';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import Chart from 'chart.js';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { BASE_URL } from '../config';
 
+// 1. CHANGE THIS IMPORT
+import Chart from 'chart.js';
+
 @Component({
-    selector: 'dashboard-cmp',
-    moduleId: module.id,
-    templateUrl: 'dashboard.component.html',
-    styleUrls: ['dashboard.component.scss']
+  selector: 'dashboard-cmp',
+  moduleId: module.id,
+  templateUrl: 'dashboard.component.html',
+  styleUrls: ['dashboard.component.scss']
 })
+export class DashboardComponent implements OnInit, OnDestroy {
 
-export class DashboardComponent implements OnInit{
-
-
- @ViewChild('ticketsChart') private ticketsChartRef: ElementRef;
-  @ViewChild('eventsChart') private eventsChartRef: ElementRef;
-  userId:number=0;
-  constructor(private http: HttpClient,private route: Router) { }
+  dashboardData: any;
+  isLoading = false;
 
 
-    dashboardData:any =[];
-    isLoading =false;
-    ngOnInit(){
-    //  this.getDashboardData()
-    }
+  cashflowChart: any;
+  loanStatusChart: any;
 
+  constructor(private http: HttpClient, private route: Router) { }
 
-    getDashboardData(){
-      this.isLoading=true;
-      const token = sessionStorage.getItem('token');
-      const headers = { 'Authorization': 'Bearer '+token }
-      try {
-        this.http.get(BASE_URL + '/api/dashboard', { headers }).subscribe((response: any) => {
-          this.dashboardData = response;
-         // console.log(this.dashboardData);
-          this.isLoading = false;
+  ngOnInit() {
+    this.getDashboardData();
+  }
 
-             setTimeout(() => {
-                  if (!this.isLoading) {
-                      this.createTicketsChart();
-                      this.createEventsChart();
-                  }
-              }, 0);
-        });
-      } catch (error) {
+  ngOnDestroy() {
+    // Destroy charts to free memory
+    if (this.cashflowChart) this.cashflowChart.destroy();
+    if (this.loanStatusChart) this.loanStatusChart.destroy();
+  }
+
+   getDashboardData() {
+    this.isLoading = true;
+    const token = sessionStorage.getItem('token');
+    const headers = { 'Authorization': 'Bearer ' + token };
+
+    this.http.get(BASE_URL + '/api/dashboarddata', { headers }).subscribe(
+      (response: any) => {
+        console.log("API Response:", response); // Debugging line
+
+        // 2. ASSIGN DATA
+        this.dashboardData = response.data;
+        this.isLoading = false;
+
+        // 3. Render charts ONLY after data is set
+        setTimeout(() => {
+          this.initCharts();
+        }, 100);
+      },
+      (error) => {
         console.log(error);
         this.isLoading = false;
       }
-    }
-
-  //     ngAfterViewInit(): void {
-  //   // We need to wait until the view is initialized and *ngIf has rendered the canvases
-  //   // A timeout of 0 pushes the chart creation to the next change detection cycle
-  //   setTimeout(() => {
-  //       if (!this.isLoading) {
-  //           this.createTicketsChart();
-  //           this.createEventsChart();
-  //       }
-  //   }, 0);
-  // }
-
-  createTicketsChart(): void {
-    const data = this.dashboardData.data;
-    new Chart(this.ticketsChartRef.nativeElement, {
-      type: 'doughnut',
-      data: {
-        labels: ['VIP Tickets', 'Normal Tickets'],
-        datasets: [{
-          data: [data.totalVipTickets, data.totalNormalTickets],
-          backgroundColor: [
-            '#FFC107', // Yellow for VIP
-            '#212529'  // Black for Normal
-          ],
-          borderColor: '#ffffff',
-          borderWidth: 4
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        cutoutPercentage: 75,
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            fontColor: '#333',
-            fontFamily: 'Arial, sans-serif'
-          }
-        },
-        tooltips: {
-          backgroundColor: '#000'
-        }
-      }
-    });
+    );
   }
 
-  createEventsChart(): void {
-    const data = this.dashboardData.data;
-    new Chart(this.eventsChartRef.nativeElement, {
-      type: 'bar',
-      data: {
-        labels: ['Upcoming Events', 'Past Events'],
-        datasets: [{
-          label: 'Number of Events',
-          data: [data.upcomingEvents, data.pastEvents],
-          backgroundColor: [
-            'rgba(255, 193, 7, 0.7)', // Yellow with transparency
-            'rgba(33, 37, 41, 0.7)'   // Black with transparency
-          ],
-          borderColor: [
-            '#FFC107',
-            '#212529'
-          ],
-          borderWidth: 2
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        legend: {
-          display: false // Hiding legend as the title and axis labels are clear
-        },
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true,
-              stepSize: 1, // Ensure y-axis has integer steps for event counts
-              fontColor: '#333'
+initCharts() {
+        if (!this.dashboardData) return;
+
+        // --- Chart 1: Cashflow (Kept same as before) ---
+        const ctx1 = document.getElementById('cashflowChart');
+        if (ctx1) {
+          this.cashflowChart = new Chart(ctx1 as any, {
+            type: 'bar',
+            data: {
+              labels: ['Today\'s Financials'],
+              datasets: [
+                {
+                  label: 'Expected',
+                  data: [this.dashboardData.expected_sum_for_today || 0],
+                  backgroundColor: '#003366',
+                  borderColor: '#003366',
+                  borderWidth: 1
+                },
+                {
+                  label: 'Collected',
+                  data: [this.dashboardData.sum_paid_today || 0],
+                  backgroundColor: '#FBC02D',
+                  borderColor: '#FBC02D',
+                  borderWidth: 1
+                }
+              ]
             },
-             gridLines: {
-                display: false
-             }
-          }],
-          xAxes: [{
-             ticks: {
-                fontColor: '#333'
-             },
-             gridLines: {
-                display: false
-             }
-          }]
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              scales: { yAxes: [{ ticks: { beginAtZero: true } }] }
+            }
+          });
         }
-      }
-    });
+
+        // --- Chart 2: Loan Portfolio (UPDATED) ---
+        const ctx2 = document.getElementById('loanStatusChart');
+
+        if (ctx2) {
+          // 1. Get the values (Adding Pending Collateral)
+          let active = this.dashboardData.total_active_loans || 0;
+          let inactive = this.dashboardData.total_inactive_loans || 0;
+          // Access the new data point
+          let pending = this.dashboardData.total_pending_collateral_loans || 0;
+
+          // 2. Setup Data and Colors
+          // We add the Yellow color (#FBC02D) for Pending items to fit your theme
+          let chartLabels = ['Active Loans', 'Pending Collateral', 'Inactive Loans'];
+          let chartData = [active, pending, inactive];
+          let chartColors = [
+            '#003366', // Deep Blue (Active)
+            '#FBC02D', // Yellow (Pending)
+            '#e0e0e0'  // Grey (Inactive)
+          ];
+
+          // 3. Handle Empty State (If all are 0, show a placeholder)
+          if (active === 0 && inactive === 0 && pending === 0) {
+            chartData = [1];
+            chartColors = ['#f4f4f4']; // Light placeholder grey
+            chartLabels = ['No Data'];
+          }
+
+          this.loanStatusChart = new Chart(ctx2 as any, {
+            type: 'doughnut',
+            data: {
+              labels: chartLabels,
+              datasets: [{
+                data: chartData,
+                backgroundColor: chartColors,
+                borderWidth: 0
+              }]
+            },
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              cutoutPercentage: 70, // Makes the donut thinner
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 12
+                }
+              }
+            }
+          });
+        }
   }
 }

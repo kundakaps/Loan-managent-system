@@ -87,6 +87,7 @@ export class HomeComponent implements OnInit {
        if(response.success){
         //console.log(response)
         sessionStorage.setItem('token', response.token);
+        sessionStorage.setItem('role', response.role);
         this.router.navigate(['/dashboard']);
 
 

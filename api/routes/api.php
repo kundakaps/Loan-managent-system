@@ -10,6 +10,7 @@ use App\Http\Controllers\PayrollController;
 use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 
 
 
@@ -23,6 +24,10 @@ Route::middleware('auth:api')->group(function () {
 
     Route::get('me', [UserController::class,'me']);
 
+    Route::get('dashboarddata', [DashboardController::class,'DashboardData']);
+
+
+
     Route::post('addcustomer',[CustomerController::class, 'CreateCustomer']);
     Route::get('customers',[CustomerController::class, 'GetAllCustomers']);
 
@@ -31,6 +36,15 @@ Route::middleware('auth:api')->group(function () {
 
     Route::post('addloan',[LoanController::class, 'CreateLoan']);
     Route::get('allloans',[LoanController::class, 'GetAllLoans']);
+    Route::get('unactivatedloans',[LoanController::class, 'getLoansToBeActivated']);
+    Route::post('activateloan',[LoanController::class, 'ActivateLoan']);
+    Route::post('singleloan',[LoanController::class, 'getSingleLoan']);
+    Route::post('makerepayment',[LoanController::class, 'CreateLoanRepayment']);
+    Route::post('loan-collaterals',[LoanController::class, 'CreateLoanCollateral']);
+    Route::post('loan-collateral-files',[LoanController::class, 'CreateLoanCollateralFiles']);
+
+
+
 
 
 

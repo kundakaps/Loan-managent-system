@@ -133,3 +133,51 @@
         </div>
   </div>
 
+
+  <div class="page-wrapper" *ngIf="isWaitingActivation">
+
+        <!-- Reusing 'form-card' ensures it is exactly the same width/style as the form -->
+        <div class="form-card">
+
+          <div class="form-title">
+            <strong>All Loans</strong>
+          </div>
+
+          <div class="form-subtitle">
+            List of all loans waiting to be activated
+          </div>
+
+          <div class="table-container">
+            <table class="custom-table" id="loansunactivatedTable">
+              <thead>
+                <tr>
+                  <th>Client Name</th>
+                  <th>Facility Name</th>
+                  <th>Amount</th>
+                  <th>Balance</th>
+                  <th>Next Payment Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let data of UnactivatedLoans">
+                  <td>{{ data.first_name | titlecase }} {{ data.last_name | titlecase }}</td>
+                  <td>{{ data.amount | titlecase }}</td>
+                  <td>{{ data.facility_name | titlecase }}</td>
+                  <td>{{ data.balance | titlecase }}</td>
+                  <td>{{ data.next_payment_date | titlecase }}</td>
+                  <td>{{ data.status | titlecase }}</td>
+                  <td class="text-center">
+                    <button class="action-btn" (click)="detailspage(data.id)">
+                      Details
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+  </div>
+

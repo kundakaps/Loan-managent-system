@@ -96,6 +96,7 @@ import { EventsComponent } from './pages/events/events.component';
 import { EventsDetailsComponent } from './pages/events-details/events-details.component';
 import { CustomersComponent } from './pages/customers/customers.component';
 import { FacilitiesComponent } from './pages/facilities/facilities.component';
+import { LoanDetailsComponent } from './pages/loan-details/loan-details.component';
 
 
 
@@ -168,7 +169,8 @@ import { FacilitiesComponent } from './pages/facilities/facilities.component';
     EventsComponent,
     EventsDetailsComponent,
     CustomersComponent,
-    FacilitiesComponent
+    FacilitiesComponent,
+    LoanDetailsComponent
 
   ],
   imports: [

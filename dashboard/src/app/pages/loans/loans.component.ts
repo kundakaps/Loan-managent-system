@@ -17,8 +17,11 @@ export class LoansComponent implements OnInit {
     isLoading =false
     isAddloan =false
     isAllLoans = false
+    isWaitingActivation = false
     facilities:any=[]
     customers:any=[]
+    UnactivatedLoans:any=[]
+
 
 constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
 
@@ -42,6 +45,9 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
       case 'all-loans':
         this.showAllLoans();
         break;
+      case 'waiting-activation':
+        this.showWaitingActivation();
+        break;
 
 
       default:
@@ -55,6 +61,7 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
   showAddLoan() {
     this.isAddloan = true;
     this.isAllLoans = false;
+    this.isWaitingActivation = false;
     this.getCustomers()
     this.getFacilities();
     }
@@ -62,7 +69,14 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
     showAllLoans() {
     this.isAddloan = false;
     this.isAllLoans = true;
+    this.isWaitingActivation = false;
     this.getLoans()
+    }
+    showWaitingActivation() {
+    this.isAddloan = false;
+    this.isAllLoans = false;
+    this.isWaitingActivation = true;
+    this.getUnactivatedLoans()
     }
 
 
@@ -98,6 +112,8 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
       this.isLoading=false
     }
   }
+
+
 
 
     loanModel = {
@@ -245,6 +261,162 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
       console.log(error)
       this.isLoading=false
     }
+  }
+  getUnactivatedLoans(){
+    //this.isLoading=true
+    const token = sessionStorage.getItem('token');
+
+    const headers = { 'Authorization': 'Bearer '+token }
+    try {
+      this.http.get(BASE_URL+'/api/unactivatedloans', { headers }).subscribe((response:any)=>{
+
+       this.UnactivatedLoans=response.data
+      $('#loansunactivatedTable').DataTable().clear().destroy();
+
+      setTimeout(() => {
+        var table = $('#loansunactivatedTable').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 15,
+          processing: true,
+          lengthMenu: [15, 25, 50],
+        });
+
+
+
+      }, 1);
+
+        this.isLoading=false
+      })
+    }
+    catch(error){
+      console.log(error)
+      this.isLoading=false
+    }
+  }
+
+
+
+  detailspage(id: any) {
+    // --- MODAL 1: CHOOSE ACTION ---
+        Swal.fire({
+          title: 'Choose Action',
+          text: 'What would you like to do?',
+          icon: 'question',
+          showCancelButton: true,
+          showDenyButton: true,
+
+          // Buttons
+          confirmButtonText: 'Make Repayment', // Yellow
+          denyButtonText: 'View Loan Details', // Blue
+          cancelButtonText: 'Close',
+
+          // Theme Colors
+          confirmButtonColor: '#ffc107',
+          denyButtonColor: '#007bff',
+          cancelButtonColor: '#6c757d',
+
+        }).then((result) => {
+
+          // ---------------------------------------------------
+          // ACTION 1: MAKE REPAYMENT (Opens Input Modal)
+          // ---------------------------------------------------
+          if (result.isConfirmed) {
+
+            Swal.fire({
+              title: 'Enter Repayment Amount',
+              text: `Enter the amount for Loan ID: ${id}`,
+              input: 'number', // Defines the input type
+              inputAttributes: {
+                min: '1',       // specific html attributes
+                step: '0.01'    // allow decimals
+              },
+              showCancelButton: true,
+              confirmButtonText: 'Submit Payment',
+              confirmButtonColor: '#ffc107', // Keeping the Yellow theme for payment
+              cancelButtonColor: '#6c757d',
+
+              // Validation: prevents submitting empty values
+              inputValidator: (value) => {
+                if (!value) {
+                  return 'You need to enter an amount!';
+                }
+                return null; // Return null implies valid
+              }
+            }).then((paymentResult) => {
+
+              // Check if they clicked Submit on the input modal
+              if (paymentResult.isConfirmed) {
+                const amount = paymentResult.value;
+
+                // --- FINAL OUTPUT ---
+                console.log('Action: Submit Repayment');
+                console.log('Loan ID:', id);
+                console.log('Amount Entered:', amount);
+
+                this.submitPayment(id, amount)
+
+                // Optional: Show a success message after
+                //Swal.fire('Success', 'Repayment recorded!', 'success');
+              }
+            });
+
+          }
+
+          // ---------------------------------------------------
+          // ACTION 2: VIEW DETAILS
+          // ---------------------------------------------------
+          else if (result.isDenied) {
+
+            // Your navigation logic here
+            this.router.navigate(['/loan-details'], { queryParams: { id } });
+          }
+
+        });
+  }
+
+
+  submitPayment(id: any, amount: any) {
+        this.isLoading = true
+
+
+
+          const url = BASE_URL+'/api/makerepayment';
+          const body = {
+            "loan_id": id,
+            "amount": amount
+          };
+
+        const token = sessionStorage.getItem('token');
+
+        const headers = { 'Authorization': 'Bearer '+token }
+
+          // 3. Make the POST request
+          this.http.post(url, body, { headers }).subscribe({
+            next: (response:any) => {
+            this.isLoading =false
+            if(response.success){
+              Swal.fire(
+                'Success',
+                response.message,
+                'success'
+              )
+              this.showAllLoans()
+
+            }else{
+              Swal.fire('Error', response.message, 'error');
+            }
+
+
+            },
+            error: (error) => {
+
+              this.isLoading =false
+              console.error('Error occurred:', error);
+              alert('Failed to create customer.');
+            }
+          });
+
+
   }
 
 
