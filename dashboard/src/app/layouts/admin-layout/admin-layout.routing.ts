@@ -83,6 +83,14 @@ export const AdminLayoutRoutes: Routes = [
 
       ]
     },
+     { path: 'users',      component: UserComponent,canActivate:[AuthGuard],
+        children: [
+        { path: 'add-user', component: UserComponent },
+        { path: 'all-users', component: UserComponent },
+
+
+      ]
+    },
     { path: 'loan-details',      component: LoanDetailsComponent},
    // { path: 'event-details',      component: EventsDetailsComponent,canActivate:[AuthGuard]},
 

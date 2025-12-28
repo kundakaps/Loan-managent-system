@@ -11,8 +11,7 @@ use App\Http\Controllers\SchoolsController;
 use App\Http\Controllers\UtilityController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
-
-
+use App\Models\User;
 
 Route::options('{any}', function (Request $request) {
     return response()->json([], 200);
@@ -42,6 +41,11 @@ Route::middleware('auth:api')->group(function () {
     Route::post('makerepayment',[LoanController::class, 'CreateLoanRepayment']);
     Route::post('loan-collaterals',[LoanController::class, 'CreateLoanCollateral']);
     Route::post('loan-collateral-files',[LoanController::class, 'CreateLoanCollateralFiles']);
+
+
+    Route::get('users',[UserController::class, 'getAllUsers']);
+    Route::post('adduser',[UserController::class, 'AddUser']);
+    Route::post('updateuser',[UserController::class, 'updateUser']);
 
 
 
@@ -74,5 +78,5 @@ Route::get('/getdata', [PayrollController::class,'getIndoJV1']);
 Route::get('/testconection', [PayrollController::class,'testConection']);
 
 Route::post('auth/login', [UserController::class,'login']);
-Route::post('auth/adduser', [UserController::class,'createUser']);
+//Route::post('auth/adduser', [UserController::class,'createUser']);
 

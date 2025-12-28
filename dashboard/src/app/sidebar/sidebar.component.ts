@@ -44,7 +44,7 @@ export const ROUTES: RouteInfo[] = [
     path: '/users', title: 'USERS', icon: 'nc-single-02', class: '',
     restrictedToRole1: true,
     children: [
-      { path: 'add-user', title: 'add user' },
+     // { path: 'add-user', title: 'add user' },
       { path: 'all-users', title: 'all users' },
     ]
   },
