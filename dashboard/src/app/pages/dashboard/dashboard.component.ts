@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   cashflowChart: any;
   loanStatusChart: any;
+  role:any = sessionStorage.getItem('role');
 
   constructor(private http: HttpClient, private route: Router) { }
 

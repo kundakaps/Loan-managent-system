@@ -41,6 +41,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('makerepayment',[LoanController::class, 'CreateLoanRepayment']);
     Route::post('loan-collaterals',[LoanController::class, 'CreateLoanCollateral']);
     Route::post('loan-collateral-files',[LoanController::class, 'CreateLoanCollateralFiles']);
+     Route::post('assignrole',[UserController::class, 'assignRoles']);
+
 
 
     Route::get('users',[UserController::class, 'getAllUsers']);

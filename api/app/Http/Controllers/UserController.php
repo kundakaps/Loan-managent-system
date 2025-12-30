@@ -279,7 +279,35 @@ private function sendSimulateEmail($to_email, $password)
             ]);
     }
 
+    public function assignRoles(Request $request){
+            $user = auth()->user();
+            $roles = AssignedRoles::where('user_id', $user->id)->first();
 
+            if($roles->role_id != 1){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+            //insert or update
+            $roles = AssignedRoles::where('user_id', $request->user_id)->first();
+            if($roles){
+                $roles->role_id = $request->role_id;
+                $roles->save();
+            }else{
+                $roles = AssignedRoles::create([
+                    'user_id' => $request->user_id,
+                    'role_id' => $request->role_id,
+                ]);
+            }
+
+        return response()->json([
+            'success'=>true,
+            'message'=>'user assigned successfully'
+        ]);
+
+
+    }
 
      public static function isIpAllowedForUser($userId, $ip)
         {

@@ -191,4 +191,84 @@ addUserToDB(data: any) {
 
 }
 
+
+
+
+
+
+assignRole(id: any) {
+  Swal.fire({
+    title: 'ASSIGN ROLE',
+    text: 'Please select the role for this user',
+    icon: 'question',
+    showDenyButton: true,
+    showCancelButton: true,
+    confirmButtonText: 'Admin User',
+    denyButtonText: 'Normal User',
+    cancelButtonText: 'Cancel',
+    confirmButtonColor: '#0056b3', // Your theme blue
+    denyButtonColor: '#6c757d',    // Gray for normal user
+    customClass: {
+      popup: 'swal-custom-popup',
+      confirmButton: 'action-btn', // Uses your CSS class
+      denyButton: 'action-btn'     // Uses your CSS class
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Admin User clicked
+      console.log(1, id);
+
+      this.submitRole(id, 1)
+
+
+
+    } else if (result.isDenied) {
+      // Normal User clicked
+      console.log(0, id);
+      this.submitRole(id, 0)
+
+      // Optional: Add success feedback
+      // Swal.fire('Saved!', 'User assigned as Normal User', 'info');
+    }
+  });
+}
+
+
+submitRole(id: any, role: any) {
+    const body = {
+      "user_id": id,
+      "role_id": role
+    };
+
+
+    const token = sessionStorage.getItem('token');
+    const headers = { 'Authorization': 'Bearer '+token }
+
+
+        this.http.post(BASE_URL + '/api/assignrole', body, { headers }).subscribe({
+          next: (response: any) => {
+            if(response.success){
+              this.isLoading = false;
+              Swal.fire({
+                title: 'Success!',
+                text: response.message,
+                icon: 'success',
+                confirmButtonColor: '#003366'
+              }).then(() => {
+                 this.showAllUser()
+              });
+            }else{
+              this.isLoading = false;
+              Swal.fire('Error', response.message, 'error');
+            }
+          },
+          error: (error) => {
+            console.error(error);
+            this.isLoading = false;
+            Swal.fire('Error', 'sosmething went wrong', 'error');
+          }
+        });
+
+}
+
 }

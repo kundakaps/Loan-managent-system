@@ -96,7 +96,31 @@ class LoanController extends Controller
             //     return response()->json([], 401);
             // }
 
-            $data=DB::table('loans')
+
+              $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+           // return $roles;
+
+            if($roles->role_id != 1){
+
+                $data=DB::table('loans')
+                    ->join('customers', 'loans.client_id', '=', 'customers.id')
+                    ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
+                    ->select(
+                        'loans.*',
+                        'customers.first_name',
+                        'customers.last_name',
+                        'facilities.facility_name')
+                    ->where('loans.posted_by', $user->id)
+                    ->get();
+                return response()->json([
+                    'success'=>true,
+                    'data'=> $data
+                ]);
+
+
+            }elseif($roles->role_id == 1){
+                $data=DB::table('loans')
                     ->join('customers', 'loans.client_id', '=', 'customers.id')
                     ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
                     ->select(
@@ -110,6 +134,12 @@ class LoanController extends Controller
                 'success'=>true,
                 'data'=> $data
             ]);
+
+            }
+
+
+
+
 
     }
 
@@ -429,6 +459,8 @@ class LoanController extends Controller
                 'data'=> $data
             ]);
     }
+
+
 
 
     public function ActivateLoan(Request $request){
