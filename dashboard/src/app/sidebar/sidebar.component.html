@@ -1,68 +1,135 @@
-<div class="sidebar-wrapper">
-  <div class="logo">
-      <a href="/" class="simple-text logo-normal">
-          <div style="display: flex; justify-content: center; align-items: center; margin:-20px">
-              <img style="height: 80px;" src="assets/img/logo.png">
+<style>
+    .sidebar {
+        width: 260px !important;
+        position: fixed;
+        top: 0; bottom: 0; left: 0;
+        z-index: 1030;
+        background-color: #0056B3 !important;
+        box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+    }
 
+    .sidebar-wrapper {
+        background-color: #0056B3 !important;
+        height: 100% !important;
+        margin: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        padding: 20px 0 !important;
+        width: 260px !important;
+        overflow-x: hidden !important;
+    }
 
-          </div>
-      </a>
-      <a href="/" class="simple-text logo-normal">
+    .sidebar-wrapper .logo {
+        background: white !important;
+        margin: 0 15px 30px 15px !important;
+        padding: 15px !important;
+        border-radius: 12px !important;
+        text-align: center !important;
+    }
 
-      </a>
-  </div>
-  <style>
-      /* Reset any inherited styles causing greyed-out effect */
-      .nav a,
-      i,
-      .nav .menu-link,
-      .nav .child-link {
-          color: #0056B3 !important;
-          font-weight: 500;
-          text-decoration: none;
-          opacity: 1 !important;
-          /* Ensures there’s no dimming effect */
-      }
-      /* Hover effect */
+    .sidebar-wrapper .logo img { height: 50px !important; }
 
-      .menu-link:hover,
-      .child-link:hover {
-          color: yellow !important;
-      }
+    .nav { display: block !important; padding: 0 12px !important; list-style: none; }
 
-      .nc-icon {
-          font-size: 18px;
-          margin-right: 10px;
-      }
+    /* Main link style */
+    .menu-link {
+        color: white !important;
+        display: flex !important;
+        align-items: center !important;
+        padding: 12px 15px !important;
+        border-radius: 10px !important;
+        margin-bottom: 5px;
+        text-decoration: none !important;
+        cursor: pointer;
+    }
 
-      .nav p {
-          margin: 0;
-          font-size: 14px;
-      }
-  </style>
+    .menu-link i {
+        color: white !important;
+        font-size: 18px !important;
+        margin-right: 12px !important;
+    }
 
-  <ul class="nav">
-      <li *ngFor="let menuItem of menuItems" [ngClass]="menuItem.class">
-          <a *ngIf="!menuItem.children" [routerLink]="menuItem.path" class="menu-link">
-              <i style=" font-size: 15px;" class="nc-icon {{ menuItem.icon }}"></i>
-              <p style=" font-size: 10px;">{{ menuItem.title }}</p>
-          </a>
+    /* 1. PARENT ACTIVE STATE: Highlighting the main item when it or a child is active */
+    .nav li.active > .menu-link,
+    .nav li.active > div > .menu-link,
+    .menu-link:hover {
+        background-color: white !important;
+        color: #000 !important;
+        font-weight: 600 !important;
+    }
 
+    .nav li.active .menu-link i, .menu-link:hover i { color: #000 !important; }
 
-          <div *ngIf="menuItem.children" style="margin-left: 24px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start;">
-              <a href="javascript:void(0)" (click)="toggleDropdown(menuItem)" class="menu-link" style="display: flex; align-items: center;">
-                  <i style=" font-size: 15px;" class="nc-icon {{ menuItem.icon }}"></i>
-                  <p style=" font-size: 10px; margin-left: 0px;">{{ menuItem.title }}</p>
-              </a>
-              <ul *ngIf="menuItem.isOpen" class="nav" style="margin-left:19px; margin-top:-1px;display: flex; flex-direction: column; justify-content: center; align-items: flex-start;  padding-left: 20px;">
-                  <li *ngFor="let child of menuItem.children">
-                      <a style="font-size: 10px; margin: 0px; display: inline;" [routerLink]="menuItem.path + '/' + child.path" class="child-link">{{ child.title }}</a>
-                  </li>
-              </ul>
-          </div>
+    /* Submenu styling */
+    .submenu-list {
+        list-style: none;
+        padding-left: 45px !important;
+        margin-top: -5px;
+        margin-bottom: 10px;
+    }
 
-      </li>
-  </ul>
+    .child-link {
+        color: white !important;
+        text-decoration: none !important;
+        font-size: 12px;
+        display: block;
+        padding: 8px 0;
+        transition: 0.2s;
+    }
 
+    /* 2. CHILD ACTIVE STATE: Highlighting the specific sub-item */
+    .child-link.active-child {
+        color: white !important;
+        font-weight: bold;
+        text-decoration: underline !important;
+    }
 
+    .child-link:hover { color: white !important; }
+
+    .sidebar-footer-text {
+        text-align: center; color: rgba(255, 255, 255, 0.4);
+        font-size: 10px; margin-top: auto; padding: 15px;
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-wrapper">
+        <div class="logo">
+            <a href="/" class="simple-text"><img src="assets/img/logo.png"></a>
+        </div>
+
+        <ul class="nav">
+            <!-- Apply routerLinkActive to the LI so it stays active when children match -->
+            <li *ngFor="let menuItem of menuItems" [ngClass]="menuItem.class" [routerLinkActive]="'active'">
+
+                <!-- IF NO CHILDREN -->
+                <a *ngIf="!menuItem.children" [routerLink]="menuItem.path" class="menu-link">
+                    <i class="nc-icon {{ menuItem.icon }}"></i>
+                    <p style="margin:0; font-size: 12px; text-transform: uppercase;">{{ menuItem.title }}</p>
+                </a>
+
+                <!-- IF CHILDREN -->
+                <div *ngIf="menuItem.children">
+                    <a (click)="toggleDropdown(menuItem)" class="menu-link">
+                        <i class="nc-icon {{ menuItem.icon }}"></i>
+                        <p style="margin:0; font-size: 12px; text-transform: uppercase;">{{ menuItem.title }}</p>
+                        <i class="nc-icon nc-minimal-down ms-auto" style="font-size: 10px;"></i>
+                    </a>
+
+                    <ul *ngIf="menuItem.isOpen" class="submenu-list">
+                        <li *ngFor="let child of menuItem.children">
+                            <!-- Added active-child class for sub-items -->
+                            <a [routerLink]="menuItem.path + '/' + child.path"
+                               routerLinkActive="active-child"
+                               class="child-link">
+                                {{ child.title }}
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </li>
+        </ul>
+        <div class="sidebar-footer-text">Version: 1.0.0</div>
+    </div>
 </div>

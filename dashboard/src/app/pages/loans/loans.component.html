@@ -31,7 +31,7 @@
                 required>
           <option value="">Select Facility</option>
           <option *ngFor="let facility of facilities" [value]="facility.id">
-            {{ facility.facility_name }}
+            {{ facility.facility_name + ' - '+ facility.facility_percentage + '%'}}
           </option>
         </select>
       </div>
@@ -48,7 +48,7 @@
                required />
       </div>
       <div class="form-group">
-        <label>Tenure (in Months)</label>
+        <label>Tenure (in days)</label>
         <!-- Triggers calculation when tenure changes -->
         <input type="number" class="form-control" name="tenure"
                [(ngModel)]="loanModel.tenure"

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('nrc');
             $table->string('occupation');
+            $table->string('phone_number');
+            $table->string('email');
             $table->text('residential_address');
             $table->string('contact_number');
             $table->text('work_address');

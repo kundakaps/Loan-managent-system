@@ -53,6 +53,7 @@ import { EventsDetailsComponent } from 'app/pages/events-details/events-details.
 import { CustomersComponent } from 'app/pages/customers/customers.component';
 import { FacilitiesComponent } from 'app/pages/facilities/facilities.component';
 import { LoanDetailsComponent } from 'app/pages/loan-details/loan-details.component';
+import { CollateralComponent } from 'app/pages/collateral/collateral.component';
 
 export const AdminLayoutRoutes: Routes = [
      { path: 'dashboard',      component: DashboardComponent,canActivate:[AuthGuard]},
@@ -70,6 +71,15 @@ export const AdminLayoutRoutes: Routes = [
       children: [
         { path: 'add-facility', component: FacilitiesComponent },
         { path: 'all-facilities', component: FacilitiesComponent },
+
+
+      ]
+    },
+
+    { path: 'collateral',      component: CollateralComponent,canActivate:[AuthGuard],
+      children: [
+        { path: 'add-collateral', component: CollateralComponent },
+        { path: 'added-collateral', component: CollateralComponent },
 
 
       ]

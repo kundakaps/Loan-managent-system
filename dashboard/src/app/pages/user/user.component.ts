@@ -18,10 +18,12 @@ export class UserComponent implements OnInit{
   isAllUser = false
   isLoading = false
   users:any=[]
+  roles:any=[]
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
     ngOnInit(): void {
       // Subscribing to changes in child routes
+      this.getRoles()
     this.route.url.subscribe(() => {
       // Access the last child segment of the current route
       const lastSegment = this.route.snapshot.firstChild?.url[0]?.path;
@@ -61,7 +63,7 @@ export class UserComponent implements OnInit{
   }
 
   getUsers(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -82,6 +84,27 @@ export class UserComponent implements OnInit{
 
 
       }, 1);
+
+        this.isLoading=false
+      })
+    }
+    catch(error){
+      console.log(error)
+      this.isLoading=false
+    }
+  }
+
+
+  getRoles(){
+    this.isLoading=true
+    const token = sessionStorage.getItem('token');
+
+    const headers = { 'Authorization': 'Bearer '+token }
+    try {
+      this.http.get(BASE_URL+'/api/roles', { headers }).subscribe((response:any)=>{
+
+       this.roles=response.data
+        console.log(this.roles)
 
         this.isLoading=false
       })
@@ -196,40 +219,46 @@ addUserToDB(data: any) {
 
 
 
-assignRole(id: any) {
+assignRole(userId: any) {
+
+  // Convert roles array to SweetAlert inputOptions format
+  const roleOptions: any = {};
+
+  this.roles.forEach((role: any) => {
+    roleOptions[role.id] = role.role_name;
+  });
+
   Swal.fire({
     title: 'ASSIGN ROLE',
     text: 'Please select the role for this user',
     icon: 'question',
-    showDenyButton: true,
+    input: 'select',
+    inputOptions: roleOptions,
+    inputPlaceholder: 'Select a role',
     showCancelButton: true,
-    confirmButtonText: 'Admin User',
-    denyButtonText: 'Normal User',
-    cancelButtonText: 'Cancel',
-    confirmButtonColor: '#0056b3', // Your theme blue
-    denyButtonColor: '#6c757d',    // Gray for normal user
+    confirmButtonText: 'Assign Role',
+    confirmButtonColor: '#0056b3',
     customClass: {
       popup: 'swal-custom-popup',
-      confirmButton: 'action-btn', // Uses your CSS class
-      denyButton: 'action-btn'     // Uses your CSS class
+      confirmButton: 'action-btn'
+    },
+    inputValidator: (value) => {
+      if (!value) {
+        return 'You must select a role!';
+      }
+      return null;
     }
   }).then((result) => {
+
     if (result.isConfirmed) {
-      // Admin User clicked
-      console.log(1, id);
 
-      this.submitRole(id, 1)
+      const selectedRoleId = Number(result.value);
 
+      console.log('Selected Role ID:', selectedRoleId);
 
-
-    } else if (result.isDenied) {
-      // Normal User clicked
-      console.log(0, id);
-      this.submitRole(id, 0)
-
-      // Optional: Add success feedback
-      // Swal.fire('Saved!', 'User assigned as Normal User', 'info');
+      this.submitRole(userId, selectedRoleId);
     }
+
   });
 }
 

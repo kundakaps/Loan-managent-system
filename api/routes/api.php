@@ -39,9 +39,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('activateloan',[LoanController::class, 'ActivateLoan']);
     Route::post('singleloan',[LoanController::class, 'getSingleLoan']);
     Route::post('makerepayment',[LoanController::class, 'CreateLoanRepayment']);
+    Route::get('pendingcollaterals',[LoanController::class, 'LoansPendingCollateral']);
     Route::post('loan-collaterals',[LoanController::class, 'CreateLoanCollateral']);
+    Route::post('vehicle-assessment',[LoanController::class, 'storeVehicleAssessment']);
     Route::post('loan-collateral-files',[LoanController::class, 'CreateLoanCollateralFiles']);
-     Route::post('assignrole',[UserController::class, 'assignRoles']);
+    Route::post('assignrole',[UserController::class, 'assignRoles']);
+    Route::get('roles',[UserController::class, 'getRoles']);
 
 
 
@@ -80,5 +83,5 @@ Route::get('/getdata', [PayrollController::class,'getIndoJV1']);
 Route::get('/testconection', [PayrollController::class,'testConection']);
 
 Route::post('auth/login', [UserController::class,'login']);
-//Route::post('auth/adduser', [UserController::class,'createUser']);
+Route::post('auth/adduser', [UserController::class,'createUser']);
 

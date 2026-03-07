@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\AssignedRoles;
+use App\Models\Roles;
 use App\Models\UserIpBinding;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -277,6 +278,26 @@ private function sendSimulateEmail($to_email, $password)
                 'success'=>true,
                 'data'=> $users
             ]);
+    }
+
+    public function getRoles(Request $request){
+        $user = auth()->user();
+        $ip = $request->ip();
+        $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+            if($roles->role_id != 1){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+
+
+        $roles = Roles::all();
+        return response()->json([
+            'success'=>true,
+            'data'=> $roles
+        ]);
     }
 
     public function assignRoles(Request $request){

@@ -1,22 +1,24 @@
 <?php
 
 namespace App\Http\Controllers;
-use Carbon\Carbon;
-use App\Models\Loans;
-use App\Models\Facility;
-use App\Models\Customers;
-use App\Models\Repayments;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Models\AssignedRoles;
-use App\Models\UserIpBinding;
+use App\Models\Customers;
+use App\Models\Facility;
 use App\Models\LoanCollateral;
-use Illuminate\Support\Facades\DB;
 use App\Models\LoanCollateralFiles;
-use function Laravel\Prompts\table;
+use App\Models\Loans;
+use App\Models\Repayments;
+use App\Models\UserIpBinding;
+use App\Models\VehicleAssessment;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+use function Laravel\Prompts\table;
 
 class LoanController extends Controller
 {
@@ -249,7 +251,7 @@ class LoanController extends Controller
             }
            $customer = Customers::where('id', $loan->client_id)->first();
            $facility = Facility::where('id', $loan->facility_id)->first();
-           $collaterals = LoanCollateral::where('loan_id', $loan->id)->first();
+           $collaterals = VehicleAssessment::where('loan_id', $loan->id)->first();
            $collaterals_files = LoanCollateralFiles::where('loan_id', $loan->id)->get();
            $repayments = Repayments::where('loan_id', $loan->id)->get();
 
@@ -337,6 +339,152 @@ class LoanController extends Controller
 
     }
 
+    public function LoansPendingCollateral(Request $request)
+    {
+            $user = auth()->user();
+            // $ip = $request->ip();
+
+            // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+            //     // Log unauthorized IP attempt
+            //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+            //         'user_id' => $user->id,
+            //         'username' => $user->email,
+            //         'ip' => $ip,
+            //         'action' => 'unauthorized IP attempt on login',
+            //     ]);
+
+
+            //     return response()->json([], 401);
+            // }
+
+            $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+           // return $roles;
+
+            if($roles->role_id != 2){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+
+                $loans=DB::table('loans')
+                    ->join('customers', 'loans.client_id', '=', 'customers.id')
+                    ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
+                    ->select(
+                        'loans.*',
+                        'customers.id as client_id',
+                        'customers.first_name as customer_first_name',
+                        'customers.last_name as customer_last_name',
+                        'facilities.facility_name')
+                    ->where('status','Pending Collateral')
+                    ->get();
+
+            return response()->json([
+                'success'=>true,
+                'data'=> $loans
+                ]);
+
+
+
+    }
+
+
+
+public function storeVehicleAssessment(Request $request)
+    {
+        $user = auth()->user();
+            // $ip = $request->ip();
+
+            // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+            //     // Log unauthorized IP attempt
+            //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+            //         'user_id' => $user->id,
+            //         'username' => $user->email,
+            //         'ip' => $ip,
+            //         'action' => 'unauthorized IP attempt on login',
+            //     ]);
+
+
+            //     return response()->json([], 401);
+            // }
+
+            $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+           // return $roles;
+
+            if($roles->role_id != 2){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+
+        $validated = $request->validate([
+            'customer_id'             => 'required',
+            'loan_id'                 => 'required|string',
+            'details_match_whitebook' => 'boolean',
+            'car_make'                => 'required|string',
+            'car_model'               => 'required|string',
+            'manufacturing_year'      => 'required|string',
+            'vehicle_number_plate'    => 'required|string',
+            'vehicle_engine_number'   => 'required|string',
+            'chassis_number'          => 'required|string',
+            'vehicle_mileage'         => 'required|numeric',
+
+            // Enum validation for ratings
+            'ball_joints'             => 'nullable|in:V.GOOD,GOOD,FAIR,POOR',
+            'cv_joints'               => 'nullable|in:V.GOOD,GOOD,FAIR,POOR',
+            'shocks'                  => 'nullable|in:V.GOOD,GOOD,FAIR,POOR',
+            'control_arms'            => 'nullable|in:V.GOOD,GOOD,FAIR,POOR',
+
+            'type_of_vehicle_body'    => 'nullable|string',
+            'tires_condition'         => 'nullable|string',
+
+            // Booleans for inventory
+            'has_extinguisher'        => 'boolean',
+            'has_jack'                => 'boolean',
+            'has_spare_wheel'         => 'boolean',
+
+            'vehicle_interior'        => 'nullable|string',
+            'accident_history'        => 'nullable|string',
+            'paint_condition'         => 'nullable|string',
+            'engine_condition'        => 'nullable|string',
+            'vehicle_compression'     => 'nullable|string',
+
+            'market_value'            => 'nullable|numeric',
+            'amount_requested'        => 'nullable|numeric',
+            'amount_approved'         => 'nullable|numeric',
+
+        ]);
+
+            $validated['submitter_id'] = $user->id;
+
+
+        try {
+            $assessment = VehicleAssessment::create($validated);
+
+            $loadUpdateData = Loans::where('id',$request->loan_id)->first();
+            $loadUpdateData->status ='pending payout';
+            $loadUpdateData->save();
+
+
+            return response()->json([
+                'success'  => true,
+                'message' => 'Vehicle assessment saved successfully',
+                'data'    => $assessment
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to save assessment',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
     public function CreateLoanCollateralFiles(Request $request)
     {
         // 1. Validate
@@ -387,7 +535,7 @@ class LoanController extends Controller
             }
 
             $loan = Loans::where('id', $request->loan_id)->first();
-            $loan->status = 'unactivated';
+            $loan->status = 'pending payout';
             $loan->save();
 
             return response()->json([

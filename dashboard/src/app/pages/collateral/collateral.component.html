@@ -1,0 +1,215 @@
+<div class="assessment-container">
+  <div class="max-width-wrapper">
+
+    <!-- HEADER -->
+    <header class="header-card">
+      <div class="title-area">
+        <h1>Vehicle Asset Assessment</h1>
+        <p>Ensure all mechanical and physical details are verified.</p>
+      </div>
+      <div class="select-wrapper">
+        <select (change)="onLoanSelect($event)">
+          <option value="">Choose Pending Customer...</option>
+          <option *ngFor="let loan of pendingLoans" [value]="loan.id">
+            {{ loan.customer_first_name }} {{ loan.customer_last_name }}
+          </option>
+        </select>
+      </div>
+    </header>
+
+    <!-- SELECTED CLIENT DASHBOARD -->
+    <div *ngIf="selectedLoan" class="loan-stats-grid">
+      <div class="stat-card primary">
+        <div class="stat-label">Client ID</div>
+        <div class="stat-value">#00{{ selectedLoan.client_id }}</div>
+      </div>
+      <div class="stat-card accent">
+        <div class="stat-label">Facility Name</div>
+        <div class="stat-value">{{ selectedLoan.facility_name }}</div>
+      </div>
+      <div class="stat-card success">
+        <div class="stat-label">Current Loan Balance</div>
+        <div class="stat-value">ZMK {{ selectedLoan.amount | number }}</div>
+      </div>
+    </div>
+
+    <!-- MAIN ASSESSMENT FORM -->
+    <form *ngIf="selectedLoan" [formGroup]="assessmentForm" (ngSubmit)="submitAssessment()">
+
+      <!-- Section 1: Identification -->
+      <section class="form-section">
+        <div class="section-header">
+          <h3>Vehicle Identity & Verification</h3>
+        </div>
+
+        <div class="grid-3">
+          <div class="input-group">
+            <label>Car Make</label>
+            <input type="text" formControlName="car_make" placeholder="e.g. Toyota">
+          </div>
+          <div class="input-group">
+            <label>Car Model</label>
+            <input type="text" formControlName="car_model" placeholder="e.g. Hilux">
+          </div>
+          <div class="input-group">
+            <label>Year of Mfg</label>
+            <input type="text" formControlName="manufacturing_year" placeholder="YYYY">
+          </div>
+          <div class="input-group">
+            <label>Plate Number</label>
+            <input type="text" formControlName="vehicle_number_plate">
+          </div>
+          <div class="input-group">
+            <label>Engine Number</label>
+            <input type="text" formControlName="vehicle_engine_number">
+          </div>
+          <div class="input-group">
+            <label>Chassis Number</label>
+            <input type="text" formControlName="chassis_number">
+          </div>
+          <div class="input-group">
+            <label>Current Mileage (KM)</label>
+            <input type="number" formControlName="vehicle_mileage">
+          </div>
+        </div>
+
+        <div class="checkbox-item" style="margin-top: 25px;">
+          <input type="checkbox" id="whitebook" formControlName="details_match_whitebook">
+          <label for="whitebook">Verified: Details match the physical Whitebook</label>
+        </div>
+      </section>
+
+      <!-- Section 2: Mechanical Condition -->
+      <section class="form-section">
+        <div class="section-header">
+          <h3>Mechanical & Suspension Health</h3>
+        </div>
+        <div class="grid-4">
+          <!-- Loops through TS keys: ball_joints, cv_joints, etc. -->
+          <div class="input-group" *ngFor="let part of ['ball_joints', 'cv_joints', 'shocks', 'control_arms']">
+            <label>{{ part.replace('_', ' ') | uppercase }}</label>
+            <select [formControlName]="part">
+              <option value="V.GOOD">Excellent</option>
+              <option value="GOOD">Good</option>
+              <option value="FAIR">Fair / Needs Watch</option>
+              <option value="POOR">Critical / Poor</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3: Physical Condition (Body/Interior) -->
+      <section class="form-section">
+        <div class="section-header">
+          <h3>Body & Interior Condition</h3>
+        </div>
+        <div class="grid-3">
+          <div class="input-group">
+            <label>Interior Condition</label>
+            <select formControlName="vehicle_interior">
+              <option value="CLEAN">Clean/Mint</option>
+              <option value="GOOD">Good</option>
+              <option value="WORN">Worn</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Paint Condition</label>
+            <select formControlName="paint_condition">
+              <option value="ORIGINAL">Original</option>
+              <option value="REPAINTED">Repainted</option>
+              <option value="SCRATCHED">Scratched/Dented</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label>Accident History</label>
+            <select formControlName="accident_history">
+              <option value="NONE">No Signs</option>
+              <option value="MINOR">Minor Repairs</option>
+              <option value="MAJOR">Major Accident Signs</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Inventory Checklist -->
+      <section class="form-section">
+        <div class="section-header">
+          <h3>Inventory Presence</h3>
+        </div>
+        <div class="checklist-container">
+          <label class="checkbox-item">
+            <input type="checkbox" formControlName="has_extinguisher"> Extinguisher
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" formControlName="has_jack"> Jack & Tools
+          </label>
+          <label class="checkbox-item">
+            <input type="checkbox" formControlName="has_spare_wheel"> Spare Wheel
+          </label>
+        </div>
+      </section>
+
+      <!-- Section 5: Valuation -->
+      <section class="form-section" style="background: #f8fafc; border: 2px dashed #cbd5e1;">
+        <div class="section-header">
+          <h3>Financial Assessment (ZMK)</h3>
+        </div>
+        <div class="grid-3">
+          <div class="input-group">
+            <label>Assessed Market Value</label>
+            <input type="number" formControlName="market_value" style="font-size: 18px; font-weight: bold; color: #10b981;">
+          </div>
+          <div class="input-group">
+            <label>Requested Amount</label>
+            <input type="number" formControlName="amount_requested" readonly>
+          </div>
+          <div class="input-group">
+            <label>Final Approved Amount</label>
+            <input type="number" formControlName="amount_approved" style="font-size: 18px; font-weight: bold; color: #3b82f6;">
+          </div>
+        </div>
+      </section>
+
+                          <hr class="form-divider">
+
+                    <h6 class="subsection-title">Attach Photos / Documents</h6>
+
+                    <div class="upload-dropzone"
+                         [class.drag-over]="isDragOver"
+                         (drop)="onFileDrop($event)"
+                         (dragover)="onDragOver($event)"
+                         (dragleave)="onDragLeave($event)">
+                        <i class="fa fa-cloud-upload"></i>
+                        <p>Drag files here or click to browse</p>
+                        <label class="btn-browse">
+                            Select Files
+                            <input type="file" multiple (change)="onFileBrowse($event)" hidden>
+                        </label>
+                    </div>
+
+                    <div class="selected-files-list" *ngIf="selectedFiles.length > 0">
+                        <div *ngFor="let file of selectedFiles; let i = index" class="selected-file">
+                            <span>{{ file.name }}</span>
+                            <span class="remove" (click)="removeFile(i)">&times;</span>
+                        </div>
+                    </div>
+
+
+      <button type="submit" class="btn-submit">Generate Assessment Report</button>
+
+      <!-- Debugging: View live JSON (Remove this for production) -->
+      <!-- <div style="margin-top: 20px; background: #eee; padding: 10px;">
+        <strong>Debug Form Data:</strong>
+        <pre>{{ assessmentForm.value | json }}</pre>
+      </div> -->
+
+    </form>
+
+    <!-- Empty State -->
+    <div *ngIf="!selectedLoan" class="empty-state" style="text-align: center; padding: 100px 0; color: #94a3b8;">
+      <div style="font-size: 50px; margin-bottom: 20px;">🚗</div>
+      <p style="font-weight: 600;">Selection Required: Pick a customer to start inspection</p>
+    </div>
+
+  </div>
+</div>

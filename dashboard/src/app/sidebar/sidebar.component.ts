@@ -3,7 +3,9 @@ import { Component, OnInit } from '@angular/core';
 export interface ChildRoute {
   path: string;
   title: string;
-  restrictedToRole1?: boolean; // Added this for sub-menu control
+  restrictedToRole1?: boolean;
+  restrictedToRole2?: boolean;// Added this for sub-menu control
+  restrictedToRole0?: boolean;
 }
 
 export interface RouteInfo {
@@ -11,7 +13,9 @@ export interface RouteInfo {
   title: string;
   icon: string;
   class: string;
+  restrictedToRole0?: boolean;
   restrictedToRole1?: boolean;
+  restrictedToRole2?: boolean;
   children?: ChildRoute[];
   isOpen?: boolean;
 }
@@ -20,24 +24,35 @@ export const ROUTES: RouteInfo[] = [
   { path: '/dashboard', title: 'Dashboard', icon: 'nc-bank', class: '' },
   {
     path: '/customers', title: 'CUSTOMERS', icon: 'nc-single-02', class: '',
+    restrictedToRole1: true,
+    restrictedToRole0: true,
     children: [
       { path: 'add-customer', title: 'add customer' },
       { path: 'all-customers', title: 'all customers' },
     ]
   },
   {
-    path: '/facilities', title: 'FACILITIES', icon: 'nc-tile-56', class: '',
+    path: '/facilities', title: 'FACILITIES', icon: 'nc-tile-56', class: '',restrictedToRole1: true,
     children: [
       { path: 'add-facility', title: 'add facility' },
       { path: 'all-facilities', title: 'all facilities' },
     ]
   },
+    {
+    path: '/collateral', title: 'Collateral', icon: 'nc-tile-56', class: '',restrictedToRole2: true,
+    children: [
+      { path: 'add-collateral', title: 'add collateral' },
+      { path: 'added-collateral', title: 'added collateral' },
+    ]
+  },
   {
     path: '/loans', title: 'LOANS', icon: 'nc-single-copy-04', class: '',
+    restrictedToRole0: true ,
+    restrictedToRole1: true,
     children: [
-      { path: 'add-loan', title: 'add loan' },
+      { path: 'add-loan', title: 'add loan' ,restrictedToRole0: true ,restrictedToRole1: true},
       { path: 'waiting-activation', title: 'waiting activation', restrictedToRole1: true }, // Added restriction
-      { path: 'all-loans', title: 'all loans' },
+      { path: 'all-loans', title: 'all loans',restrictedToRole0: true ,restrictedToRole1: true },
     ]
   },
   {

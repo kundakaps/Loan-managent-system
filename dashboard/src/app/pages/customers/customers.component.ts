@@ -109,7 +109,7 @@ export class CustomersComponent implements OnInit {
   }
 
 getCustomers(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }

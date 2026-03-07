@@ -107,7 +107,7 @@ export class FacilitiesComponent implements OnInit {
        }
     }
   getFacilities(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }

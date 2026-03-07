@@ -1,0 +1,313 @@
+/* ==========================================================================
+   1. GLOBAL STYLES & CONTAINER
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+
+.assessment-container {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: #1e293b;
+}
+
+.max-width-wrapper {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   2. GLASSMORPHISM HEADER
+   ========================================================================== */
+.header-card {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  animation: slideDown 0.6s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.title-area h1 {
+  font-size: 24px;
+  color: #1e293b;
+  font-weight: 800;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.title-area p {
+  color: #64748b;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+/* Custom Select Dropdown in Header */
+.select-wrapper select {
+  appearance: none;
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 12px 40px 12px 15px;
+  font-weight: 600;
+  color: #334155;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 280px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 18px;
+}
+
+.select-wrapper select:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* ==========================================================================
+   3. LOAN STATS DASHBOARD
+   ========================================================================== */
+.loan-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+  animation: fadeIn 0.8s ease-in;
+}
+
+.stat-card {
+  background: white;
+  padding: 20px;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  border-bottom: 4px solid transparent;
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover { transform: translateY(-5px); }
+.stat-card.primary { border-bottom-color: #3b82f6; }
+.stat-card.success { border-bottom-color: #10b981; }
+.stat-card.accent { border-bottom-color: #8b5cf6; }
+
+.stat-label { font-size: 11px; text-transform: uppercase; font-weight: 700; color: #94a3b8; letter-spacing: 1px; }
+.stat-value { font-size: 18px; font-weight: 700; color: #1e293b; margin-top: 5px; }
+
+/* ==========================================================================
+   4. FORM SECTIONS & INPUTS
+   ========================================================================== */
+.form-section {
+  background: white;
+  border-radius: 24px;
+  padding: 35px;
+  margin-bottom: 25px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f1f5f9;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  border-left: 5px solid #3b82f6;
+  padding-left: 15px;
+}
+
+.section-header h3 {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+/* Grids */
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+
+.input-group { display: flex; flex-direction: column; gap: 8px; }
+.input-group label { font-size: 12px; font-weight: 700; color: #64748b; text-transform: uppercase; }
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  background: #f8fafc;
+  transition: all 0.2s;
+  font-size: 14px;
+  color: #334155;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  background: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  outline: none;
+}
+
+/* Specific styling for the Valuation box (Section 5) */
+.valuation-box {
+  background: #f8fafc !important;
+  border: 2px dashed #cbd5e1 !important;
+}
+
+/* ==========================================================================
+   5. CHECKLIST & BUTTONS
+   ========================================================================== */
+.checklist-container {
+  display: flex;
+  gap: 30px;
+  background: #f1f5f9;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #475569;
+  font-size: 14px;
+}
+
+.checkbox-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: #3b82f6;
+  cursor: pointer;
+}
+
+.btn-submit {
+  background: #1e293b;
+  color: white;
+  padding: 18px 45px;
+  border-radius: 15px;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.3);
+  display: block;
+  margin: 40px 0 40px auto;
+}
+
+.btn-submit:hover {
+  background: #334155;
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(30, 41, 59, 0.2);
+}
+
+.btn-submit:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ==========================================================================
+   6. RESPONSIVE DESIGN (MOBILE OPTIMIZATIONS)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+  .max-width-wrapper { max-width: 95%; }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .assessment-container { padding: 15px 10px; }
+
+  /* Header Stacking */
+  .header-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .select-wrapper { width: 100%; }
+  .select-wrapper select { width: 100%; min-width: unset; }
+
+  /* Stats Grid: 2 columns */
+  .loan-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  /* Form Sections: Reduce padding */
+  .form-section {
+    padding: 25px 15px;
+    border-radius: 16px;
+  }
+
+  /* Stacking all grids to 1 column */
+  .grid-3, .grid-4 {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  /* Checklist: vertical stack */
+  .checklist-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* Button: Full width for mobile thumbs */
+  .btn-submit {
+    width: 100%;
+    margin: 20px 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .loan-stats-grid { grid-template-columns: 1fr; }
+  .title-area h1 { font-size: 20px; }
+}
+
+$primary-blue: #003366;
+$accent-yellow: #FBC02D;
+$bg-color: #f4f7fa;
+$text-dark: #32325d;
+$text-muted: #8898aa;
+$card-shadow: 0 0 2rem 0 rgba(136, 152, 170, .15);
+
+.upload-dropzone {
+    border: 2px dashed #cbd5e0; background-color: #f8fafc; border-radius: 8px; padding: 30px 20px; text-align: center; transition: all 0.3s ease;
+    &.drag-over { border-color: $accent-yellow; background-color: rgba(251, 192, 45, 0.05); }
+    i { font-size: 2.5rem; color: $text-muted; margin-bottom: 10px; }
+    p { margin: 5px 0 10px; color: $text-muted; font-size: 0.9rem; }
+    .btn-browse {
+        background: $primary-blue; color: white; padding: 8px 20px; border-radius: 20px; font-size: 0.9rem; cursor: pointer; display: inline-block; transition: background 0.3s;
+        &:hover { background: lighten($primary-blue, 10%); }
+    }
+}
+
+.selected-files-list {
+    margin-top: 15px; background: #f4f7fa; border-radius: 6px; padding: 10px;
+    .selected-file {
+        display: flex; justify-content: space-between; font-size: 0.85rem; padding: 5px 0; border-bottom: 1px solid #eee; color: #32325d;
+        &:last-child { border-bottom: none; }
+        .remove { color: #f5365c; cursor: pointer; font-weight: bold; font-size: 1.1rem; line-height: 1; }
+    }
+}
+
+/* Animation Helper */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

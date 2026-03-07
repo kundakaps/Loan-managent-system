@@ -36,7 +36,7 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
     });
   }
 
-    handleRouteChange(route: string) {
+  handleRouteChange(route: string) {
     //console.log(route);
     switch (route) {
       case 'add-loan':
@@ -125,33 +125,35 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
     monthly_repayment: 0 // This will store the calculated result
   };
 
-   calculateMonthlyRepayment() {
-    // Ensure we have the necessary values before calculating
-    if (this.loanModel.amount && this.loanModel.tenure && this.loanModel.facility_id) {
+calculateMonthlyRepayment() {
+  if (this.loanModel.amount && this.loanModel.tenure && this.loanModel.facility_id) {
 
-      // Find the selected facility object to get the percentage
-      // note: using == instead of === just in case the ID comes as a string from the select
-      const selectedFacility = this.facilities.find(f => f.id == Number(this.loanModel.facility_id));
+    const selectedFacility = this.facilities.find(
+      f => f.id == Number(this.loanModel.facility_id)
+    );
 
-      if (selectedFacility) {
-        const principal = Number(this.loanModel.amount);
-        const tenureMonths = Number(this.loanModel.tenure);
-        const rate = selectedFacility.facility_percentage;
+    if (selectedFacility) {
+      const principal = Number(this.loanModel.amount);
 
-        // --- MATH LOGIC ---
-        // Adjust this formula based on your specific business requirement.
-        // Example: Simple Interest (Principal + Interest) / Months
-        const totalInterest = principal * (rate / 100);
-        const totalAmount = principal + totalInterest;
-        const monthly = totalAmount / tenureMonths;
+      const tenureDays = Number(this.loanModel.tenure);
 
-        // Fix to 2 decimal places
-        this.loanModel.monthly_repayment = parseFloat(monthly.toFixed(2));
-      }
-    } else {
-      this.loanModel.monthly_repayment = 0;
+      // Convert days to months (approximate)
+      const tenureMonths = tenureDays / 30;
+
+      const rate = selectedFacility.facility_percentage;
+
+      const totalInterest = principal * (rate / 100);
+      const totalAmount = principal + totalInterest;
+
+      const monthly = totalAmount / tenureMonths;
+
+      this.loanModel.monthly_repayment = parseFloat(monthly.toFixed(2));
     }
+
+  } else {
+    this.loanModel.monthly_repayment = 0;
   }
+}
 
    submitForm(form: NgForm) {
         this.isLoading = true
