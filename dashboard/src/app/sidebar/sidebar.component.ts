@@ -6,6 +6,7 @@ export interface ChildRoute {
   restrictedToRole1?: boolean;
   restrictedToRole2?: boolean;// Added this for sub-menu control
   restrictedToRole0?: boolean;
+  restrictedToRole3?: boolean;
 }
 
 export interface RouteInfo {
@@ -16,6 +17,7 @@ export interface RouteInfo {
   restrictedToRole0?: boolean;
   restrictedToRole1?: boolean;
   restrictedToRole2?: boolean;
+  restrictedToRole3?: boolean;
   children?: ChildRoute[];
   isOpen?: boolean;
 }
@@ -36,6 +38,16 @@ export const ROUTES: RouteInfo[] = [
     children: [
       { path: 'add-facility', title: 'add facility' },
       { path: 'all-facilities', title: 'all facilities' },
+    ]
+  },
+
+    {
+    path: '/payouts', title: 'Payouts', icon: 'nc-tile-56', class: '',
+    restrictedToRole3: true,
+
+    children: [
+      { path: 'new-payout', title: 'new payout'},
+      { path: 'payout-history', title: 'payout history'},
     ]
   },
     {
@@ -80,6 +92,10 @@ export class SidebarComponent implements OnInit {
     // Removes entire sections (like USERS) if restricted
     let filteredRoutes = ROUTES.filter(item => {
       if (item.restrictedToRole1 && userRole !== '1') {
+        return false;
+      }else if (item.restrictedToRole2 && userRole !== '2') {
+        return false;
+      }else if (item.restrictedToRole3 && userRole !== '3') {
         return false;
       }
       return true;

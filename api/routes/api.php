@@ -36,6 +36,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('addloan',[LoanController::class, 'CreateLoan']);
     Route::get('allloans',[LoanController::class, 'GetAllLoans']);
     Route::get('unactivatedloans',[LoanController::class, 'getLoansToBeActivated']);
+    Route::get('unpaidloans',[LoanController::class, 'getLoansToBePaidout']);
+    Route::post('disbursement',[LoanController::class, 'storeDisbursement']);
     Route::post('activateloan',[LoanController::class, 'ActivateLoan']);
     Route::post('singleloan',[LoanController::class, 'getSingleLoan']);
     Route::post('makerepayment',[LoanController::class, 'CreateLoanRepayment']);

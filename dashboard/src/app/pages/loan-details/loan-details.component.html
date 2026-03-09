@@ -14,11 +14,18 @@
         <span class="status-badge" [ngClass]="getStatusClass(loanDetails.loan.status)">
           {{ loanDetails.loan.status | uppercase }}
         </span>
+        <button (click)="openPayoutModal()"
+                *ngIf="loanDetails.loan.status == 'unpaid' && role =='3'"
+                class="btn-activate">
+          <i class="fa fa-bolt"></i> Add Payout Details
+        </button>
+
         <button (click)="activateLoan(loanDetails.loan.id)"
                 *ngIf="loanDetails.loan.status == 'unactivated' && role =='1'"
                 class="btn-activate">
           <i class="fa fa-bolt"></i> Activate Loan
         </button>
+
       </div>
       <div class="header-right">
         <p class="posted-by">Posted by: <strong>{{ loanDetails.loan.posted_by_name }}</strong></p>
@@ -51,7 +58,7 @@
         <div class="icon-box blue-bg"><i class="fa fa-hourglass-half"></i></div>
         <div class="text-box">
           <p class="label">Duration</p>
-          <h3 class="value">{{ loanDetails.loan.tenure }} <small>Months</small></h3>
+          <h3 class="value">{{ loanDetails.loan.tenure }} <small>Day(s)</small></h3>
         </div>
       </div>
       <div class="card metric-card">
@@ -88,6 +95,81 @@
             <div class="info-row"><span class="label">Address</span><span class="data">{{ loanDetails.customer.residential_address }}</span></div>
           </div>
         </div>
+
+      <div style="margin-bottom: 20px;" class="payout-card" *ngIf="loanDetails?.payout_details">
+        <!-- 1. Header & Recipient -->
+        <div class="payout-header">
+          <div class="payout-badge">Disbursement Details</div>
+          <h2>{{ loanDetails.payout_details.recipient_name }}</h2>
+          <p class="payout-subtitle">Payment Agreement Summary</p>
+        </div>
+
+        <div class="payout-content">
+          <!-- 2. Main Figures -->
+          <div class="amount-row">
+            <span class="label">Total Sum (Gross)</span>
+            <span class="value">ZMK {{ loanDetails.payout_details.total_sum | number:'1.2-2' }}</span>
+          </div>
+
+          <!-- 3. Deductions Section -->
+          <div class="deductions-container">
+            <span class="section-label">Applied Deductions</span>
+
+            <div class="deduction-item" *ngIf="loanDetails.payout_details.apply_admin_fee">
+              <span>Administration Fee</span>
+              <span class="minus">- ZMK {{ loanDetails.payout_details.admin_fee_amount | number }}</span>
+            </div>
+
+            <div class="deduction-item" *ngIf="loanDetails.payout_details.apply_ownership_change_fee">
+              <span>Change of Ownership</span>
+              <span class="minus">- ZMK {{ loanDetails.payout_details.ownership_change_fee_amount | number }}</span>
+            </div>
+
+            <div class="deduction-item" *ngIf="loanDetails.payout_details.apply_caveat_removal_fee">
+              <span>Removal of Caveat</span>
+              <span class="minus">- ZMK {{ loanDetails.payout_details.caveat_removal_fee_amount | number }}</span>
+            </div>
+
+            <div class="no-deductions" *ngIf="!loanDetails.payout_details.apply_admin_fee && !loanDetails.payout_details.apply_ownership_change_fee && !loanDetails.payout_details.apply_caveat_removal_fee">
+              No deductions applied
+            </div>
+          </div>
+
+          <!-- 4. NET PAYOUT HIGHLIGHT -->
+          <div class="net-payout-box">
+            <span class="label">NET PAYOUT AMOUNT</span>
+            <span class="net-value">ZMK {{ loanDetails.payout_details.net_payout_amount | number:'1.2-2' }}</span>
+          </div>
+
+          <!-- 5. Banking Info -->
+          <div class="banking-details">
+            <span class="section-label">Disbursement Channel</span>
+            <div class="bank-grid">
+              <div class="bank-item">
+                <label>Bank</label>
+                <p>{{ loanDetails.payout_details.bank_name }}</p>
+              </div>
+              <div class="bank-item">
+                <label>Account No</label>
+                <p>{{ loanDetails.payout_details.account_no }}</p>
+              </div>
+              <div class="bank-item">
+                <label>Account Name</label>
+                <p>{{ loanDetails.payout_details.account_name }}</p>
+              </div>
+              <div class="bank-item">
+                <label>Phone Reference</label>
+                <p>{{ loanDetails.payout_details.phone_no }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 6. Footer Acknowledgement -->
+        <div class="payout-footer">
+          <p>Acknowledged by: <strong>{{ loanDetails.payout_details.acknowledgement_name }}</strong></p>
+        </div>
+      </div>
 
         <!-- Repayments Card -->
         <div class="card">
@@ -184,6 +266,22 @@
               </div>
             </div>
           </div>
+                  <!-- Documents -->
+        <div class="card" *ngIf="loanDetails.collaterals_files?.length > 0">
+            <div class="card-header"><h5 class="card-title"><i class="fa fa-paperclip"></i> Documents</h5></div>
+            <div class="card-body">
+                <p class="text-muted small mb-3">Click to view/download.</p>
+                <div class="files-gallery">
+                    <div class="file-card clickable" *ngFor="let file of loanDetails.collaterals_files" (click)="viewFile(file.file_name)">
+                        <div class="file-icon">
+                            <i *ngIf="file.file_name.endsWith('.pdf')" class="fa fa-file-pdf-o" style="color: #f5365c;"></i>
+                            <i *ngIf="!file.file_name.endsWith('.pdf')" class="fa fa-file-image-o" style="color: #003366;"></i>
+                        </div>
+                        <div class="file-name">{{ file.file_name.endsWith('.pdf') ? 'PDF Document' : 'Image File' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </ng-container>
 
       </div>

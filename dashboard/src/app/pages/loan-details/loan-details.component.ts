@@ -257,6 +257,184 @@ activateLoan(id:any){
     });
   }
 
+     openPayoutModal() {
+    Swal.fire({
+      title: 'Disbursement Agreement',
+      width: '800px',
+      html: `
+        <div class="swal-form" style="text-align: left; font-family: 'Inter', sans-serif;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <div>
+              <label style="display:block; font-size: 12px; font-weight: bold; color: #666;">TOTAL SUM (ZMK)</label>
+              <input id="total_sum" type="number" class="swal2-input" style="width: 100%; margin: 5px 0;" placeholder="0.00">
+            </div>
+            <div>
+              <label style="display:block; font-size: 12px; font-weight: bold; color: #666;">RECIPIENT NAME</label>
+              <input id="recipient_name" type="text" class="swal2-input" style="width: 100%; margin: 5px 0;" placeholder="Mr/Ms/Mrs...">
+            </div>
+          </div>
+
+          <h4 style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px;">Deductions</h4>
+          <table style="width: 100%; font-size: 14px; border-collapse: collapse;">
+            <thead>
+              <tr style="background: #f9f9f9;">
+                <th style="padding: 8px; text-align: left;">Type</th>
+                <th style="padding: 8px;">Amount (ZMK)</th>
+                <th style="padding: 8px;">Apply</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 8px;">Admin Fee</td>
+                <td><input id="admin_fee" type="number" class="swal2-input" value="2000" style="width: 120px; height: 35px; margin: 0 auto; display: block;"></td>
+                <td style="text-align: center;"><input id="apply_admin" type="checkbox" checked style="width: 20px; height: 20px;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">Change of Ownership</td>
+                <td><input id="ownership_fee" type="number" class="swal2-input" value="2000" style="width: 120px; height: 35px; margin: 0 auto; display: block;"></td>
+                <td style="text-align: center;"><input id="apply_ownership" type="checkbox" checked style="width: 20px; height: 20px;"></td>
+              </tr>
+              <tr>
+                <td style="padding: 8px;">Removal of Caveat</td>
+                <td><input id="caveat_fee" type="number" class="swal2-input" value="1000" style="width: 120px; height: 35px; margin: 0 auto; display: block;"></td>
+                <td style="text-align: center;"><input id="apply_caveat" type="checkbox" checked style="width: 20px; height: 20px;"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div style="background: #eef2ff; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: right;">
+            <label style="font-weight: bold; color: #4338ca;">NET PAYOUT: </label>
+            <span id="payout_display" style="font-size: 20px; font-weight: 800; color: #1e1b4b;">ZMK 0.00</span>
+          </div>
+
+          <h4 style="border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px;">Banking Details</h4>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <input id="bank_name" class="swal2-input" placeholder="Bank Name" style="width: 100%; margin: 5px 0;">
+            <input id="acc_no" class="swal2-input" placeholder="Account No" style="width: 100%; margin: 5px 0;">
+            <input id="acc_name" class="swal2-input" placeholder="Account Name" style="width: 100%; margin: 5px 0;">
+            <input id="phone" class="swal2-input" placeholder="Phone Number" style="width: 100%; margin: 5px 0;">
+          </div>
+
+          <div style="margin-top: 15px;">
+             <label style="display:block; font-size: 12px; font-weight: bold; color: #666;">ACKNOWLEDGE NAME (I, ... acknowledge)</label>
+             <input id="ack_name" class="swal2-input" style="width: 100%; margin: 5px 0;">
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Submit Payout',
+      cancelButtonText: 'Cancel',
+      confirmButtonColor: '#2563eb',
+      allowOutsideClick: false, // Prevents closing by clicking backdrop
+      didOpen: () => {
+        // Calculation Logic attached to UI elements
+        const updatePayout = () => {
+          const total = parseFloat((<HTMLInputElement>document.getElementById('total_sum')).value) || 0;
+
+          const admin = (<HTMLInputElement>document.getElementById('apply_admin')).checked ?
+                        parseFloat((<HTMLInputElement>document.getElementById('admin_fee')).value) || 0 : 0;
+
+          const owner = (<HTMLInputElement>document.getElementById('apply_ownership')).checked ?
+                        parseFloat((<HTMLInputElement>document.getElementById('ownership_fee')).value) || 0 : 0;
+
+          const caveat = (<HTMLInputElement>document.getElementById('apply_caveat')).checked ?
+                         parseFloat((<HTMLInputElement>document.getElementById('caveat_fee')).value) || 0 : 0;
+
+          const net = total - (admin + owner + caveat);
+          document.getElementById('payout_display')!.innerText = `ZMK ${net.toLocaleString()}`;
+        };
+
+        // Attach listeners to all relevant inputs
+        const ids = ['total_sum', 'admin_fee', 'ownership_fee', 'caveat_fee', 'apply_admin', 'apply_ownership', 'apply_caveat'];
+        ids.forEach(id => document.getElementById(id)?.addEventListener('input', updatePayout));
+      },
+      preConfirm: () => {
+        // Collect all data
+        const getVal = (id: string) => (<HTMLInputElement>document.getElementById(id)).value;
+        const getCheck = (id: string) => (<HTMLInputElement>document.getElementById(id)).checked;
+
+        // Simple validation
+        if (!getVal('total_sum') || !getVal('recipient_name') || !getVal('acc_no')) {
+          Swal.showValidationMessage('Please fill in required fields');
+          return false;
+        }
+
+        // Return data object
+        return {
+          total_sum: parseFloat(getVal('total_sum')),
+          recipient_name: getVal('recipient_name'),
+          admin_fee_amount: parseFloat(getVal('admin_fee')),
+          apply_admin_fee: getCheck('apply_admin'),
+          ownership_fee_amount: parseFloat(getVal('ownership_fee')),
+          apply_ownership_fee: getCheck('apply_ownership'),
+          caveat_fee_amount: parseFloat(getVal('caveat_fee')),
+          apply_caveat_fee: getCheck('apply_caveat'),
+          net_payout_amount: parseFloat(document.getElementById('payout_display')!.innerText.replace(/[^\d.-]/g, '')),
+          bank_name: getVal('bank_name'),
+          account_no: getVal('acc_no'),
+          account_name: getVal('acc_name'),
+          phone_no: getVal('phone'),
+          acknowledgement_name: getVal('ack_name'),
+          client_signature_date: new Date().toISOString().split('T')[0],
+          staff_signature_date: new Date().toISOString().split('T')[0]
+        };
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const collectedData = result.value;
+        collectedData['loan_id'] =this.id
+        console.log('--- PAYOUT DATA COLLECTED ---');
+        this.submitPayoutDetails(collectedData);
+        // This result.value is exactly what you should send to your Laravel function
+       // Swal.fire('Success', 'Data logged to console!', 'success');
+      }
+    });
+  }
+
+  submitPayoutDetails(body:any){
+            this.isLoading = true
+
+
+
+              const url = BASE_URL+'/api/disbursement';
+
+
+               const token = sessionStorage.getItem('token');
+
+            const headers = { 'Authorization': 'Bearer '+token }
+
+              // 3. Make the POST request
+              this.http.post(url, body, { headers }).subscribe({
+                next: (response:any) => {
+                this.isLoading =false
+                if(response.success){
+                  Swal.fire(
+                    'Success',
+                    response.message,
+                    'success'
+                  )
+                  // .then(() => {
+                  //   this.router.navigate(['/events/all-events']);
+                  // });
+
+                }else{
+                  Swal.fire('Error', response.message, 'error');
+                }
+
+                  // Optional: Reset the form after success
+                 // form.resetForm();
+                },
+                error: (error) => {
+
+                  this.isLoading =false
+                  console.error('Error occurred:', error);
+                //  alert('Failed to create customer.');
+                }
+              });
+
+
+  }
+
   finishSubmission() {
     this.isSubmitting = false;
     Swal.fire({

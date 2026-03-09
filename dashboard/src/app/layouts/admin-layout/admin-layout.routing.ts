@@ -54,6 +54,7 @@ import { CustomersComponent } from 'app/pages/customers/customers.component';
 import { FacilitiesComponent } from 'app/pages/facilities/facilities.component';
 import { LoanDetailsComponent } from 'app/pages/loan-details/loan-details.component';
 import { CollateralComponent } from 'app/pages/collateral/collateral.component';
+import { PayoutComponent } from 'app/pages/payout/payout.component';
 
 export const AdminLayoutRoutes: Routes = [
      { path: 'dashboard',      component: DashboardComponent,canActivate:[AuthGuard]},
@@ -101,6 +102,18 @@ export const AdminLayoutRoutes: Routes = [
 
       ]
     },
+
+
+     { path: 'payouts',      component: PayoutComponent,canActivate:[AuthGuard],
+        children: [
+        { path: 'new-payout', component: PayoutComponent },
+        { path: 'payout-history', component: PayoutComponent },
+
+
+      ]
+    },
+
+
     { path: 'loan-details',      component: LoanDetailsComponent},
    // { path: 'event-details',      component: EventsDetailsComponent,canActivate:[AuthGuard]},
 

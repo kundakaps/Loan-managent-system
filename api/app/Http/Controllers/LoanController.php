@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Models\AssignedRoles;
 use App\Models\Customers;
+use App\Models\DisbursementAgreement;
 use App\Models\Facility;
 use App\Models\LoanCollateral;
 use App\Models\LoanCollateralFiles;
@@ -254,6 +255,9 @@ class LoanController extends Controller
            $collaterals = VehicleAssessment::where('loan_id', $loan->id)->first();
            $collaterals_files = LoanCollateralFiles::where('loan_id', $loan->id)->get();
            $repayments = Repayments::where('loan_id', $loan->id)->get();
+           $payout_details = DisbursementAgreement::where('loan_id', $loan->id)->first();
+
+
 
            return response()->json([
                 'success' => true,
@@ -264,6 +268,8 @@ class LoanController extends Controller
                     'collaterals' => $collaterals,
                     'collaterals_files' => $collaterals_files,
                     'repayments' => $repayments,
+                    'payout_details' => $payout_details
+
                 ]
             ]);
 
@@ -465,7 +471,7 @@ public function storeVehicleAssessment(Request $request)
             $assessment = VehicleAssessment::create($validated);
 
             $loadUpdateData = Loans::where('id',$request->loan_id)->first();
-            $loadUpdateData->status ='pending payout';
+            $loadUpdateData->status ='unpaid';
             $loadUpdateData->save();
 
 
@@ -535,7 +541,7 @@ public function storeVehicleAssessment(Request $request)
             }
 
             $loan = Loans::where('id', $request->loan_id)->first();
-            $loan->status = 'pending payout';
+            $loan->status = 'unpaid';
             $loan->save();
 
             return response()->json([
@@ -560,6 +566,125 @@ public function storeVehicleAssessment(Request $request)
                 ->where('ip', $ip)
                 ->exists();
     }
+
+    public function getLoansToBePaidout(Request $request){
+            $user = auth()->user();
+            // $ip = $request->ip();
+
+            // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+            //     // Log unauthorized IP attempt
+            //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+            //         'user_id' => $user->id,
+            //         'username' => $user->email,
+            //         'ip' => $ip,
+            //         'action' => 'unauthorized IP attempt on login',
+            //     ]);
+
+
+            //     return response()->json([], 401);
+            // }
+
+            $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+           // return $roles;
+
+            if($roles->role_id != 3){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+
+
+
+            $data=DB::table('loans')
+                    ->join('customers', 'loans.client_id', '=', 'customers.id')
+                    ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
+                    ->select(
+                        'loans.*',
+                        'customers.first_name',
+                        'customers.last_name',
+                        'facilities.facility_name')
+                    ->where('loans.status','unpaid')
+                    ->get();
+
+            return response()->json([
+                'success'=>true,
+                'data'=> $data
+            ]);
+
+    }
+
+public function storeDisbursement(Request $request)
+{
+       $user = auth()->user();
+       $roles = AssignedRoles::where('user_id', $user->id)->first();
+
+           // return $roles;
+
+            if($roles->role_id != 3){
+                return response()->json([
+                    'success'=>false,
+                    'message'=>'You are not authorized to view this page'
+                ]);
+            }
+
+
+    $validated = $request->validate([
+        'loan_id'              => 'required|exists:loans,id',
+        'total_sum'            => 'required|numeric',
+        'recipient_name'       => 'required|string',
+
+        // Deduction data from frontend
+        'admin_fee_amount'     => 'nullable|numeric',
+        'apply_admin_fee'      => 'boolean',
+        'ownership_fee_amount' => 'nullable|numeric',
+        'apply_ownership_fee'  => 'boolean',
+        'caveat_fee_amount'    => 'nullable|numeric',
+        'apply_caveat_fee'     => 'boolean',
+
+        // Final Payout from frontend
+        'net_payout_amount'    => 'required|numeric',
+
+        // Bank Details
+        'account_no'           => 'required|string',
+        'bank_name'            => 'required|string',
+        'account_name'         => 'required|string',
+        'phone_no'             => 'required|string',
+
+        // Signatures (Base64 or Paths)
+        'client_signature'      => 'nullable|string',
+        'client_signature_date' => 'required|date',
+        'acknowledgement_name'  => 'required|string',
+        'staff_signature'       => 'nullable|string',
+        'staff_signature_date'  => 'required|date',
+    ]);
+
+    $validated['user_id'] = $user->id;
+
+
+    try {
+        // Create the record with exactly what was sent
+        $disbursement = DisbursementAgreement::create($validated);
+        $loan = Loans::where('id', $request->loan_id)->first();
+
+        $loan->status = 'unactivated';
+        $loan->save();
+
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Disbursement agreement saved successfully',
+           // 'data'    => $disbursement
+        ], 201);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'error'   => 'Failed to save data',
+            'details' => $e->getMessage()
+        ], 500);
+    }
+}
 
     public function getLoansToBeActivated(Request $request){
             $user = auth()->user();

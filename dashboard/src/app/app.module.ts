@@ -98,6 +98,7 @@ import { CustomersComponent } from './pages/customers/customers.component';
 import { FacilitiesComponent } from './pages/facilities/facilities.component';
 import { LoanDetailsComponent } from './pages/loan-details/loan-details.component';
 import { CollateralComponent } from './pages/collateral/collateral.component';
+import { PayoutComponent } from './pages/payout/payout.component';
 
 
 
@@ -172,7 +173,8 @@ import { CollateralComponent } from './pages/collateral/collateral.component';
     CustomersComponent,
     FacilitiesComponent,
     LoanDetailsComponent,
-    CollateralComponent
+    CollateralComponent,
+    PayoutComponent
 
   ],
   imports: [

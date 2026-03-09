@@ -10,6 +10,215 @@ $muted: #8898aa;
 .main-content {
   background-color: $bg; min-height: 100vh; padding: 30px; font-family: 'Inter', sans-serif;
 }
+/* 1. HEADER CONTAINER */
+.details-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Vertically centers everything */
+  padding-bottom: 20px;
+  margin-bottom: 30px;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap; /* Ensures it stacks on small mobile screens */
+  gap: 20px;
+}
+
+/* LEFT SIDE: ID, Badge, and Button */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.header-left .title {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+/* STATUS BADGE */
+.status-badge {
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: inline-block;
+
+  /* Colors for 'UNACTIVATED' (Assuming default fallback) */
+  background: #fee2e2;
+  color: #ef4444;
+  border: 1px solid #fca5a5;
+}
+
+/* ACTIVATE BUTTON */
+.btn-activate {
+  background: #1e293b;
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-activate i {
+  color: #fbbf24; /* Yellow color for the lightning bolt icon */
+}
+
+.btn-activate:hover {
+  background: #334155;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.btn-activate:active {
+  transform: translateY(0);
+}
+
+/* RIGHT SIDE: Posted By and Date */
+.header-right {
+  text-align: right;
+}
+
+.header-right .posted-by {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0 0 5px 0;
+}
+
+.header-right .posted-by strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.header-right .date-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8fafc;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #334155;
+  border: 1px solid #e2e8f0;
+}
+
+.header-right .date-info i {
+  color: #3b82f6; /* Blue icon for the calendar */
+}
+
+/* Optional: Handling [ngClass] colors from your TS getStatusClass function */
+.status-badge.badge-success { background: #dcfce7; color: #16a34a; border-color: #86efac; }
+.status-badge.badge-warning { background: #fef3c7; color: #d97706; border-color: #fcd34d; }
+.status-badge.badge-danger { background: #fee2e2; color: #ef4444; border-color: #fca5a5; }
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .details-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-right {
+    text-align: left;
+  }
+}
+
+/* 1. DOCUMENT CARD HEADER */
+.card-header .card-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #003366;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.card-header .card-title i {
+    margin-right: 10px;
+    color: #fbc02d; /* Yellow accent for the paperclip */
+}
+
+/* 2. GALLERY GRID CONTAINER */
+.files-gallery {
+    display: grid;
+    /* This creates a responsive grid that fits as many 120px wide cards as possible */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 10px;
+}
+
+/* 3. INDIVIDUAL FILE CARD */
+.file-card {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px 10px;
+    text-align: center;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 110px;
+}
+
+/* 4. INTERACTIVITY (HOVER) */
+.file-card.clickable {
+    cursor: pointer;
+}
+
+.file-card.clickable:hover {
+    background: #ffffff;
+    border-color: #003366;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.file-card.clickable:active {
+    transform: translateY(0);
+}
+
+/* 5. ICON STYLING */
+.file-icon {
+    font-size: 2.5rem; /* Large icon */
+    margin-bottom: 8px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 6. FILE NAME LABEL */
+.file-name {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    word-break: break-word; /* Prevents long names from breaking layout */
+}
+
+/* 7. CUSTOM STYLING FOR FILE TYPES (Optional additional support) */
+.file-card:hover .file-name {
+    color: #003366;
+}
+
+/* Responsiveness for very small screens */
+@media (max-width: 480px) {
+    .files-gallery {
+        grid-template-columns: repeat(2, 1fr); /* 2 cards per row on small phones */
+    }
+}
 
 /* Card General Styling */
 .card {
@@ -145,3 +354,162 @@ $muted: #8898aa;
   .spinner { width: 45px; height: 45px; border: 5px solid #eee; border-top: 5px solid $primary; border-radius: 50%; animation: spin 1s linear infinite; }
 }
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+
+.payout-card {
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eef2f6;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Header */
+.payout-header {
+  background: #f8fafc;
+  padding: 24px;
+  border-bottom: 1px dashed #cbd5e1;
+  text-align: center;
+}
+
+.payout-badge {
+  display: inline-block;
+  background: #dbeafe;
+  color: #1e40af;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+
+.payout-header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: #0f172a;
+  text-transform: uppercase;
+}
+
+.payout-subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Content Area */
+.payout-content {
+  padding: 24px;
+}
+
+.amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.amount-row .label { color: #64748b; font-size: 14px; }
+.amount-row .value { font-weight: 700; color: #0f172a; font-size: 16px; }
+
+/* Deductions */
+.section-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 12px;
+}
+
+.deductions-container {
+  background: #fffcf9;
+  border: 1px solid #fee2e2;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.deduction-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 8px;
+  color: #475569;
+}
+
+.deduction-item:last-child { margin-bottom: 0; }
+.minus { color: #dc2626; font-weight: 600; }
+.no-deductions { font-size: 13px; color: #94a3b8; font-style: italic; }
+
+/* Net Payout Box - The "Hero" of the card */
+.net-payout-box {
+  background: #1e293b;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 15px -3px rgba(30, 41, 59, 0.2);
+}
+
+.net-payout-box .label {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.net-payout-box .net-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+/* Banking Grid */
+.banking-details {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 20px;
+}
+
+.bank-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.bank-item label {
+  display: block;
+  font-size: 10px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.bank-item p {
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  word-break: break-all;
+}
+
+/* Footer */
+.payout-footer {
+  background: #f8fafc;
+  padding: 15px;
+  text-align: center;
+  border-top: 1px solid #f1f5f9;
+}
+
+.payout-footer p {
+  margin: 0;
+  font-size: 12px;
+  color: #64748b;
+}
+
+.payout-footer strong { color: #1e293b; }
