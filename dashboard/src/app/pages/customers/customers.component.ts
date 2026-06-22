@@ -141,4 +141,7 @@ getCustomers(){
   }
 
 
+  protected detailspage(id) {
+    this.router.navigate(['/customer-details'], { queryParams: { id } });
+  }
 }

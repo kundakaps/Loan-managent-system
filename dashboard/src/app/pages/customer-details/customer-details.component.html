@@ -1,0 +1,108 @@
+<div class="page-wrapper" *ngIf="customerDetails">
+  <!-- Top Navigation/Header -->
+  <div class="header-container">
+    <div class="breadcrumb">Customers / Profile / {{ customerDetails.data.first_name }}</div>
+    <div class="header-main">
+      <div class="user-id-group">
+        <div class="avatar-sm">
+          {{ customerDetails.data.first_name[0] | uppercase }}{{ customerDetails.data.last_name[0] | uppercase }}
+        </div>
+        <div>
+          <h1>{{ customerDetails.data.first_name }} {{ customerDetails.data.last_name }}</h1>
+          <span class="sub-text">{{ customerDetails.data.occupation }} | NRC: {{ customerDetails.data.nrc }}</span>
+        </div>
+      </div>
+      <div class="header-actions">
+<!--        <button class="btn-outline">Download KYC</button>-->
+        <a href="/#/loans/add-loan" class="btn-primary">+ New Loan</a>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="content-body">
+    <!-- Grid for Details -->
+    <div class="info-grid">
+      <!-- Contact Card -->
+      <div class="info-card">
+        <div class="card-title"><span class="icon">📞</span> Contact Information</div>
+        <div class="details-row">
+          <div class="data-group">
+            <label>Phone</label>
+            <p>{{ customerDetails.data.phone_number }}</p>
+          </div>
+          <div class="data-group">
+            <label>Email</label>
+            <p>{{ customerDetails.data.email }}</p>
+          </div>
+          <div class="data-group">
+            <label>Residential Address</label>
+            <p>{{ customerDetails.data.residential_address }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next of Kin Card -->
+      <div class="info-card">
+        <div class="card-title"><span class="icon">👥</span> Next of Kin</div>
+        <div class="details-row">
+          <div class="data-group">
+            <label>Name</label>
+            <p>{{ customerDetails.data.next_of_kin_name }}</p>
+          </div>
+          <div class="data-group">
+            <label>Phone</label>
+            <p>{{ customerDetails.data.next_of_kin_phone }}</p>
+          </div>
+          <div class="data-group">
+            <label>Relationship Address</label>
+            <p>{{ customerDetails.data.next_of_kin_address }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loan History Table Section -->
+    <div class="table-container">
+      <div class="table-header">
+        <h2>Loan History</h2>
+        <span class="count-badge">{{ customerDetails.loans.length }} Loans Found</span>
+      </div>
+
+      <div class="responsive-table">
+        <table id="loansTable">
+          <thead>
+          <tr>
+            <th>LOAN ID</th>
+            <th>AMOUNT</th>
+            <th>BALANCE</th>
+            <th>MONTHLY REPAYMENT</th>
+            <th>TENURE</th>
+            <th>NEXT PAYMENT</th>
+            <th>STATUS</th>
+            <th>ACTION</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let loan of customerDetails.loans">
+            <td><strong>#{{ loan.id }}</strong></td>
+            <td>ZMW {{ loan.amount | number:'1.2-2' }}</td>
+            <td class="balance-cell">ZMW {{ loan.balance | number:'1.2-2' }}</td>
+            <td>ZMW {{ loan.monthly_repayment | number:'1.2-2' }}</td>
+            <td>{{ loan.tenure }} Days</td>
+            <td>{{ loan.next_payment_date | date:'dd MMM yyyy' }}</td>
+            <td>
+                <span class="status-badge" [ngClass]="loan.status">
+                  {{ loan.status | uppercase }}
+                </span>
+            </td>
+            <td>
+              <button (click)="loadDetails(loan.id)" class="view-btn">View Details</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

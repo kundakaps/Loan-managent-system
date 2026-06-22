@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use App\Models\Facility;
+use App\Models\Loans;
+use App\Models\PayoutDetails;
+use App\Models\UserIpBinding;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\UserIpBinding;
 
 
 class CustomerController extends Controller
@@ -41,13 +43,24 @@ public function CreateCustomer(Request $request)
             'nrc'                  => ['required', 'string', 'unique:customers,nrc'],
             'occupation'           => ['nullable', 'string', ],
             'residential_address'  => ['nullable', 'string', ],
-            'contact_number'       => ['nullable', 'string', ],
+            'phoneNumber'       => ['nullable', 'string', ],
             'work_address'         => ['nullable', 'string', ],
             'referral_id'          => ['nullable', 'string', 'exists:customers,id'],
             'next_of_kin_name'     => ['nullable', 'string', ],
             'next_of_kin_phone'    => ['nullable', 'string', ],
             'next_of_kin_email'    => ['nullable', 'email', ],
             'next_of_kin_address'  => ['nullable', 'string', ],
+
+            //payout details
+            'account_number'       => ['required', 'string', ],
+            'branch_name'          => ['required', 'string', ],
+            'sort_code'            => ['required', 'string', ],
+            'swift_code'           => ['required', 'string', ],
+            'bank_name'            => ['required', 'string', ],
+            'mobile_money_number'  => ['required', 'string', ],
+            'mobile_money_name'    => ['required', 'string', ],
+
+
         ]);
 
 
@@ -64,7 +77,7 @@ public function CreateCustomer(Request $request)
             'email'                => $validated['emailAddress'],
             'occupation'           => $validated['occupation'],
             'residential_address'  => $validated['residential_address'],
-            'contact_number'       => $validated['contact_number'],
+            'contact_number'       => $validated['phoneNumber'],
             'work_address'         => $validated['work_address'],
             //'referral_id'          => $validated['created_by'],
             'next_of_kin_name'     => $validated['next_of_kin_name'],
@@ -72,6 +85,19 @@ public function CreateCustomer(Request $request)
             'next_of_kin_email'    => $validated['next_of_kin_email'],
             'next_of_kin_address'  => $validated['next_of_kin_address'],
             'created_by'  =>$user->id,
+        ]);
+
+
+        $payoutDetails = PayoutDetails::create([
+            'user_id' => $customer->id,
+            'account_number' => $validated['account_number'],
+            'branch_name' => $validated['branch_name'],
+            'sort_code' => $validated['sort_code'],
+            'swift_code' => $validated['swift_code'],
+            'bank_name' => $validated['bank_name'],
+            'mobile_money_number' => $validated['mobile_money_number'],
+            'mobile_money_name' => $validated['mobile_money_name'],
+
         ]);
 
         // 3) Return appropriate response
@@ -93,6 +119,42 @@ public function CreateCustomer(Request $request)
         // Or, if this is a web app form submission, you could:
         // return redirect()->route('customers.show', $customer->id)
         //                  ->with('success', 'Customer created successfully.');
+    }
+
+
+
+    public function getSingleCustomer(Request $request, $id){
+        $user = auth()->user();
+        $ip = $request->ip();
+
+
+
+        // if (!$this->isIpAllowedForUser($user->id, $ip)) {
+        //     // Log unauthorized IP attempt
+        //     Log::channel('daily_user_logs')->warning('Unauthorized IP access attempt', [
+        //         'user_id' => $user->id,
+        //         'username' => $user->email,
+        //         'ip' => $ip,
+        //         'action' => 'unauthorized IP attempt on login',
+        //     ]);
+
+        //     return response()->json([], 401);
+        // }
+
+        $customer = Customers::where('id', $id)->first();
+
+        if (!$customer) {
+            return response()->json(['error' => 'Customer not found'], 404);
+        }
+
+        $loans = Loans::where('client_id', $id)->get();
+
+
+        return response()->json([
+            'success' => true,
+            'data' =>  $customer,
+            'loans' => $loans
+        ]);
     }
 
     public function GetAllCustomers(Request $request){

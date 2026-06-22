@@ -113,6 +113,61 @@
               <textarea class="form-control" name="next_of_kin_address" ngModel required></textarea>
             </div>
 
+            <h3 class="section-title">Payout Details</h3>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Account Number</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="account_number" ngModel required />
+              </div>
+              <div class="form-group">
+                <label>Branch Name</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="branch_name" ngModel required />
+              </div>
+            </div>
+
+            <div class="form-row">
+
+              <div class="form-group">
+                <label>Sort Code</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="sort_code" ngModel required />
+              </div>
+
+              <div class="form-group">
+                <label>Swift Code</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="swift_code" ngModel required />
+              </div>
+            </div>
+
+            <div class="form-row">
+
+              <div class="form-group">
+                <label>Bank Name</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="bank_name" ngModel required />
+              </div>
+
+              <div class="form-group">
+                <label>Mobile Money Number</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="mobile_money_number" ngModel required />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label>Mobile Money Name</label>
+                <!-- Added required -->
+                <input type="text" class="form-control" name="mobile_money_name" ngModel required />
+              </div>
+            </div>
+
+
+
             <!-- Button is disabled if the form is invalid -->
             <button type="submit" class="submit-btn" [disabled]="!customerForm.valid">
               Submit

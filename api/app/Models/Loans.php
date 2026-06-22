@@ -15,6 +15,7 @@ class Loans extends Model
         'monthly_repayment',
         'next_payment_date',
         'status',
-        'balance'
+        'balance',
+        'collateral_id'
     ];
 }

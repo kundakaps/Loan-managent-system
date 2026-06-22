@@ -44,6 +44,27 @@ export class CollateralComponent implements OnInit {
     });
   }
 
+  onLoanSearch(event: any) {
+    const selectedName = event.target.value;
+
+    // Find the loan object where the combined name matches the typed/selected value
+    const selectedLoan = this.pendingLoans.find(loan =>
+      `${loan.customer_first_name} ${loan.customer_last_name}` === selectedName
+    );
+
+    // If a match is found from the list, mimic the original dropdown change event
+    if (selectedLoan) {
+      const mockEvent = {
+        target: {
+          value: selectedLoan.client_id
+        }
+      };
+
+      // Trigger your original function with the client_id it expects
+      this.onLoanSelect(mockEvent);
+    }
+  }
+
   handleRouteChange(route: string) {
     switch (route) {
       case 'add-collateral':
@@ -115,7 +136,7 @@ export class CollateralComponent implements OnInit {
     this.assessmentForm = this.fb.group({
       // Hidden / Reference IDs
       customer_id: [''],
-      loan_id: [''],
+      //loan_id: [''],
 
       // Section 1: Identity
       details_match_whitebook: [false],
@@ -147,24 +168,24 @@ export class CollateralComponent implements OnInit {
 
       // Section 5: Financials
       market_value: ['', Validators.required],
-      amount_requested: [''],
-      amount_approved: ['', Validators.required],
+     // amount_requested: [''],
+    //  amount_approved: ['', Validators.required],
     });
   }
 
   onLoanSelect(event: any) {
     const loanId = event.target.value;
     this.loanId = loanId;
-    this.selectedLoan = this.pendingLoans.find(l => l.id == loanId);
+    this.selectedLoan = loanId
 
     if (this.selectedLoan) {
       // Patching values into the form
-      this.clientId = this.selectedLoan.client_id,
+      this.clientId = event.target.value
       this.assessmentForm.patchValue({
-        customer_id: this.selectedLoan.client_id,
+      customer_id: event.target.value,
 
-        loan_id: this.selectedLoan.id,
-        amount_requested: this.selectedLoan.amount
+        //loan_id: this.selectedLoan.id,
+        //amount_requested: this.selectedLoan.amount
       });
     } else {
       this.assessmentForm.reset();
@@ -172,14 +193,14 @@ export class CollateralComponent implements OnInit {
   }
 
   submitAssessment() {
-    if (this.assessmentForm.valid) {
+   if (this.assessmentForm.valid) {
       // getRawValue() captures even disabled fields
       const formData = this.assessmentForm.getRawValue();
 
 
      this.isSubmitting = true;
 
-     formData.loan_id = this.loanId;
+    // formData.loan_id = this.loanId;
      formData.customer_id = this.clientId;
 
       console.log("FULL FORM DATA:", formData);
@@ -196,7 +217,8 @@ export class CollateralComponent implements OnInit {
     this.http.post(`${BASE_URL}/api/vehicle-assessment`, formData, { headers }).subscribe({
       next: (res: any) => {
         if (this.selectedFiles.length > 0) {
-          this.uploadFiles(this.loanId, headers);
+
+          this.uploadFiles(res.assessment, headers);
         } else {
           this.finishSubmission();
         }
@@ -214,9 +236,9 @@ export class CollateralComponent implements OnInit {
   }
 
 
-    uploadFiles(loanId: any, headers: any) {
+    uploadFiles(collateral_id: any, headers: any) {
       const formData = new FormData();
-      formData.append('loan_id', loanId);
+      formData.append('collateral_id', collateral_id);
       this.selectedFiles.forEach((file) => {
         formData.append('files[]', file, file.name);
       });

@@ -58,6 +58,7 @@ export class PayoutComponent implements OnInit {
   showPayoutHistory() {
     this.isNewPayout = false;
     this.isPayoutHistory = true;
+     this.getLoansPaid()
   }
 
     getLoans(){
@@ -67,6 +68,38 @@ export class PayoutComponent implements OnInit {
     const headers = { 'Authorization': 'Bearer '+token }
     try {
       this.http.get(BASE_URL+'/api/unpaidloans', { headers }).subscribe((response:any)=>{
+
+       this.loanData=response.data
+      $('#loansTable').DataTable().clear().destroy();
+
+      setTimeout(() => {
+        var table = $('#loansTable').DataTable({
+          pagingType: 'full_numbers',
+          pageLength: 15,
+          processing: true,
+          lengthMenu: [15, 25, 50],
+        });
+
+
+
+      }, 1);
+
+        this.isLoading=false
+      })
+    }
+    catch(error){
+      console.log(error)
+      this.isLoading=false
+    }
+  }
+
+    getLoansPaid(){
+    //this.isLoading=true
+    const token = sessionStorage.getItem('token');
+
+    const headers = { 'Authorization': 'Bearer '+token }
+    try {
+      this.http.get(BASE_URL+'/api/paidloans', { headers }).subscribe((response:any)=>{
 
        this.loanData=response.data
       $('#loansTable').DataTable().clear().destroy();

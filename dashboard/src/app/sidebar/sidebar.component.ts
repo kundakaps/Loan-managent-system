@@ -63,7 +63,7 @@ export const ROUTES: RouteInfo[] = [
     restrictedToRole1: true,
     children: [
       { path: 'add-loan', title: 'add loan' ,restrictedToRole0: true ,restrictedToRole1: true},
-      { path: 'waiting-activation', title: 'waiting activation', restrictedToRole1: true }, // Added restriction
+      { path: 'waiting-activation', title: 'waiting approval', restrictedToRole1: true }, // Added restriction
       { path: 'all-loans', title: 'all loans',restrictedToRole0: true ,restrictedToRole1: true },
     ]
   },

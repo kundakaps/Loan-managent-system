@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('posted_by');
             $table->string('client_id');
             $table->string('facility_id');
+            $table->string('collateral_id');
             $table->string('amount');
             $table->string('tenure');
             $table->string('monthly_repayment');

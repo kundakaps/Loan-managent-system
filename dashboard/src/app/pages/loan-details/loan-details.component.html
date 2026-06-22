@@ -14,19 +14,34 @@
         <span class="status-badge" [ngClass]="getStatusClass(loanDetails.loan.status)">
           {{ loanDetails.loan.status | uppercase }}
         </span>
-        <button (click)="openPayoutModal()"
-                *ngIf="loanDetails.loan.status == 'unpaid' && role =='3'"
+
+
+        <button (click)="openPayoutModal(loanDetails.payout_details,loanDetails.account_details)"
+                *ngIf="loanDetails.loan.status == 'approved' && role =='3'"
                 class="btn-activate">
-          <i class="fa fa-bolt"></i> Add Payout Details
+          <i class="fa fa-bolt"></i> Verify Payout Details
         </button>
 
         <button (click)="activateLoan(loanDetails.loan.id)"
-                *ngIf="loanDetails.loan.status == 'unactivated' && role =='1'"
+                *ngIf="loanDetails.loan.status == 'Pending Approval' && role =='1'"
                 class="btn-activate">
-          <i class="fa fa-bolt"></i> Activate Loan
+          <i class="fa fa-bolt"></i> Loan Action
+        </button>
+
+
+        <button (click)="openEditLoanModal()"
+                *ngIf="role =='1'"
+                class="btn-activate">
+          <i class="fa fa-pencil"></i> Edit Loan
         </button>
 
       </div>
+
+
+
+
+
+
       <div class="header-right">
         <p class="posted-by">Posted by: <strong>{{ loanDetails.loan.posted_by_name }}</strong></p>
         <div class="date-info">
@@ -34,6 +49,37 @@
         </div>
       </div>
     </div>
+
+
+    <!-- Documents -->
+    <div class="card" *ngIf="loanDetails.contract?.length > 0">
+      <div class="card-header"><h5 class="card-title"><i class="fa fa-paperclip"></i>Contract Documents</h5></div>
+      <div class="card-body">
+        <p class="text-muted small mb-3">Click to view/download.</p>
+        <div class="files-gallery">
+          <div class="file-card clickable" *ngFor="let file of loanDetails.contract" (click)="viewContractFile(file.file_path)">
+            <div class="file-icon">
+              <i *ngIf="file.file_path.endsWith('.pdf')" class="fa fa-file-pdf-o" style="color: #f5365c;"></i>
+              <i *ngIf="!file.file_path.endsWith('.pdf')" class="fa fa-file-image-o" style="color: #003366;"></i>
+            </div>
+            <div class="file-name">{{ file.file_path.endsWith('.pdf') ? 'PDF Document' : 'Image File' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="loanDetails.loan.status == 'rejected' " class="card">
+      <div class="card-header"></div>
+      <div class="card-body">
+        <div class="terms-grid">
+          <div class="term-item"><small>Rejection Reason</small><p>{{ loanDetails.rejected_loan.reason }}</p></div>
+
+        </div>
+      </div>
+    </div>
+
+
 
     <!-- 2. SUMMARY METRICS -->
     <div class="metrics-grid">
@@ -147,28 +193,28 @@
             <div class="bank-grid">
               <div class="bank-item">
                 <label>Bank</label>
-                <p>{{ loanDetails.payout_details.bank_name }}</p>
+                <p>{{ loanDetails.account_details.bank_name }}</p>
               </div>
               <div class="bank-item">
                 <label>Account No</label>
-                <p>{{ loanDetails.payout_details.account_no }}</p>
+                <p>{{ loanDetails.account_details.account_number }}</p>
               </div>
               <div class="bank-item">
-                <label>Account Name</label>
-                <p>{{ loanDetails.payout_details.account_name }}</p>
+                <label>Mobile Money No</label>
+                <p>{{ loanDetails.account_details.mobile_money_number }}</p>
               </div>
               <div class="bank-item">
-                <label>Phone Reference</label>
-                <p>{{ loanDetails.payout_details.phone_no }}</p>
+                <label>Mobile Money Name</label>
+                <p>{{ loanDetails.account_details.mobile_money_name }}</p>
               </div>
             </div>
           </div>
         </div>
 
         <!-- 6. Footer Acknowledgement -->
-        <div class="payout-footer">
+        <!-- <div class="payout-footer">
           <p>Acknowledged by: <strong>{{ loanDetails.payout_details.acknowledgement_name }}</strong></p>
-        </div>
+        </div> -->
       </div>
 
         <!-- Repayments Card -->
@@ -261,8 +307,8 @@
               <!-- Financial Evaluation -->
               <div class="financial-summary-card mt-4">
                 <div class="eval-column"><small>Market Value</small><h4 class="text-success">ZMW {{ loanDetails.collaterals.market_value | number }}</h4></div>
-                <div class="eval-column border-left border-right"><small>Requested</small><h4>ZMW {{ loanDetails.collaterals.amount_requested | number }}</h4></div>
-                <div class="eval-column"><small>Approved</small><h4 class="text-primary">ZMW {{ loanDetails.collaterals.amount_approved | number }}</h4></div>
+                <!-- <div class="eval-column border-left border-right"><small>Requested</small><h4>ZMW {{ loanDetails.collaterals.amount_requested | number }}</h4></div>
+                <div class="eval-column"><small>Approved</small><h4 class="text-primary">ZMW {{ loanDetails.collaterals.amount_approved | number }}</h4></div> -->
               </div>
             </div>
           </div>

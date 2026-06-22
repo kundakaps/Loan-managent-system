@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('loan_collateral_files', function (Blueprint $table) {
             $table->id();
-            $table->string('loan_id');
+            $table->string('collateral_id');
              $table->text('file_name');
             $table->timestamps();
         });

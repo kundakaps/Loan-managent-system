@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx tsc *)",
+      "Read(//c/Users/kunda0757/Desktop/Projects/Projects/Loan Management System/api/**)",
+      "Bash(php -l app/Http/Controllers/LoanController.php)",
+      "Bash(php -l routes/api.php)",
+      "Skill(run)",
+      "Skill(run:*)",
+      "Read(//c/Users/kunda0757/Desktop/Projects/Projects/Loan Management System/.claude/**)",
+      "Bash(grep -Hm1 ^description: 'c:/Users/kunda0757/Desktop/Projects/Projects/Loan Management System/dashboard/.claude/skills/*/SKILL.md')",
+      "Bash(grep -Hm1 ^description: 'c:/Users/kunda0757/Desktop/Projects/Projects/Loan Management System/api/.claude/skills/*/SKILL.md')",
+      "Bash(php -r ' *)",
+      "Bash(php artisan *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:8000/api/me)",
+      "Bash(curl -s -X POST http://localhost:8000/api/singleloan -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiaWF0IjoxNzgyMDYyNzc3LCJleHAiOjE3ODIwNjYzNzcsIm5iZiI6MTc4MjA2Mjc3NywianRpIjoiUTZ5bEo1VWxEZkZnMnhRdiIsInN1YiI6IjEiLCJwcnYiOiIyM2JkNWM4OTQ5ZjYwMGFkYjM5ZTcwMWM0MDA4NzJkYjdhNTk3NmY3In0.ymyvgUMx1xddc934pCMF-M6oEyGMeCw0D6G3mVytAlU' -H 'Content-Type: application/json' -d '{\"loan_id\":4}')",
+      "Bash(npx ng *)",
+      "Bash(tee /tmp/ng_serve.log)",
+      "Bash(chromium-cli --help)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:4200/)",
+      "Bash(npx -y playwright --version)",
+      "Bash(node -e ' *)",
+      "Bash(curl -s http://localhost:4200/main.js -o /tmp/main.js -w \"size=%{size_download} code=%{http_code}\\\\n\")",
+      "Read(//tmp/**)",
+      "Bash(nohup npx ng serve --port=4300)",
+      "Bash(echo \"started pid $!\")",
+      "Bash(curl -s http://localhost:4300/main.js -o /tmp/main4300.js -w \"size=%{size_download} code=%{http_code}\\\\n\")",
+      "Bash(curl -s http://localhost:4300/ -o /tmp/index4300.html)",
+      "Bash(curl -s \"http://localhost:4300/src_app_layouts_admin-layout_admin-layout_module_ts.js\" -o /tmp/admin_chunk.js -w \"code=%{http_code} size=%{size_download}\\\\n\")",
+      "Bash(curl -s http://localhost:4300/runtime.js -o /tmp/runtime4300.js)",
+      "Bash(grep -oE \"r\\\\.u=.{0,400}\" /tmp/main4300.js)",
+      "Bash(curl -s \"http://localhost:4300/loan-details?id=4\" -o /tmp/page.html -w \"code=%{http_code}\\\\n\")",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code}\\\\n\" \"http://localhost:4300/loan-details\")",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code}\\\\n\" \"http://localhost:4300/\")",
+      "Bash(curl -s -o /dev/null -w \"code=%{http_code}\\\\n\" \"http://localhost:4300/somegarbage\")"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\kunda0757\\Desktop\\Projects\\Projects\\Loan Management System\\api\\routes",
+      "c:\\Users\\kunda0757\\Desktop\\Projects\\Projects\\Loan Management System\\api\\app\\Http\\Controllers"
+    ]
+  }
+}

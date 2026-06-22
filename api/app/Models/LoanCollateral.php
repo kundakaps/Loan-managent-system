@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class LoanCollateral extends Model
 {
     protected $fillable = [
-        'loan_id',
+        'client_id',
         'number_plate',
         'engine_number',
         'chassis_number',

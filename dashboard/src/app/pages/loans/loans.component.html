@@ -1,137 +1,283 @@
+
+
 <app-spinner *ngIf="isLoading"></app-spinner>
 
 <div *ngIf="isAddloan" class="form-card">
   <h2 class="form-title">Create Loan Facility</h2>
-  <p class="form-subtitle">Enter loan details below</p>
+  <p class="form-subtitle">Enter details to generate loan and disbursement records</p>
 
   <form (ngSubmit)="submitForm(customerForm)" #customerForm="ngForm">
 
-    <!-- Row 1 -->
+    <!-- STEP 1: Selection -->
     <div class="form-row">
       <div class="form-group">
-        <label>Select Client</label>
-        <!-- Added [(ngModel)] -->
-        <select class="form-control" name="client_id" [(ngModel)]="loanModel.client_id" required>
-          <option value="">Select Client</option>
-          <option *ngFor="let client of customers" [value]="client.id">
-            {{ client.first_name + ' ' + client.last_name }}
+        <label for="client-choice">Select Client</label>
+
+        <input
+          list="clients"
+          id="client-choice"
+          class="form-control"
+          placeholder="Type to search client..."
+          (input)="onClientSearch($event)"
+          required>
+
+        <input
+          type="hidden"
+          name="client_id"
+          [(ngModel)]="loanModel.client_id"
+          required>
+
+        <datalist id="clients">
+          <option *ngFor="let client of customers" [value]="client.first_name + ' ' + client.last_name">
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label>Select Collateral</label>
+        <select (change)="onCollateralSelect($event)" class="form-control" name="collateral_id" [(ngModel)]="loanModel.collateral_id" required>
+          <option value="">Select Collateral</option>
+          <option *ngFor="let colateral of clientCollateral" [value]="colateral.id">
+            {{ colateral.car_make + ' ' + colateral.car_model }} ({{ colateral.vehicle_number_plate }})
           </option>
         </select>
       </div>
+    </div>
 
-      <div class="form-group">
-        <label>Select Facility</label>
-        <!--
-           1. Value is bound to facility.id (Requirement Met)
-           2. (ngModelChange) triggers calculation when facility changes
-        -->
-        <select class="form-control" name="facility_name"
-                [(ngModel)]="loanModel.facility_id"
-                (ngModelChange)="calculateMonthlyRepayment()"
-                required>
-          <option value="">Select Facility</option>
-          <option *ngFor="let facility of facilities" [value]="facility.id">
-            {{ facility.facility_name + ' - '+ facility.facility_percentage + '%'}}
-          </option>
-        </select>
+    <!-- EVERYTHING BELOW SHOWS ONLY AFTER COLLATERAL SELECTION -->
+    <div *ngIf="showLoanForm && selectedCollateral">
+
+      <!-- STEP 2: Full Collateral Specs -->
+      <div class="collateral-detail-box">
+        <h3 class="section-header">Collateral Details</h3>
+        <div class="detail-grid">
+          <div class="detail-item"><span>Engine:</span> {{selectedCollateral.engine_condition}}</div>
+          <div class="detail-item"><span>Mileage:</span> {{selectedCollateral.vehicle_mileage}} km</div>
+          <div class="detail-item"><span>Market Value:</span> K {{selectedCollateral.market_value | number}}</div>
+          <div class="detail-item"><span>Body Type:</span> {{selectedCollateral.type_of_vehicle_body || 'N/A'}}</div>
+          <div class="detail-item"><span>Paint:</span> {{selectedCollateral.paint_condition}}</div>
+          <div class="detail-item"><span>Chassis:</span> {{selectedCollateral.chassis_number}}</div>
+          <div class="detail-item"><span>Accident Hist:</span> {{selectedCollateral.accident_history}}</div>
+          <div class="detail-item"><span>Whitebook:</span> {{selectedCollateral.details_match_whitebook ? 'MATCHES' : 'NO MATCH'}}</div>
+        </div>
+
+        <div class="files-section">
+          <label>Collateral Documents (Click to view):</label>
+          <div class="file-links">
+            <button type="button" *ngFor="let file of selectedCollateral.files; let i = index"
+                    (click)="handleFileClick(file)" class="file-badge">
+              📄 Document {{ i + 1 }}
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <!-- Row 2 -->
-    <div class="form-row">
-      <div class="form-group">
-        <label>Amount</label>
-        <!-- Triggers calculation when amount changes -->
-        <input type="number" class="form-control" name="amount"
-               [(ngModel)]="loanModel.amount"
-               (ngModelChange)="calculateMonthlyRepayment()"
-               required />
+      <hr class="section-divider">
+
+      <!-- STEP 3: Loan Terms (The "Old" Form Part) -->
+      <h3 class="section-header">Loan Facility</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Select Facility</label>
+          <select class="form-control" name="facility_name" [(ngModel)]="loanModel.facility_id" (ngModelChange)="calculateMonthlyRepayment()" required>
+            <option value="">Select Facility</option>
+            <option *ngFor="let facility of facilities" [value]="facility.id">
+              {{ facility.facility_name }} - {{ facility.facility_percentage }}%
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Amount</label>
+          <input type="number" class="form-control" name="amount" [(ngModel)]="loanModel.amount" (ngModelChange)="calculateMonthlyRepayment()" required />
+        </div>
+        <div class="form-group">
+          <label>Tenure (Days)</label>
+          <input type="number" class="form-control" name="tenure" [(ngModel)]="loanModel.tenure" (ngModelChange)="calculateMonthlyRepayment()" required />
+        </div>
       </div>
-      <div class="form-group">
-        <label>Tenure (in days)</label>
-        <!-- Triggers calculation when tenure changes -->
-        <input type="number" class="form-control" name="tenure"
-               [(ngModel)]="loanModel.tenure"
-               (ngModelChange)="calculateMonthlyRepayment()"
-               required />
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Monthly Repayment</label>
+          <input type="text" class="form-control highlight-readonly" name="monthly_repayments" [ngModel]="loanModel.monthly_repayment" readonly />
+        </div>
+        <!-- <div class="form-group">
+          <label>Date of Next Payment</label>
+          <input type="date" class="form-control" name="next_payment" [(ngModel)]="loanModel.next_payment" required />
+        </div> -->
       </div>
-    </div>
 
-    <!-- Full width -->
-    <div class="form-group">
-      <label>Monthly Repayment</label>
-      <!--
-         1. Bound to the calculated result
-         2. Readonly so user cannot edit it manually
-      -->
-      <input type="text" class="form-control" name="monthly_repayments"
-             [ngModel]="loanModel.monthly_repayment"
-             readonly
-             required />
-    </div>
+      <hr class="section-divider">
 
-    <div class="form-group">
-      <label>Date of Next Payment</label>
-      <input type="date" class="form-control" name="next_payment"
-             [(ngModel)]="loanModel.next_payment"
-             required />
-    </div>
+      <!-- STEP 4: Disbursement Agreement (The Addition) -->
+      <h3 class="section-header">Disbursement Agreement</h3>
 
-    <button type="submit" class="submit-btn" [disabled]="!customerForm.valid">
-      Submit
-    </button>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Total Sum (ZMK)</label>
+          <input type="number" class="form-control" name="total_sum" [(ngModel)]="payoutModel.total_sum" (ngModelChange)="calculateNetPayout()" required>
+        </div>
+        <div class="form-group">
+          <label>Recipient Name</label>
+          <input type="text" class="form-control" name="recipient_name" [(ngModel)]="payoutModel.recipient_name" required>
+        </div>
+      </div>
+
+      <div class="deduction-table-wrapper">
+        <table class="deduction-table">
+          <thead>
+            <tr>
+              <th>Deduction Type</th>
+              <th>Amount (ZMK)</th>
+              <th>Apply</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Admin Fee</td>
+              <td><input type="number" class="form-control small-input" name="admin_fee" [(ngModel)]="payoutModel.admin_fee" (ngModelChange)="calculateNetPayout()"></td>
+              <td><input type="checkbox" name="apply_admin" [(ngModel)]="payoutModel.apply_admin" (change)="calculateNetPayout()"></td>
+            </tr>
+            <tr>
+              <td>Change of Ownership</td>
+              <td><input type="number" class="form-control small-input" name="ownership_fee" [(ngModel)]="payoutModel.ownership_fee" (ngModelChange)="calculateNetPayout()"></td>
+              <td><input type="checkbox" name="apply_ownership" [(ngModel)]="payoutModel.apply_ownership" (change)="calculateNetPayout()"></td>
+            </tr>
+            <tr>
+              <td>Removal of Caveat</td>
+              <td><input type="number" class="form-control small-input" name="caveat_fee" [(ngModel)]="payoutModel.caveat_fee" (ngModelChange)="calculateNetPayout()"></td>
+              <td><input type="checkbox" name="apply_caveat" [(ngModel)]="payoutModel.apply_caveat" (change)="calculateNetPayout()"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="net-payout-banner">
+        <span class="banner-label">NET PAYOUT:</span>
+        <span class="banner-amount">ZMK {{ payoutModel.net_payout | number:'1.2-2' }}</span>
+      </div>
+
+      <h4 class="section-header">Banking Details</h4>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bank Name</label>
+          <p type="text"  class="form-control"> {{payoutDetails.bank_name}}</p>
+        </div>
+        <div class="form-group">
+          <label>Account Number</label>
+          <p type="text"  class="form-control"> {{payoutDetails.account_number}} </p>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Bank Branch</label>
+          <p type="text"  class="form-control">{{payoutDetails.branch_name}} </p></div>
+        <div class="form-group">
+          <label>Sort Code</label>
+          <p type="text"  class="form-control">{{payoutDetails.sort_code}} </p>
+        </div>
+      </div>
+
+       <div class="form-row">
+        <div class="form-group">
+          <label>Swift Code</label>
+          <p type="text"  class="form-control">{{payoutDetails.swift_code}} </p></div>
+
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Mobile Money Number</label>
+          <p type="text"  class="form-control">{{payoutDetails.mobile_money_number}} </p></div>
+        <div class="form-group">
+          <label>Mobile Money Name</label>
+          <p type="text"  class="form-control">{{payoutDetails.mobile_money_name}} </p>
+        </div>
+      </div>
+
+      <!-- <div class="form-group">
+        <label>Acknowledgement Name (I, ... acknowledge)</label>
+        <input type="text" class="form-control" name="ack_name" [(ngModel)]="loanModel.ack_name" required>
+      </div> -->
+
+      <button type="submit" class="submit-btn" [disabled]="!customerForm.valid">
+        Submit Loan Application
+      </button>
+    </div>
 
   </form>
 </div>
 
 
 
-  <div class="page-wrapper" *ngIf="isAllLoans">
+<div class="page-wrapper" *ngIf="isAllLoans">
 
-        <!-- Reusing 'form-card' ensures it is exactly the same width/style as the form -->
-        <div class="form-card">
+  <div class="form-card">
 
-          <div class="form-title">
-            <strong>All Loans</strong>
-          </div>
+    <div class="form-title">
+      <strong>All Loans</strong>
+    </div>
 
-          <div class="form-subtitle">
-            List of all loans
-          </div>
+    <div class="form-subtitle">
+      List of all loans
+    </div>
 
-          <div class="table-container">
-            <table class="custom-table" id="loansTable">
-              <thead>
-                <tr>
-                  <th>Client Name</th>
-                  <th>Facility Name</th>
-                  <th>Amount</th>
-                  <th>Balance</th>
-                  <th>Next Payment Date</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let data of Loans">
-                  <td>{{ data.first_name | titlecase }} {{ data.last_name | titlecase }}</td>
-                  <td>{{ data.amount | titlecase }}</td>
-                  <td>{{ data.facility_name | titlecase }}</td>
-                  <td>{{ data.balance | titlecase }}</td>
-                  <td>{{ data.next_payment_date | titlecase }}</td>
-                  <td>{{ data.status | titlecase }}</td>
-                  <td class="text-center">
-                    <button class="action-btn" (click)="detailspage(data.id)">
-                      Details
-                    </button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+    <div class="table-container">
+      <table class="custom-table" id="loansTable">
+        <thead>
+        <tr>
+          <th>Client Name</th>
+          <th>Facility Name</th>
+          <th>Amount</th>
+          <th>Balance</th>
+          <th>Next Payment Date</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
 
-        </div>
+        <tbody>
+        <tr *ngFor="let data of Loans">
+
+          <td>{{ data.first_name | titlecase }} {{ data.last_name | titlecase }}</td>
+          <td>{{ data.facility_name | titlecase }}</td>
+          <td>{{ data.amount }}</td>
+          <td>{{ data.balance }}</td>
+          <td>{{ data.next_payment_date }}</td>
+
+          <!-- ✅ Status with inline color -->
+          <td
+            [ngStyle]="{
+                'background-color':
+                  data.status?.toLowerCase() === 'active' ? '#28a745' :
+                  data.status?.toLowerCase() === 'pending' ? '#fd7e14' :
+                  data.status?.toLowerCase() === 'approved' ? '#007bff' :
+                  data.status?.toLowerCase() === 'rejected' ? '#dc3545' :
+                  '#6c757d',
+
+                'color': '#ffffff',
+                'font-weight': 'bold',
+                'text-align': 'center',
+                'padding': '6px',
+                'border-radius': '6px'
+              }"
+              >
+            {{ data.status | titlecase }}
+          </td>
+
+          <td class="text-center">
+            <button class="action-btn" (click)="detailspage(data.id)">
+              Details
+            </button>
+          </td>
+
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
   </div>
+</div>
+
 
 
   <div class="page-wrapper" *ngIf="isWaitingActivation">
@@ -144,7 +290,7 @@
           </div>
 
           <div class="form-subtitle">
-            List of all loans waiting to be activated
+            List of all loans waiting to pending Approved
           </div>
 
           <div class="table-container">
@@ -163,8 +309,8 @@
               <tbody>
                 <tr *ngFor="let data of UnactivatedLoans">
                   <td>{{ data.first_name | titlecase }} {{ data.last_name | titlecase }}</td>
-                  <td>{{ data.amount | titlecase }}</td>
                   <td>{{ data.facility_name | titlecase }}</td>
+                  <td>{{ data.amount | titlecase }}</td>
                   <td>{{ data.balance | titlecase }}</td>
                   <td>{{ data.next_payment_date | titlecase }}</td>
                   <td>{{ data.status | titlecase }}</td>

@@ -18,9 +18,14 @@ export class LoansComponent implements OnInit {
     isAddloan =false
     isAllLoans = false
     isWaitingActivation = false
+    showLoanForm =false
+    selectedCollateral: any = null;
     facilities:any=[]
     customers:any=[]
     UnactivatedLoans:any=[]
+    clientCollateral:any=[]
+    payoutDetails:any=[]
+
 
 
 constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) {}
@@ -56,6 +61,36 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
 
 
 
+  }
+
+  // Add this variable at the top of your component class to hold the input text
+  clientSearchString: string = '';
+
+  onClientSearch(event: any) {
+    const selectedName = event.target.value;
+
+    // Find the client object where the full name matches what was clicked
+    const selectedClient = this.customers.find(client =>
+      `${client.first_name} ${client.last_name}` === selectedName
+    );
+
+    if (selectedClient) {
+      // 1. Manually assign the ID to your model (mimicking the old ngModel behavior)
+      this.loanModel.client_id = selectedClient.id;
+
+      // 2. Recreate the $event structure your original function expects
+      const mockEvent = {
+        target: {
+          value: selectedClient.id
+        }
+      };
+
+      // 3. Trigger your original function flawlessly
+      this.onClientSelect(mockEvent);
+    } else {
+      // Optional: Clear the ID if the user types something invalid/clears the input
+      this.loanModel.client_id = '';
+    }
   }
 
   showAddLoan() {
@@ -116,12 +151,159 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
 
 
 
-    loanModel = {
+
+onCollateralSelect(event: any) {
+  const collateral_id = event.target.value;
+
+  if (!collateral_id) {
+    this.showLoanForm = false;
+    this.selectedCollateral = null;
+    return;
+  }
+
+  this.isLoading = true;
+
+  // Find the selected object from the list to display its details
+  this.selectedCollateral = this.clientCollateral.find(c => c.id == collateral_id);
+
+  // Small timeout to simulate loading or just set to true
+  setTimeout(() => {
+    this.showLoanForm = true;
+    this.isLoading = false;
+  }, 500);
+}
+
+  onClientSelect(event: any) {
+    this.isLoading = true;
+    const client_id = event.target.value;
+    //console.log(client_id)
+    if(!client_id){
+    //  this.clientCollateral=[]
+      this.isLoading=false
+      return;
+    }
+
+    const body = {
+      "client_id": client_id
+    };
+
+    //this.isLoading=true
+    const token = sessionStorage.getItem('token');
+
+    const headers = { 'Authorization': 'Bearer '+token }
+    try {
+      this.http.post(BASE_URL+'/api/client-collateral',body, { headers }).subscribe((response:any)=>{
+
+       this.clientCollateral=response
+       //console.log(this.clientCollateral)
+
+        this.isLoading=false
+
+        this.getPayoutDetails(client_id)
+
+      })
+    }
+    catch(error){
+      console.log(error)
+      this.isLoading=false
+    }
+
+  }
+
+  getPayoutDetails(client_id:any){
+    //
+    const body = {
+      "client_id": client_id
+    };
+    //this.isLoading=true
+
+    const token = sessionStorage.getItem('token');
+
+    const headers = { 'Authorization': 'Bearer '+token }
+    try {
+      this.http.post(BASE_URL+'/api/client-payout-details',body, { headers }).subscribe((response:any)=>{
+
+       this.payoutDetails=response
+       //console.log(this.clientCollateral)
+
+        this.isLoading=false
+
+
+      })
+    }
+    catch(error){
+      console.log(error)
+      this.isLoading=false
+    }
+
+
+
+  }
+
+
+
+  // Inside your component class
+payoutModel: any = {
+  // ... existing fields ...
+  total_sum: 0,
+  recipient_name: '',
+  admin_fee: 2000,
+  apply_admin: true,
+  ownership_fee: 2000,
+  apply_ownership: true,
+  caveat_fee: 1000,
+  apply_caveat: true,
+  net_payout: 0,
+  bank_name: '',
+  acc_no: '',
+  acc_name: '',
+  phone: '',
+  ack_name: ''
+};
+
+// Function to calculate Net Payout in real-time
+calculateNetPayout() {
+  const total = parseFloat(this.payoutModel.total_sum) || 0;
+
+  const admin = this.payoutModel.apply_admin ? (parseFloat(this.payoutModel.admin_fee) || 0) : 0;
+  const owner = this.payoutModel.apply_ownership ? (parseFloat(this.payoutModel.ownership_fee) || 0) : 0;
+  const caveat = this.payoutModel.apply_caveat ? (parseFloat(this.payoutModel.caveat_fee) || 0) : 0;
+
+  this.payoutModel.net_payout = total - (admin + owner + caveat);
+}
+
+
+
+
+
+handleFileClick(file: any) {
+  //console.log(file);
+
+  Swal.fire({
+    title: 'Preview File',
+    html: `
+      <iframe
+        src="${file}"
+        width="100%"
+        height="500px"
+        style="border:none;">
+      </iframe>
+    `,
+    width: '800px',
+    showCloseButton: true,
+    showConfirmButton: false
+  });
+}
+
+
+
+
+  loanModel = {
     client_id: '',
     facility_id: '',
     amount: null,
     tenure: null,
-    next_payment: '',
+    collateral_id:'',
     monthly_repayment: 0 // This will store the calculated result
   };
 
@@ -158,6 +340,8 @@ calculateMonthlyRepayment() {
    submitForm(form: NgForm) {
         this.isLoading = true
         if (form.valid) {
+          form.value.net_payout=this.payoutModel.net_payout
+
           console.log('Sending data...', form.value);
 
           const url = BASE_URL+'/api/addloan';
@@ -420,6 +604,8 @@ calculateMonthlyRepayment() {
 
 
   }
+
+
 
 
 

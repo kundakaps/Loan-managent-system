@@ -1,24 +1,19 @@
-/* Page wrapper fills space */
+/* Container and General Form Styles */
 .page-wrapper {
   width: 100%;
-  padding: 0; /* minimal padding */
   display: flex;
   justify-content: center;
 }
 
-/* Make card wider */
 .form-card {
   width: 100%;
- // max-width: 1200px; /* wider form */
   background: #ffffff;
   border-radius: 12px;
   padding: 35px;
- // margin-top: 10px; /* reduce top space */
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   border-top: 5px solid #0056b3;
 }
 
-/* Titles */
 .form-title {
   font-size: 26px;
   color: #0056b3;
@@ -30,7 +25,6 @@
   margin-bottom: 25px;
 }
 
-/* Form layout */
 .form-row {
   display: flex;
   gap: 20px;
@@ -42,40 +36,112 @@
   margin-bottom: 18px;
 }
 
-/* Inputs */
 label {
   font-weight: 600;
   color: #0056b3;
   margin-bottom: 5px;
+  display: block;
 }
 
 .form-control {
+  width: 100%;
   border: 1px solid #cbd5e1;
   padding: 12px;
   border-radius: 10px;
   font-size: 15px;
 }
 
-.form-control:focus {
-  border-color: #ffd000;
-  box-shadow: 0 0 5px #ffd000;
-  outline: none;
+/* Collateral Deep Dive Section */
+.collateral-detail-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
 }
 
-/* Section titles */
-.section-title {
+.section-header {
+  font-size: 16px;
   color: #0056b3;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 15px;
+  border-bottom: 2px solid #ffd000;
+  display: inline-block;
+  padding-bottom: 4px;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 15px;
+}
+
+.detail-item {
+  font-size: 14px;
+  color: #334155;
+}
+
+.detail-item span {
   font-weight: bold;
-  margin: 10px 0;
+  color: #64748b;
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
 }
 
-.section-divider {
+/* Equipment Badges */
+.equipment-list {
+  margin-top: 20px;
+  display: flex;
+  gap: 15px;
+}
+
+.equipment-list span {
+  font-size: 13px;
+  padding: 5px 12px;
+  background: #e2e8f0;
+  border-radius: 20px;
+  color: #94a3b8;
+}
+
+.equipment-list span.active {
+  background: #dcfce7;
+  color: #166534;
+  border: 1px solid #86efac;
+}
+
+/* File Section */
+.files-section {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.file-links {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.file-badge {
+  background: #0056b3;
+  color: white;
   border: none;
-  border-top: 2px solid #eee;
-  margin: 25px 0;
+  padding: 8px 15px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-/* Submit button */
+.file-badge:hover {
+  background: #ffd000;
+  color: #000;
+}
+
+/* Submit and Tables */
 .submit-btn {
   width: 100%;
   background: #0056b3;
@@ -85,95 +151,76 @@ label {
   font-weight: bold;
   border: none;
   border-radius: 10px;
-  transition: 0.3s;
-}
-
-.submit-btn:hover {
-  background: #004494;
   cursor: pointer;
-}
-
-/* Mobile adjustments */
-@media (max-width: 600px) {
-  .form-card {
-    padding: 20px;
-    margin-top: 5px;
-  }
-}
-
-
-
-/* --- Keep your existing Form CSS above this line --- */
-
-/* Table Layout */
-.table-container {
-  width: 100%;
-  overflow-x: auto; /* Handle scroll on small screens */
   margin-top: 20px;
 }
 
-.custom-table {
-  width: 100%;
-  border-collapse: separate; /* Allows border radius */
-  border-spacing: 0;
-  width: 100%;
+.highlight-readonly {
+  background-color: #f1f5f9 !important;
+  font-weight: bold;
+  color: #0056b3;
 }
 
-/* Table Headers - Matching Form Labels */
-.custom-table th {
-  background-color: #f8f9fa;
-  color: #0056b3; /* Same blue as form labels */
-  font-weight: 700;
-  padding: 15px;
-  text-align: left;
-  border-bottom: 2px solid #0056b3; /* Blue underline */
-  font-size: 14px;
-}
-
-/* Table Body - Matching Form Inputs */
-.custom-table td {
-  padding: 15px;
-  color: #333;
-  border-bottom: 1px solid #cbd5e1; /* Same border color as inputs */
-  font-size: 14px;
-  vertical-align: middle;
-}
-
-/* Row Hover Effect */
-.custom-table tbody tr:hover {
-  background-color: #f0f8ff; /* Very light blue hover */
-}
-
-/* Remove border from last row */
-.custom-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Action Button - Matching the Theme */
-.action-btn {
-  background-color: #0056b3; /* Blue background */
-  color: #ffffff;
-  padding: 8px 20px;
+.section-divider {
   border: none;
-  border-radius: 6px;
-  font-size: 13px;
-  font-weight: 600;
+  border-top: 2px solid #eee;
+  margin: 30px 0;
+}
+
+/* Table Styles (Matching your previous design) */
+.table-container { width: 100%; overflow-x: auto; margin-top: 20px; }
+.custom-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+.custom-table th { background-color: #f8f9fa; color: #0056b3; font-weight: 700; padding: 15px; text-align: left; border-bottom: 2px solid #0056b3; }
+.custom-table td { padding: 15px; border-bottom: 1px solid #cbd5e1; vertical-align: middle; }
+.action-btn { background-color: #0056b3; color: #ffffff; padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; }
+
+/* Styling for inputs inside the deductions table */
+.table-input {
+  padding: 5px 10px !important;
+  height: 35px;
+  max-width: 150px;
+  margin: 0 auto;
+}
+
+/* Net Payout display box */
+.net-payout-box {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  padding: 20px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.payout-label {
+  font-weight: 800;
+  color: #4338ca;
+  font-size: 14px;
+}
+
+.payout-value {
+  font-size: 24px;
+  font-weight: 900;
+  color: #1e1b4b;
+}
+
+/* Ensure checkboxes look clean */
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  accent-color: #0056b3;
 }
 
-.action-btn:hover {
-  background-color: #ffd000; /* Yellow hover (matches focus state of inputs) */
-  color: #000; /* Black text on yellow */
-  transform: translateY(-1px);
-}
-
-.text-center {
-  text-align: center !important;
-}
-
-/* Helper for Uppercase NRC if needed via CSS instead of pipe */
-.uppercase {
-  text-transform: uppercase;
+/* Section styling consistency */
+.section-header {
+  font-size: 16px;
+  color: #0056b3;
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-weight: bold;
+  border-left: 4px solid #ffd000;
+  padding-left: 10px;
 }

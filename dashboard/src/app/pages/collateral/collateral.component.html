@@ -7,18 +7,32 @@
         <h1>Vehicle Asset Assessment</h1>
         <p>Ensure all mechanical and physical details are verified.</p>
       </div>
+
       <div class="select-wrapper">
-        <select (change)="onLoanSelect($event)">
-          <option value="">Choose Pending Customer...</option>
-          <option *ngFor="let loan of pendingLoans" [value]="loan.id">
-            {{ loan.customer_first_name }} {{ loan.customer_last_name }}
-          </option>
-        </select>
+        <!-- The Visible Search Input -->
+        <input
+          list="pending-loans"
+          class="form-control"
+          placeholder="Choose Customer..."
+          (input)="onLoanSearch($event)">
+
+        <!-- The Datalist showing names -->
+        <datalist id="pending-loans">
+          <option *ngFor="let loan of pendingLoans" [value]="loan.customer_first_name + ' ' + loan.customer_last_name">
+        </datalist>
       </div>
+<!--      <div class="select-wrapper">-->
+<!--        <select (change)="onLoanSelect($event)">-->
+<!--          <option value="">Choose  Customer...</option>-->
+<!--          <option *ngFor="let loan of pendingLoans" [value]="loan.client_id">-->
+<!--            {{ loan.customer_first_name }} {{ loan.customer_last_name }}-->
+<!--          </option>-->
+<!--        </select>-->
+<!--      </div>-->
     </header>
 
     <!-- SELECTED CLIENT DASHBOARD -->
-    <div *ngIf="selectedLoan" class="loan-stats-grid">
+    <!-- <div *ngIf="selectedLoan" class="loan-stats-grid">
       <div class="stat-card primary">
         <div class="stat-label">Client ID</div>
         <div class="stat-value">#00{{ selectedLoan.client_id }}</div>
@@ -31,7 +45,7 @@
         <div class="stat-label">Current Loan Balance</div>
         <div class="stat-value">ZMK {{ selectedLoan.amount | number }}</div>
       </div>
-    </div>
+    </div> -->
 
     <!-- MAIN ASSESSMENT FORM -->
     <form *ngIf="selectedLoan" [formGroup]="assessmentForm" (ngSubmit)="submitAssessment()">
@@ -159,14 +173,14 @@
             <label>Assessed Market Value</label>
             <input type="number" formControlName="market_value" style="font-size: 18px; font-weight: bold; color: #10b981;">
           </div>
-          <div class="input-group">
+          <!-- <div class="input-group">
             <label>Requested Amount</label>
             <input type="number" formControlName="amount_requested" readonly>
           </div>
           <div class="input-group">
             <label>Final Approved Amount</label>
             <input type="number" formControlName="amount_approved" style="font-size: 18px; font-weight: bold; color: #3b82f6;">
-          </div>
+          </div> -->
         </div>
       </section>
 
