@@ -62,6 +62,12 @@ export class FacilitiesComponent implements OnInit {
 
 
   submitForm(form: NgForm) {
+      if (!form.valid) {
+        form.form.markAllAsTouched();
+        Swal.fire('Missing information', 'Please fill in all required fields (highlighted in red).', 'warning');
+        return;
+      }
+
       this.isLoading = true
       if (form.valid) {
         console.log('Sending data...', form.value);
@@ -87,18 +93,17 @@ export class FacilitiesComponent implements OnInit {
             //   this.router.navigate(['/events/all-events']);
             // });
 
+            form.resetForm();
           }else{
             Swal.fire('Error', response.message, 'error');
           }
-
-            // Optional: Reset the form after success
-            form.resetForm();
           },
           error: (error) => {
 
             this.isLoading =false
             console.error('Error occurred:', error);
-            alert('Failed to create customer.');
+            const msg = error?.error?.message || 'Failed to create facility. Please try again.';
+            Swal.fire('Error', msg, 'error');
           }
         });
 

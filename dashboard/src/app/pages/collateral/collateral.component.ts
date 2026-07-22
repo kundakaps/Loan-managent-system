@@ -229,8 +229,8 @@ export class CollateralComponent implements OnInit {
         Swal.fire('Error', 'Failed to save vehicle details.', 'error');
       }
     });
-      Swal.fire('Success', 'Assessment Captured Successfully!', 'success');
     } else {
+      this.assessmentForm.markAllAsTouched();
       Swal.fire('Form Incomplete', 'Please fill in all required fields marked in red.', 'warning');
     }
   }

@@ -208,7 +208,8 @@ addUserToDB(data: any) {
 
                 this.isLoading =false
                 console.error('Error occurred:', error);
-                alert('Failed to create customer.');
+                const msg = error?.error?.message || 'Failed to create user. Please try again.';
+                Swal.fire('Error', msg, 'error');
               }
             });
 
@@ -294,7 +295,7 @@ submitRole(id: any, role: any) {
           error: (error) => {
             console.error(error);
             this.isLoading = false;
-            Swal.fire('Error', 'sosmething went wrong', 'error');
+            Swal.fire('Error', 'Something went wrong', 'error');
           }
         });
 

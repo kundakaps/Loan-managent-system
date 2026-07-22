@@ -7,6 +7,7 @@ export interface ChildRoute {
   restrictedToRole2?: boolean;// Added this for sub-menu control
   restrictedToRole0?: boolean;
   restrictedToRole3?: boolean;
+  restrictedToRole4?: boolean;
 }
 
 export interface RouteInfo {
@@ -18,6 +19,7 @@ export interface RouteInfo {
   restrictedToRole1?: boolean;
   restrictedToRole2?: boolean;
   restrictedToRole3?: boolean;
+  restrictedToRole4?: boolean;
   children?: ChildRoute[];
   isOpen?: boolean;
 }
@@ -28,13 +30,16 @@ export const ROUTES: RouteInfo[] = [
     path: '/customers', title: 'CUSTOMERS', icon: 'nc-single-02', class: '',
     restrictedToRole1: true,
     restrictedToRole0: true,
+    restrictedToRole4: true,
     children: [
       { path: 'add-customer', title: 'add customer' },
       { path: 'all-customers', title: 'all customers' },
     ]
   },
   {
-    path: '/facilities', title: 'FACILITIES', icon: 'nc-tile-56', class: '',restrictedToRole1: true,
+    path: '/facilities', title: 'FACILITIES', icon: 'nc-tile-56', class: '',
+    restrictedToRole1: true,
+    restrictedToRole4: true,
     children: [
       { path: 'add-facility', title: 'add facility' },
       { path: 'all-facilities', title: 'all facilities' },
@@ -44,6 +49,7 @@ export const ROUTES: RouteInfo[] = [
     {
     path: '/payouts', title: 'Payouts', icon: 'nc-tile-56', class: '',
     restrictedToRole3: true,
+      restrictedToRole4: true,
 
     children: [
       { path: 'new-payout', title: 'new payout'},
@@ -51,7 +57,9 @@ export const ROUTES: RouteInfo[] = [
     ]
   },
     {
-    path: '/collateral', title: 'Collateral', icon: 'nc-tile-56', class: '',restrictedToRole2: true,
+    path: '/collateral', title: 'Collateral', icon: 'nc-tile-56', class: '',
+      restrictedToRole2: true,
+      restrictedToRole4: true,
     children: [
       { path: 'add-collateral', title: 'add collateral' },
       { path: 'added-collateral', title: 'added collateral' },
@@ -61,15 +69,17 @@ export const ROUTES: RouteInfo[] = [
     path: '/loans', title: 'LOANS', icon: 'nc-single-copy-04', class: '',
     restrictedToRole0: true ,
     restrictedToRole1: true,
+    restrictedToRole4: true,
     children: [
-      { path: 'add-loan', title: 'add loan' ,restrictedToRole0: true ,restrictedToRole1: true},
-      { path: 'waiting-activation', title: 'waiting approval', restrictedToRole1: true }, // Added restriction
-      { path: 'all-loans', title: 'all loans',restrictedToRole0: true ,restrictedToRole1: true },
+      { path: 'add-loan', title: 'add loan' ,restrictedToRole0: true ,restrictedToRole1: true,restrictedToRole4: true,},
+      { path: 'waiting-activation', title: 'waiting approval', restrictedToRole1: true,restrictedToRole4: true, }, // Added restriction
+      { path: 'all-loans', title: 'all loans',restrictedToRole0: true ,restrictedToRole1: true,restrictedToRole4: true, },
     ]
   },
   {
     path: '/users', title: 'USERS', icon: 'nc-single-02', class: '',
     restrictedToRole1: true,
+    restrictedToRole4: true,
     children: [
      // { path: 'add-user', title: 'add user' },
       { path: 'all-users', title: 'all users' },
@@ -90,16 +100,30 @@ export class SidebarComponent implements OnInit {
 
     // 1. Filter Top-Level Items
     // Removes entire sections (like USERS) if restricted
-    let filteredRoutes = ROUTES.filter(item => {
-      if (item.restrictedToRole1 && userRole !== '1') {
-        return false;
-      }else if (item.restrictedToRole2 && userRole !== '2') {
-        return false;
-      }else if (item.restrictedToRole3 && userRole !== '3') {
-        return false;
-      }
-      return true;
-    });
+        let filteredRoutes = ROUTES.filter(item => {
+          if (
+            (item.restrictedToRole0 && userRole === '0') ||
+            (item.restrictedToRole1 && userRole === '1') ||
+            (item.restrictedToRole2 && userRole === '2') ||
+            (item.restrictedToRole3 && userRole === '3') ||
+            (item.restrictedToRole4 && userRole === '4')
+          ) {
+            return true;
+          }
+
+          // if no restrictions at all → allow
+          if (
+            !item.restrictedToRole0 &&
+            !item.restrictedToRole1 &&
+            !item.restrictedToRole2 &&
+            !item.restrictedToRole3 &&
+            !item.restrictedToRole4
+          ) {
+            return true;
+          }
+
+          return false;
+        });
 
     // 2. Filter Child Items
     // Keeps the section (like LOANS) but removes specific links (like waiting-activation)
@@ -107,17 +131,34 @@ export class SidebarComponent implements OnInit {
       if (item.children) {
         return {
           ...item,
-          isOpen: false, // Initialize dropdown state here
+          isOpen: false,
           children: item.children.filter(child => {
-            if (child.restrictedToRole1 && userRole !== '1') {
-              return false;
-            }
-            return true;
+            const hasRestriction =
+              child.restrictedToRole0 ||
+              child.restrictedToRole1 ||
+              child.restrictedToRole2 ||
+              child.restrictedToRole3 ||
+              child.restrictedToRole4;
+
+            // No restriction → allow
+            if (!hasRestriction) return true;
+
+            // Allow if ANY role matches
+            return (
+              (child.restrictedToRole0 && userRole === '0') ||
+              (child.restrictedToRole1 && userRole === '1') ||
+              (child.restrictedToRole2 && userRole === '2') ||
+              (child.restrictedToRole3 && userRole === '3') ||
+              (child.restrictedToRole4 && userRole === '4')
+            );
           })
         };
       }
       return item;
     });
+
+
+
   }
 
   toggleDropdown(menuItem: RouteInfo) {

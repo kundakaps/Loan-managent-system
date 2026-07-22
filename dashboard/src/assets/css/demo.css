@@ -204,3 +204,13 @@
   outline: none;
   display: none;
 }
+
+/* Highlight required fields that are missing/invalid once the user has
+   interacted with them or attempted to submit the form. */
+.form-control.ng-invalid.ng-touched,
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 1px #dc3545 !important;
+}

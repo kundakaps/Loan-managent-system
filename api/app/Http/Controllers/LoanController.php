@@ -134,41 +134,36 @@ class LoanController extends Controller
 
            // return $roles;
 
-            if($roles->role_id != 1){
+        if ($roles->role_id == 1 || $roles->role_id == 4) {
+            $data = DB::table('loans')
+                ->join('customers', 'loans.client_id', '=', 'customers.id')
+                ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
+                ->select(
+                    'loans.*',
+                    'customers.first_name',
+                    'customers.last_name',
+                    'facilities.facility_name'
+                )
+                ->get();
 
-                $data=DB::table('loans')
-                    ->join('customers', 'loans.client_id', '=', 'customers.id')
-                    ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
-                    ->select(
-                        'loans.*',
-                        'customers.first_name',
-                        'customers.last_name',
-                        'facilities.facility_name')
-                    ->where('loans.posted_by', $user->id)
-                    ->get();
-                return response()->json([
-                    'success'=>true,
-                    'data'=> $data
-                ]);
+        } else {
+            $data = DB::table('loans')
+                ->join('customers', 'loans.client_id', '=', 'customers.id')
+                ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
+                ->select(
+                    'loans.*',
+                    'customers.first_name',
+                    'customers.last_name',
+                    'facilities.facility_name'
+                )
+                ->where('loans.posted_by', $user->id)
+                ->get();
+        }
 
-
-            }elseif($roles->role_id == 1){
-                $data=DB::table('loans')
-                    ->join('customers', 'loans.client_id', '=', 'customers.id')
-                    ->join('facilities', 'loans.facility_id', '=', 'facilities.id')
-                    ->select(
-                        'loans.*',
-                        'customers.first_name',
-                        'customers.last_name',
-                        'facilities.facility_name')
-                    ->get();
-
-            return response()->json([
-                'success'=>true,
-                'data'=> $data
-            ]);
-
-            }
+        return response()->json([
+            'success' => true,
+            'data' => $data
+        ]);
 
 
 
@@ -213,7 +208,7 @@ class LoanController extends Controller
 
         //add 30 days to the last repayment date using carbon library to create next repayment date
         $next_repayment = ($loan->next_payment_date ? Carbon::parse($loan->next_payment_date) : now())->addDays(30);
-        $loan->next_payment_date = $nextRepayment->format('Y-m-d');
+      // $loan->next_payment_date = $nextRepayment->format('Y-m-d');
         $loan->balance = $loan->balance - $data['amount'];
 
            $insert = Repayments::create([
@@ -230,6 +225,16 @@ class LoanController extends Controller
 
         if($insert){
             $loan->save();
+
+            $loan_repayment_date = $loan->next_payment_date;
+            $current_date = date('Y-m-d');
+            //add 7 days to repayment date
+            $current_date_plus_seven = date('Y-m-d', strtotime($current_date . ' +7 days'));
+            //check if current_date_plus_seven is greater than loan_repayment_date
+            if($current_date_plus_seven > $loan_repayment_date){
+                $this->repayment_recalculation($loan->id);
+            }
+
             return response()->json([
                 'success' => true,
                 'message' => 'Loan repayment created successfully'
@@ -241,6 +246,23 @@ class LoanController extends Controller
                 'message' => 'Failed to create loan repayment'
                 ]);
 
+
+    }
+    private function repayment_recalculation($loan_id){
+        $loan = Loans::where('id',$loan_id)->first();
+        if($loan->balance >= $loan->amount){
+            $loan_repayment_date = $loan->next_payment_date;
+            $this->extracted($loan, $loan_repayment_date);
+            return;
+
+        }else{
+            $loan->amount = $loan->balance;
+            $loan->save();
+            $loan_repayment_date = $loan->next_payment_date;
+            $this->extracted($loan, $loan_repayment_date);
+
+            return;
+        }
 
     }
 
@@ -389,7 +411,7 @@ class LoanController extends Controller
 
 
             $data = $request->validate([
-                'client_id' => 'required',
+                'loan_id' => 'required|exists:loans,id',
                 'number_plate' => 'required',
                 'engine_number' => 'required',
                 'chassis_number' => 'required',
@@ -410,7 +432,7 @@ class LoanController extends Controller
             // }
 
             $collaterals = LoanCollateral::create([
-                'loan_id' => $data['loan_id'],
+                'client_id' => $loan->client_id,
                 'number_plate' => $data['number_plate'],
                 'engine_number' => $data['engine_number'],
                 'chassis_number' => $data['chassis_number'],
@@ -1036,6 +1058,62 @@ public function storeDisbursement(Request $request)
             'success' => true,
             'message' => 'Loan approved and contracts uploaded successfully'
         ]);
+    }
+
+    public function MonthlyCalculations(){
+
+        $loans =Loans::where('status','active')->get();
+
+        //loop through the loans
+
+        foreach($loans as $loan){
+            $loan_repayment_date = $loan->next_payment_date;
+            $current_date = date('Y-m-d');
+            //add 7 days to repayment date
+            $current_date_plus_seven = date('Y-m-d', strtotime($current_date . ' +7 days'));
+            //check if current_date_plus_seven is greater than loan_repayment_date
+            if($current_date_plus_seven > $loan_repayment_date){
+                $this->extracted($loan, $loan_repayment_date);
+
+            }else{
+                echo "loan repayment date is not yet due";
+                continue;
+            }
+        }
+
+
+
+
+    }
+
+    private function recalculate($id)
+    {
+        $loan = Loans::where('id',$id)->first();
+        $facility = Facility::where('id',$loan->facility_id)->first();
+        $percent = $facility->facility_percentage / 100;
+      //  echo  "percentage is : ".$percent."\n";
+        $tenure = $loan->tenure/30;
+        $amount = $loan->amount;
+        $monthly_repayment = ($amount * $percent) / $tenure;
+      //  echo "monthly repayment is : ".$monthly_repayment."\n";
+        return $monthly_repayment;
+    }
+
+    /**
+     * @param $loan
+     * @param $loan_repayment_date
+     * @return void
+     */
+    private function extracted($loan, $loan_repayment_date): void
+    {
+        $returned_monthly = $this->recalculate($loan->id);
+        $new_balance = $loan->balance + $returned_monthly;
+        $new_payment_date = date('Y-m-d', strtotime($loan_repayment_date . ' +30 days'));
+      //  echo "new balance is : " . $new_balance . "\n";
+     //   echo "new payment date is : " . $new_payment_date . "\n";
+        $loan->balance = $new_balance;
+        $loan->next_payment_date = $new_payment_date;
+        $loan->save();
     }
 
 

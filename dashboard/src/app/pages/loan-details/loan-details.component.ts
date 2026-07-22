@@ -866,7 +866,8 @@ rejectLoan(id: any) {
 
                   this.isLoading =false
                   console.error('Error occurred:', error);
-                //  alert('Failed to create customer.');
+                  const msg = error?.error?.message || 'Failed to process disbursement. Please try again.';
+                  Swal.fire('Error', msg, 'error');
                 }
               });
 

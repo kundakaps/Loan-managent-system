@@ -116,7 +116,7 @@ constructor(private http: HttpClient, private route: ActivatedRoute, private rou
 
 
   getCustomers(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -187,7 +187,7 @@ onCollateralSelect(event: any) {
       "client_id": client_id
     };
 
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -215,7 +215,7 @@ onCollateralSelect(event: any) {
     const body = {
       "client_id": client_id
     };
-    //this.isLoading=true
+    this.isLoading=true
 
     const token = sessionStorage.getItem('token');
 
@@ -338,6 +338,12 @@ calculateMonthlyRepayment() {
 }
 
    submitForm(form: NgForm) {
+        if (!form.valid) {
+          form.form.markAllAsTouched();
+          Swal.fire('Missing information', 'Please fill in all required fields (highlighted in red).', 'warning');
+          return;
+        }
+
         this.isLoading = true
         if (form.valid) {
           form.value.net_payout=this.payoutModel.net_payout
@@ -365,18 +371,17 @@ calculateMonthlyRepayment() {
               //   this.router.navigate(['/events/all-events']);
               // });
 
+              form.resetForm();
             }else{
               Swal.fire('Error', response.message, 'error');
             }
-
-              // Optional: Reset the form after success
-              form.resetForm();
             },
             error: (error) => {
 
               this.isLoading =false
               console.error('Error occurred:', error);
-              alert('Failed to create customer.');
+              const msg = error?.error?.message || 'Failed to create loan. Please try again.';
+              Swal.fire('Error', msg, 'error');
             }
           });
 
@@ -386,7 +391,7 @@ calculateMonthlyRepayment() {
     }
 
   getFacilities(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -418,7 +423,7 @@ calculateMonthlyRepayment() {
   }
 
   getLoans(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -449,7 +454,7 @@ calculateMonthlyRepayment() {
     }
   }
   getUnactivatedLoans(){
-    //this.isLoading=true
+    this.isLoading=true
     const token = sessionStorage.getItem('token');
 
     const headers = { 'Authorization': 'Bearer '+token }
@@ -598,7 +603,8 @@ calculateMonthlyRepayment() {
 
               this.isLoading =false
               console.error('Error occurred:', error);
-              alert('Failed to create customer.');
+              const msg = error?.error?.message || 'Failed to record repayment. Please try again.';
+              Swal.fire('Error', msg, 'error');
             }
           });
 
